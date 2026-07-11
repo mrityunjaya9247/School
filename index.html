@@ -4,25 +4,35 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NurturePass â€” School Safety Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
   <style>
     :root{
-      --blue:#2563eb;--blue-dark:#1d4ed8;--blue-light:#eff6ff;--blue-mid:#dbeafe;
-      --green:#16a34a;--green-light:#dcfce7;--green-mid:#22c55e;
-      --red:#dc2626;--red-light:#fee2e2;--red-mid:#ef4444;
-      --amber:#d97706;--amber-light:#fef3c7;
-      --orange:#ea580c;--orange-light:#ffedd5;
-      --violet:#7c3aed;--violet-light:#ede9fe;
-      --slate9:#0f172a;--slate8:#1e293b;--slate7:#334155;
-      --slate5:#64748b;--slate4:#94a3b8;--slate2:#e2e8f0;
-      --slate1:#f1f5f9;--slate0:#f8fafc;--white:#fff;
-      --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:24px;
-      --sh-sm:0 1px 3px rgba(0,0,0,.08);
-      --sh-md:0 4px 16px rgba(0,0,0,.1);
-      --sh-lg:0 10px 40px rgba(0,0,0,.14);
+      --font:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      --font-display:'Plus Jakarta Sans','Inter',sans-serif;
+      --blue:#4f46e5;--blue-dark:#4338ca;--blue-light:#eef2ff;--blue-mid:#dfe3ff;
+      --green:#0d9488;--green-light:#d0fbf3;--green-mid:#14b8a6;
+      --red:#e11d48;--red-light:#ffe4e8;--red-mid:#f43f5e;
+      --amber:#d97706;--amber-light:#fef2d6;
+      --orange:#ea580c;--orange-light:#ffe8d6;
+      --violet:#0d9488;--violet-light:#d0fbf3;
+      --slate9:#0b1120;--slate8:#1e293b;--slate7:#3a4658;
+      --slate5:#64748b;--slate4:#9aa6b8;--slate2:#e5e8f0;
+      --slate1:#eef1f7;--slate0:#f5f6fb;--white:#fff;
+      --coral:#ff6f61;--coral-2:#ff8a5c;--coral-light:#ffe9e4;
+      --navy:#1b1a3a;--navy-2:#232149;--navy-soft:#2c2a52;
+      --canvas:#e9e8f2;
+      --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;
+      --grad:linear-gradient(135deg,#ff7d5c 0%,#ff5f7e 100%);
+      --sh-sm:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.08);
+      --sh-md:0 6px 16px rgba(16,24,40,.08),0 2px 6px rgba(16,24,40,.05);
+      --sh-lg:0 24px 50px rgba(30,27,75,.20);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body{height:100%;}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--slate0);color:var(--slate9);font-size:15px;line-height:1.6;}
+    body{font-family:var(--font);background:var(--canvas);color:var(--slate8);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.005em;}
+    h1,h2,h3{font-family:var(--font-display);letter-spacing:-.02em;}
     button{font-family:inherit;cursor:pointer;border:none;background:none;}
     input,select{font-family:inherit;}
     .hidden{display:none!important;}
@@ -46,7 +56,7 @@
     /* â”€â”€ BUTTONS â”€â”€ */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:700;line-height:1;transition:opacity .15s,transform .15s;cursor:pointer;border:none;}
     .btn:hover{opacity:.88;transform:translateY(-1px);}
-    .btn-p{background:var(--blue);color:#fff;}
+    .btn-p{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.28);}
     .btn-g{background:#fff;color:var(--slate7);border:2px solid var(--slate2);}
     .btn-o{background:var(--orange);color:#fff;}
     .btn-sm{padding:5px 11px;font-size:12px;}
@@ -54,12 +64,12 @@
     .btn-w{width:100%;}
 
     /* â”€â”€ CARD â”€â”€ */
-    .card{background:#fff;border-radius:var(--r-lg);border:1px solid var(--slate2);box-shadow:var(--sh-sm);padding:22px;}
-    .ct{font-size:15px;font-weight:800;color:var(--slate8);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    .card{background:#fff;border-radius:20px;border:1px solid var(--slate1);box-shadow:var(--sh-sm);padding:24px;}
+    .ct{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.01em;color:var(--slate9);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;gap:10px;}
 
     /* â”€â”€ LOGIN â”€â”€ */
     #page-login{display:flex;min-height:100vh;}
-    .ll{display:none;width:45%;background:linear-gradient(145deg,#1e3a8a,#312e81);padding:52px;color:#fff;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+    .ll{display:none;width:45%;background:linear-gradient(150deg,#1b1a3a 0%,#2c2a52 60%,#3a2f55 100%);padding:52px;color:#fff;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
     @media(min-width:880px){.ll{display:flex;}}
     .ll::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05);top:-70px;right:-70px;}
     .lb-icon{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;}
@@ -71,7 +81,7 @@
     .l-feat{display:flex;align-items:flex-start;gap:13px;background:rgba(255,255,255,.08);padding:15px;border-radius:var(--r-md);}
     .lfi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .lfi svg{width:18px;height:18px;}
-    .lfi.g{background:#16a34a;}.lfi.v{background:#7c3aed;}.lfi.o{background:#ea580c;}
+    .lfi.g{background:#0d9488;}.lfi.v{background:#ff6f61;}.lfi.o{background:#ea580c;}
     .l-feat h3{font-size:13px;font-weight:700;margin-bottom:2px;}
     .l-feat p{font-size:12px;color:rgba(255,255,255,.65);}
     .lr{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;background:var(--slate0);}
@@ -84,27 +94,27 @@
     .fg input:focus,.fg select:focus{border-color:var(--blue);background:#fff;}
     .l-hint{margin-top:14px;padding:10px 13px;background:var(--blue-light);border-radius:var(--r-sm);font-size:12px;color:var(--blue-dark);border:1px solid var(--blue-mid);}
 
-    /* â”€â”€ APP SHELL â”€â”€ */
-    #page-app{display:flex;min-height:100vh;}
-    .sb{width:244px;flex-shrink:0;background:#fff;border-right:1px solid var(--slate2);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
-    .sb-brand{padding:18px 17px 14px;border-bottom:1px solid var(--slate1);}
-    .sb-name{font-size:19px;font-weight:800;color:var(--blue);}
-    .sb-tenant{font-size:10px;color:var(--slate4);font-weight:600;letter-spacing:.9px;text-transform:uppercase;margin-top:1px;}
-    .sb-nav{flex:1;padding:11px 8px;display:flex;flex-direction:column;gap:2px;}
-    .ni{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:var(--r-md);font-size:13px;font-weight:600;color:var(--slate5);transition:background .15s,color .15s;cursor:pointer;}
-    .ni:hover{background:var(--slate0);color:var(--slate8);}
-    .ni.active{background:var(--blue-light);color:var(--blue);font-weight:700;}
-    .ni svg{width:16px;height:16px;flex-shrink:0;}
-    .sb-foot{padding:11px 8px;border-top:1px solid var(--slate1);}
-    .ub{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--r-md);background:var(--slate0);margin-bottom:7px;}
-    .ua{width:33px;height:33px;border-radius:9px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
-    .un{font-size:12px;font-weight:700;color:var(--slate8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .ur{font-size:10px;color:var(--slate4);font-weight:600;text-transform:capitalize;}
-    .so{display:flex;align-items:center;gap:7px;width:100%;padding:9px 12px;border-radius:var(--r-md);color:var(--slate5);font-size:12px;font-weight:600;transition:background .15s,color .15s;}
-    .so:hover{background:var(--red-light);color:var(--red);}
+    /* â”€â”€ APP SHELL (framed, floating on canvas) â”€â”€ */
+    #page-app{display:flex;min-height:calc(100vh - 32px);margin:16px;background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px rgba(27,26,58,.16);}
+    .sb{width:236px;flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;overflow-y:auto;}
+    .sb-brand{padding:22px 20px 16px;}
+    .sb-name{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.02em;color:#fff;}
+    .sb-tenant{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;letter-spacing:.9px;text-transform:uppercase;margin-top:2px;}
+    .sb-nav{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+    .ni{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.6);transition:background .15s,color .15s,box-shadow .2s;cursor:pointer;position:relative;}
+    .ni:hover{background:rgba(255,255,255,.07);color:#fff;}
+    .ni.active{background:var(--grad);color:#fff;font-weight:700;box-shadow:0 10px 22px rgba(255,95,110,.4);}
+    .ni svg{width:17px;height:17px;flex-shrink:0;}
+    .sb-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);}
+    .ub{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,.06);margin-bottom:8px;}
+    .ua{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+    .un{font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ur{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;text-transform:capitalize;}
+    .so{display:flex;align-items:center;gap:8px;width:100%;padding:10px 13px;border-radius:12px;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;transition:background .15s,color .15s;}
+    .so:hover{background:rgba(244,63,94,.18);color:#fda4af;}
     .so svg{width:14px;height:14px;}
-    .ma{flex:1;display:flex;flex-direction:column;min-width:0;overflow:auto;}
-    .tb{height:56px;background:#fff;border-bottom:1px solid var(--slate2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10;gap:10px;}
+    .ma{flex:1;display:flex;flex-direction:column;min-width:0;overflow:auto;background:var(--slate0);}
+    .tb{height:64px;background:#fff;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:10;gap:10px;}
     .tb-l{display:flex;align-items:center;gap:10px;}
     .tp{font-size:11px;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.6px;}
     .ts{display:flex;align-items:center;gap:7px;background:var(--green-light);padding:4px 12px;border-radius:999px;}
@@ -117,16 +127,28 @@
 
     /* â”€â”€ PAGE HEADER â”€â”€ */
     .ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
-    .ph h1{font-size:22px;font-weight:800;color:var(--slate8);margin-bottom:2px;}
+    .ph h1{font-size:27px;font-weight:800;color:var(--slate9);margin-bottom:3px;}
     .ph .sub{font-size:13px;color:var(--slate5);}
-    .ph .sub span{color:var(--blue);font-weight:700;}
+    .ph .sub span{color:var(--coral);font-weight:700;}
+
+    /* â”€â”€ HERO BANNER â”€â”€ */
+    .hero{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 60%,var(--navy-soft) 100%);border-radius:22px;padding:28px 30px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
+    .hero::after{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,111,97,.55),rgba(255,95,126,0));}
+    .hero .eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.7px;}
+    .hero h2{font-family:var(--font-display);font-size:25px;font-weight:800;margin:7px 0 5px;letter-spacing:-.02em;}
+    .hero p{font-size:13.5px;color:rgba(255,255,255,.72);max-width:520px;}
+    .hero .hstat{position:relative;z-index:1;text-align:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:14px 20px;flex-shrink:0;}
+    .hero .hstat b{font-family:var(--font-display);font-size:28px;font-weight:800;display:block;line-height:1;}
+    .hero .hstat span{font-size:11px;color:rgba(255,255,255,.7);font-weight:600;}
 
     /* â”€â”€ KPI â”€â”€ */
-    .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px;}
-    .kc{background:#fff;border-radius:var(--r-lg);border:1px solid var(--slate2);box-shadow:var(--sh-sm);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:box-shadow .2s,transform .2s;}
-    .kc:hover{box-shadow:var(--sh-md);transform:translateY(-2px);}
-    .kl{font-size:11px;font-weight:700;color:var(--slate5);margin-bottom:4px;letter-spacing:.3px;}
-    .kv{font-size:26px;font-weight:800;color:var(--slate8);line-height:1;}
+    .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px;}
+    .kc{background:#fff;border-radius:20px;border:1px solid var(--slate1);box-shadow:var(--sh-sm);padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:box-shadow .2s,transform .2s,border-color .2s;position:relative;overflow:hidden;}
+    .kc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad);opacity:0;transition:opacity .2s;}
+    .kc:hover{box-shadow:var(--sh-md);transform:translateY(-3px);border-color:var(--coral-light);}
+    .kc:hover::before{opacity:1;}
+    .kl{font-size:11.5px;font-weight:700;color:var(--slate5);margin-bottom:5px;letter-spacing:.4px;text-transform:uppercase;}
+    .kv{font-family:var(--font-display);font-size:31px;font-weight:800;color:var(--slate9);line-height:1;letter-spacing:-.02em;}
     .kt{font-size:11px;font-weight:700;margin-top:3px;}
     .kt.up{color:var(--green);} .kt.dn{color:var(--red);}
     .ki{width:44px;height:44px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -182,6 +204,12 @@
     .ccd{font-size:12px;color:var(--slate5);margin-bottom:10px;}
 
     /* â”€â”€ TAG MANAGER â”€â”€ */
+    .sdot{width:11px;height:11px;border-radius:50%;display:inline-block;flex-shrink:0;}
+    .sdot.g{background:var(--green-mid);box-shadow:0 0 0 3px var(--green-light);}
+    .sdot.r{background:var(--red-mid);box-shadow:0 0 0 3px var(--red-light);}
+    .sdot.x{background:var(--slate4);}
+    .ed-in{padding:6px 9px;border:2px solid var(--slate2);border-radius:7px;font-size:12px;font-weight:600;color:var(--slate8);background:#fff;outline:none;transition:border-color .15s;font-family:inherit;}
+    .ed-in:focus{border-color:var(--blue);}
     .epc-in{width:100%;padding:6px 10px;border:2px solid var(--slate2);border-radius:7px;font-size:11px;font-family:monospace;outline:none;transition:border-color .15s;}
     .epc-in:focus{border-color:var(--blue);}
     .epc-in.ok{border-color:var(--green-mid);background:#f0fdf4;}
@@ -229,7 +257,7 @@
   <div class="lr">
     <div class="lbox">
       <h2>Welcome to NurturePass</h2>
-      <p class="sub">Select your school and role to continue.</p>
+      <p class="sub">Sign in to your school workspace.</p>
 
       <form id="login-form">
         <div class="fg">
@@ -237,28 +265,75 @@
           <input id="f-code" type="text" placeholder="e.g. DEMO-01" required />
         </div>
         <div class="fg">
-          <label>Your Name</label>
-          <input id="f-name" type="text" placeholder="e.g. Dr. Priya Sharma" required />
-        </div>
-        <div class="fg">
-          <label>Your Role</label>
-          <select id="f-role">
-            <option value="principal">Principal / Admin</option>
-            <option value="teacher">Teacher</option>
-            <option value="gate_operator">Gate Operator</option>
-          </select>
+          <label>Work Email</label>
+          <input id="f-email" type="email" list="email-list" placeholder="Select or type your email" autocomplete="off" required />
+          <datalist id="email-list"></datalist>
         </div>
         <button type="submit" class="btn btn-p btn-lg btn-w" id="login-btn">Enter Dashboard</button>
       </form>
 
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--slate5);">
+        Setting up your school for the first time?
+        <button type="button" onclick="window._openSetup()" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;padding:0;">Create a workspace &rarr;</button>
+      </div>
+
       <div class="l-hint" style="margin-top:14px;">
-        <strong>Quick demo:</strong> Enter code <strong>DEMO-01</strong>, any name, role <strong>Principal</strong>.
+        <strong>Quick demo:</strong> code <strong>DEMO-01</strong>, email <strong>principal@demo-01</strong> (or teacher.a@demo-01 / teacher.b@demo-01).
       </div>
     </div>
   </div>
 </div>
 
 <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• APP â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="page-setup" class="hidden" style="min-height:100vh;background:var(--slate0);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow:auto;">
+  <div style="width:100%;max-width:640px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+        </div>
+        <div><div style="font-size:20px;font-weight:800;color:var(--blue);">NurturePass</div><div style="font-size:11px;color:var(--slate4);font-weight:600;letter-spacing:.6px;text-transform:uppercase;">Workspace Setup</div></div>
+      </div>
+      <button type="button" onclick="window._closeSetup()" class="btn btn-g btn-sm">Back to sign in</button>
+    </div>
+
+    <div class="card" style="padding:28px;">
+      <div class="ct">1 &middot; School details</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="fg" style="margin:0"><label>School Code</label><input id="s-code" type="text" placeholder="e.g. OAK-24" /></div>
+        <div class="fg" style="margin:0"><label>School Name</label><input id="s-name" type="text" placeholder="e.g. Oakridge International" /></div>
+      </div>
+      <div class="fg" style="margin-top:12px;margin-bottom:0"><label>Main Entry Gate Label</label><input id="s-gate" type="text" placeholder="e.g. Main Gate" value="Main Gate" /></div>
+    </div>
+
+    <div class="card" style="padding:28px;margin-top:16px;">
+      <div class="ct">2 &middot; Classes</div>
+      <div style="display:flex;gap:8px;">
+        <input id="s-class-input" type="text" placeholder="Add a class, e.g. 10-A" style="flex:1;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;outline:none;" onkeydown="if(event.key==='Enter'){event.preventDefault();window._addClass();}" />
+        <button type="button" class="btn btn-p" onclick="window._addClass()">Add</button>
+      </div>
+      <div id="s-class-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;"></div>
+    </div>
+
+    <div class="card" style="padding:28px;margin-top:16px;">
+      <div class="ct">3 &middot; Principal</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="fg" style="margin:0"><label>Full Name</label><input id="s-prin-name" type="text" placeholder="e.g. Dr. Priya Sharma" /></div>
+        <div class="fg" style="margin:0"><label>Work Email</label><input id="s-prin-email" type="email" placeholder="principal@school.edu" /></div>
+      </div>
+    </div>
+
+    <div class="card" style="padding:28px;margin-top:16px;">
+      <div class="ct">4 &middot; Two class teachers</div>
+      <p style="font-size:12px;color:var(--slate5);margin-top:-8px;margin-bottom:14px;">Each teacher is mapped to one class and will only ever see that class.</p>
+      <div id="s-teachers"></div>
+    </div>
+
+    <button type="button" id="s-create-btn" class="btn btn-p btn-lg btn-w" style="margin-top:18px;" onclick="window._createSchool()">Create Workspace &amp; Enter</button>
+    <div style="height:40px;"></div>
+  </div>
+</div>
+
 <div id="page-app" class="hidden">
   <aside class="sb">
     <div class="sb-brand">
@@ -291,10 +366,20 @@
           Refresh
         </button>
       </div>
-      <button class="nb-btn hidden" id="notif-btn" onclick="window._askNotif()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-        Enable Notifications
-      </button>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="nb-btn hidden" id="notif-btn" onclick="window._askNotif()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+          Enable Notifications
+        </button>
+        <span id="date-pill" style="display:flex;align-items:center;gap:7px;background:var(--slate0);border:1px solid var(--slate1);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--slate7);white-space:nowrap;">
+          <svg style="width:14px;height:14px;color:var(--coral);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span id="date-pill-txt">&mdash;</span>
+        </span>
+        <button onclick="window._signOut()" title="Sign out" style="display:flex;align-items:center;gap:6px;background:var(--slate0);border:1px solid var(--slate1);border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;color:var(--slate7);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s;" onmouseover="this.style.background='var(--red-light)';this.style.color='var(--red)';" onmouseout="this.style.background='var(--slate0)';this.style.color='var(--slate7)';">
+          <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Sign out
+        </button>
+      </div>
     </header>
     <div class="pc" id="pc">
       <div class="loader"><div class="spinner"></div>Loadingâ€¦</div>
@@ -337,6 +422,10 @@
           <option value="class-8A">Class 8-A</option>
         </select>
       </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="fg" style="margin:0"><label>Guardian Phone</label><input id="f-phone" type="text" placeholder="+91 90000 00000" /></div>
+        <div class="fg" style="margin:0"><label>Guardian Email</label><input id="f-parentEmail" type="email" placeholder="parent@email.com" /></div>
+      </div>
       <div style="display:flex;gap:10px;margin-top:6px;">
         <button type="button" class="btn btn-g btn-w" onclick="window._closeModal()">Cancel</button>
         <button type="submit" id="save-student-btn" class="btn btn-p btn-w">Add Student</button>
@@ -346,6 +435,82 @@
 </div>
 
 <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- EDIT STUDENT -->
+<div id="edit-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeEdit()">
+  <div style="background:#fff;border-radius:20px;padding:30px;width:100%;max-width:480px;max-height:88vh;overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div><h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Edit Student</h2>
+      <p style="font-size:13px;color:var(--slate5);margin-top:2px;">Update details, class and guardian contact.</p></div>
+      <button onclick="window._closeEdit()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <input id="e-id" type="hidden"/>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="fg" style="margin:0"><label>First Name</label><input id="e-firstName"/></div>
+      <div class="fg" style="margin:0"><label>Last Name</label><input id="e-lastName"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+      <div class="fg" style="margin:0"><label>Roll Number</label><input id="e-roll"/></div>
+      <div class="fg" style="margin:0"><label>Class</label><select id="e-class"></select></div>
+    </div>
+    <div class="fg" style="margin-top:12px;margin-bottom:0"><label>Guardian Name</label><input id="e-guardianName" placeholder="e.g. Mr. Sharma"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+      <div class="fg" style="margin:0"><label>Guardian Phone</label><input id="e-phone" placeholder="+91 90000 00000"/></div>
+      <div class="fg" style="margin:0"><label>Guardian Email</label><input id="e-email" type="email" placeholder="parent@email.com"/></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button type="button" class="btn btn-g btn-w" onclick="window._closeEdit()">Cancel</button>
+      <button type="button" id="edit-save-btn" class="btn btn-p btn-w" onclick="window._saveEditStudent()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<input id="photo-input" type="file" accept="image/*" style="display:none"/>
+
+<!-- STUDENT ATTENDANCE HISTORY -->
+<div id="hist-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeHist()">
+  <div style="background:#fff;border-radius:20px;padding:28px;width:100%;max-width:560px;max-height:82vh;overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <h2 id="hist-title" style="font-size:20px;font-weight:800;color:var(--slate8);">Attendance history</h2>
+      <button onclick="window._closeHist()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <p id="hist-sub" style="font-size:13px;color:var(--slate5);margin-bottom:16px;">&mdash;</p>
+    <div id="hist-body"></div>
+  </div>
+</div>
+
+<!-- PARENT MESSAGE COMPOSER -->
+<div id="msg-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeMsg()">
+  <div style="background:#fff;border-radius:20px;padding:30px;width:100%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Message Parents</h2>
+        <p style="font-size:13px;color:var(--slate5);margin-top:2px;" id="msg-to">&mdash;</p>
+      </div>
+      <button onclick="window._closeMsg()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <div class="fg"><label>Template</label>
+      <select id="msg-tpl" onchange="window._applyTpl()">
+        <option value="wellbeing">Wellbeing check</option>
+        <option value="absence">Absence confirmation</option>
+        <option value="late">Late arrival note</option>
+        <option value="appreciation">Appreciation / well done</option>
+        <option value="custom">Custom message&hellip;</option>
+      </select>
+    </div>
+    <div class="fg"><label>Channel</label>
+      <select id="msg-channel"><option value="email">Email</option><option value="sms">SMS</option></select>
+    </div>
+    <div class="fg" style="margin-bottom:8px;"><label>Message</label>
+      <textarea id="msg-body" rows="6" style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;"></textarea>
+    </div>
+    <p style="font-size:11px;color:var(--slate5);margin-bottom:14px;">Nothing is sent to a real inbox in this pilot build &mdash; messages are logged with a delivery status you can review.</p>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-g btn-w" onclick="window._closeMsg()">Cancel</button>
+      <button type="button" id="msg-send-btn" class="btn btn-p btn-w" onclick="window._sendMessages()">Log &amp; Send</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 /* â”€â”€ Firebase (Firestore only â€” NO AUTH) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 import { initializeApp }
@@ -370,6 +535,8 @@ let sess = null;
 let epcMap = {};      // epc â†’ { studentId, studentName }
 let unsub  = null;
 let curPage = 'dashboard';
+let schoolMeta = {};  // { name, gateLabel, ... } for the active school
+let studentIndex = {}; // studentId â†’ { firstName, lastName, classId }
 
 /* â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const schoolDoc = c => doc(db,'schools',c);
@@ -378,6 +545,9 @@ const ref = (c,n,i) => doc(db,'schools',c,n,i);
 const subCol = (c,n,i,s) => collection(db,'schools',c,n,i,s);
 const today = () => new Date().toISOString().split('T')[0];
 const dOff  = d => { const x=new Date(); x.setDate(x.getDate()+d); return x.toISOString().split('T')[0]; };
+// When multiple records exist for one student, prefer present > late > absent (avoids stale-absent overriding a fresh scan)
+const _rank = {present:3, late:2, absent:1};
+function mergeStatus(map, r){ const sid=r.studentId; if(!sid) return; const cur=map[sid]; if(!cur || (_rank[r.status]||0) >= (_rank[cur.status]||0)) map[sid]=r; }
 
 function ico(d,s=16){ return `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:${s}px;height:${s}px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="${d}"/></svg>`; }
 const IC = {
@@ -425,6 +595,49 @@ async function loadEpcCache(){
     console.log(`ðŸ“¡ ${Object.keys(epcMap).length} EPC mappings loaded`);
   }catch(e){ console.warn('Could not load tagMappings (check Firestore rules):', e.message); }
 }
+
+/* Cache students so live scans can resolve class + name instantly */
+async function loadStudentIndex(){
+  studentIndex={};
+  try{
+    const s=await getDocs(col(sess.code,'students'));
+    s.forEach(d=>{ const v=d.data(); studentIndex[d.id]={firstName:v.firstName,lastName:v.lastName,classId:v.classId}; });
+  }catch(e){ console.warn('Could not load students:', e.message); }
+}
+
+/* Mark a student accounted-for today (scan or manual) and refresh the view */
+// Write today's present record (no UI refresh)
+async function writePresent(sid, manual){
+  const s=studentIndex[sid];
+  if(s && s.classId){
+    const dayId=`${today()}_${s.classId}`;
+    const now=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    try{
+      await setDoc(recRef(sess.code,dayId,sid),{
+        studentId:sid, firstName:s.firstName, lastName:s.lastName, classId:s.classId,
+        status:'present', entryTime:now, arrivalTime:now,
+        markedManually:!!manual, source:manual?'manual':'scan', updatedAt:serverTimestamp()
+      },{merge:true});
+    }catch(e){ toast('Could not save attendance', e.message, 'r'); return false; }
+  }
+  window._absentees=(window._absentees||[]).filter(a=>a.id!==sid);
+  return true;
+}
+// Re-render whichever attendance view is open (called sparingly / debounced)
+async function refreshAttendanceView(){
+  if(curPage==='dashboard' && sess.role==='principal') await showPage('dashboard');
+  else if((curPage==='dashboard'||curPage==='class') && sess.role==='teacher') await showPage(curPage);
+}
+async function accountForStudent(sid, manual){
+  const ok=await writePresent(sid, manual);
+  if(ok) await refreshAttendanceView();
+  return ok;
+}
+
+window._markPresent = async (sid)=>{
+  const ok=await accountForStudent(sid,true);
+  if(ok) toast('Marked present','Attendance recorded manually (no card needed).','g');
+};
 
 /* â”€â”€ Real-time Tags Listener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 // seenIds tracks docs already shown so we only fire on TRULY new scans
@@ -509,6 +722,7 @@ function onNewScan(data){
     pushNotif(`ðŸŽ“ ${name} entered campus`, `Antenna ${antenna} Â· ${timestamp}`);
     toast(`${name} entered`, `Antenna ${antenna} Â· ${timestamp}`, 'g');
     prependFeed({_name:name, ok:true, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+    if(m.studentId) accountForStudent(m.studentId,false);
   } else {
     pushNotif('âš ï¸ Unknown RFID Tag', `EPC: ${epc} Â· Antenna ${antenna}`);
     toast('Unknown tag scanned', `EPC: ${short}â€¦ Â· Antenna ${antenna}`, 'a');
@@ -517,6 +731,44 @@ function onNewScan(data){
   if(curPage==='tags') loadRawScans();
   if(curPage==='dashboard') setStatus(`Live Â· last scan ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`);
 }
+
+/* Override with batched, non-flooding scan handling (no per-student popup) */
+let _entryBatch=0,_unknownBatch=0,_lastEntryName='',_scanTimer=null,_refreshTimer=null;
+function scheduleScanSummary(){
+  if(_scanTimer) clearTimeout(_scanTimer);
+  _scanTimer=setTimeout(()=>{
+    const parts=[];
+    if(_entryBatch) parts.push(_entryBatch===1 ? `${_lastEntryName} entered` : `${_entryBatch} students entered`);
+    if(_unknownBatch) parts.push(`${_unknownBatch} unknown tag${_unknownBatch>1?'s':''}`);
+    if(parts.length){
+      toast('Gate activity', parts.join(' · '), _unknownBatch?'a':'g');
+      if(_entryBatch) pushNotif('Campus arrivals', `${_entryBatch} student${_entryBatch>1?'s':''} entered just now.`);
+    }
+    if(curPage==='tags') loadRawScans();
+    _entryBatch=0;_unknownBatch=0;_lastEntryName='';_scanTimer=null;
+  }, 3000);
+}
+// Quick, debounced refresh so the open dashboard/roster status updates ~1s after a scan
+function scheduleQuickRefresh(){
+  if(_refreshTimer) clearTimeout(_refreshTimer);
+  _refreshTimer=setTimeout(async()=>{ _refreshTimer=null; await refreshAttendanceView(); }, 1000);
+}
+onNewScan = function(data){
+  const {epc='',antenna='?',timestamp=''} = data;
+  const m = epcMap[epc];
+  const name = m ? m.studentName : null;
+  const short = (epc||'').substring(0,12);
+  if(name){
+    prependFeed({_name:name, ok:true, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+    if(m.studentId){ writePresent(m.studentId,false).then(()=>scheduleQuickRefresh()); }
+    _entryBatch++; _lastEntryName=name;
+  } else {
+    prependFeed({_name:`Unknown (${short}…)`, ok:false, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+    _unknownBatch++;
+  }
+  scheduleScanSummary();
+  if(curPage==='dashboard') setStatus(`Live · last scan ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`);
+};
 
 function prependFeed(e){
   const el=document.getElementById('live-feed');
@@ -536,32 +788,180 @@ window._refreshFeed = async () => {
 };
 
 /* â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+// Populate the email dropdown from the school's provisioned staff (so returning users pick, not type)
+async function loadEmailOptions(){
+  const code=(document.getElementById('f-code').value||'').trim().toUpperCase();
+  const dl=document.getElementById('email-list'); if(!dl) return;
+  if(!code){ dl.innerHTML=''; return; }
+  try{
+    const snap=await getDocs(col(code,'staff'));
+    const opts=[];
+    snap.forEach(d=>{ const s=d.data(); if(s.email) opts.push(`<option value="${s.email}">${s.name||''} — ${s.role||''}</option>`); });
+    if(!opts.length && code==='DEMO-01') opts.push(
+      '<option value="principal@demo-01">Principal</option>',
+      '<option value="teacher.a@demo-01">Teacher — Class 10A</option>',
+      '<option value="teacher.b@demo-01">Teacher — Class 10B</option>');
+    dl.innerHTML=opts.join('');
+  }catch(e){
+    dl.innerHTML = code==='DEMO-01'
+      ? '<option value="principal@demo-01"></option><option value="teacher.a@demo-01"></option><option value="teacher.b@demo-01"></option>'
+      : '';
+  }
+}
+(()=>{ const fc=document.getElementById('f-code'); if(fc){ fc.addEventListener('change',loadEmailOptions); fc.addEventListener('blur',loadEmailOptions); } })();
+
 document.getElementById('login-form').addEventListener('submit', async e=>{
   e.preventDefault();
-  const code = document.getElementById('f-code').value.trim().toUpperCase();
-  const name = document.getElementById('f-name').value.trim();
-  const role = document.getElementById('f-role').value;
-  const btn  = document.getElementById('login-btn');
-  btn.textContent='Loadingâ€¦'; btn.disabled=true;
+  const code  = document.getElementById('f-code').value.trim().toUpperCase();
+  const email = document.getElementById('f-email').value.trim().toLowerCase();
+  const btn   = document.getElementById('login-btn');
+  btn.textContent='Signing inâ€¦'; btn.disabled=true;
 
-  // Save session locally â€” no Firestore needed for login
-  sess = { code, name, role };
-  localStorage.setItem('np',JSON.stringify(sess));
+  try{
+    // DEMO-01 auto-provisions itself so the demo works out of the box
+    if(code==='DEMO-01'){
+      await seedSchool(code).catch(err=>console.warn('Seed skipped:',err.message));
+      await ensureDemoStaff(code).catch(err=>console.warn('Staff ensure skipped:',err.message));
+    }
 
-  // Try to seed school data in background (won't block login)
-  seedSchool(code).catch(err=>console.warn('Seed skipped:',err.message));
-
-  await enterApp();
-  btn.textContent='Enter Dashboard'; btn.disabled=false;
+    // Look up the provisioned staff record for this email at this school
+    const snap = await getDocs(query(col(code,'staff'), where('email','==',email)));
+    if(snap.empty){
+      toast('No account found', `No user "${email}" at ${code}. Check the details or set up the workspace.`, 'r');
+      btn.textContent='Enter Dashboard'; btn.disabled=false;
+      return;
+    }
+    const d = snap.docs[0];
+    const st = d.data();
+    sess = { code, staffId:d.id, name:st.name, email:st.email, role:st.role, classIds:st.classIds||[] };
+    localStorage.setItem('np',JSON.stringify(sess));
+    await enterApp();
+  }catch(err){
+    toast('Sign-in failed', err.message, 'r');
+  }finally{
+    btn.textContent='Enter Dashboard'; btn.disabled=false;
+  }
 });
 
-document.getElementById('so-btn').addEventListener('click',()=>{
+window._signOut = ()=>{
   if(unsub){unsub();unsub=null;}
   sess=null; localStorage.removeItem('np');
   document.getElementById('page-app').classList.add('hidden');
+  document.getElementById('page-setup').classList.add('hidden');
   document.getElementById('page-login').classList.remove('hidden');
-  document.getElementById('login-form').reset();
-});
+  const lf=document.getElementById('login-form'); if(lf) lf.reset();
+  toast('Signed out','You have been signed out safely.','g');
+};
+document.getElementById('so-btn').addEventListener('click', window._signOut);
+
+/* â”€â”€ SCHOOL SETUP WIZARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+let setupClasses = [];
+const classIdFrom = label => 'class-' + label.replace(/[^A-Za-z0-9]/g,'');
+
+window._openSetup = () => {
+  setupClasses = [];
+  document.getElementById('page-login').classList.add('hidden');
+  document.getElementById('page-setup').classList.remove('hidden');
+  ['s-code','s-name','s-prin-name','s-prin-email'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderClassChips(); renderTeacherRows();
+};
+window._closeSetup = () => {
+  document.getElementById('page-setup').classList.add('hidden');
+  document.getElementById('page-login').classList.remove('hidden');
+};
+
+window._addClass = () => {
+  const inp=document.getElementById('s-class-input');
+  const label=inp.value.trim();
+  if(!label) return;
+  const id=classIdFrom(label);
+  if(setupClasses.some(c=>c.id===id)){ toast('Duplicate class', `${label} is already added.`, 'a'); inp.value=''; return; }
+  setupClasses.push({id,label});
+  inp.value=''; inp.focus();
+  renderClassChips(); renderTeacherRows();
+};
+window._removeClass = (id) => {
+  setupClasses = setupClasses.filter(c=>c.id!==id);
+  renderClassChips(); renderTeacherRows();
+};
+
+function renderClassChips(){
+  const el=document.getElementById('s-class-chips'); if(!el) return;
+  if(!setupClasses.length){ el.innerHTML='<span style="font-size:12px;color:var(--slate4);">No classes yet â€” add at least one.</span>'; return; }
+  el.innerHTML=setupClasses.map(c=>`<span class="badge bb" style="font-size:12px;padding:6px 10px;gap:6px;">${c.label}
+    <button type="button" onclick="window._removeClass('${c.id}')" style="background:none;border:none;color:var(--blue-dark);cursor:pointer;font-weight:800;font-size:14px;line-height:1;padding:0;">&times;</button></span>`).join('');
+}
+
+function renderTeacherRows(){
+  const el=document.getElementById('s-teachers'); if(!el) return;
+  // preserve any values already typed
+  const prev=[0,1].map(i=>({
+    name:(document.getElementById(`t${i}-name`)||{}).value||'',
+    email:(document.getElementById(`t${i}-email`)||{}).value||'',
+    cls:(document.getElementById(`t${i}-class`)||{}).value||''
+  }));
+  const opts=c=>setupClasses.map(x=>`<option value="${x.id}">${x.label}</option>`).join('');
+  el.innerHTML=[0,1].map(i=>`
+    <div style="border:1px solid var(--slate2);border-radius:var(--r-md);padding:14px;margin-bottom:12px;">
+      <div style="font-size:12px;font-weight:800;color:var(--slate7);margin-bottom:10px;">Teacher ${i+1}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="fg" style="margin:0"><label>Full Name</label><input id="t${i}-name" type="text" placeholder="e.g. Ms. Anjali Rao" value="${prev[i].name}" /></div>
+        <div class="fg" style="margin:0"><label>Work Email</label><input id="t${i}-email" type="email" placeholder="teacher@school.edu" value="${prev[i].email}" /></div>
+      </div>
+      <div class="fg" style="margin:0"><label>Assigned Class</label>
+        <select id="t${i}-class">${setupClasses.length?opts(i):'<option value="">Add a class first</option>'}</select>
+      </div>
+    </div>`).join('');
+  // restore selected class
+  [0,1].forEach(i=>{ const s=document.getElementById(`t${i}-class`); if(s&&prev[i].cls) s.value=prev[i].cls; });
+}
+
+window._createSchool = async () => {
+  const code=(document.getElementById('s-code').value||'').trim().toUpperCase();
+  const name=(document.getElementById('s-name').value||'').trim();
+  const gate=(document.getElementById('s-gate').value||'').trim()||'Main Gate';
+  const prinName=(document.getElementById('s-prin-name').value||'').trim();
+  const prinEmail=(document.getElementById('s-prin-email').value||'').trim().toLowerCase();
+  const T=[0,1].map(i=>({
+    name:(document.getElementById(`t${i}-name`).value||'').trim(),
+    email:(document.getElementById(`t${i}-email`).value||'').trim().toLowerCase(),
+    cls:(document.getElementById(`t${i}-class`).value||'').trim()
+  }));
+
+  if(!code||!name){ toast('Missing school info','Enter a school code and name.','a'); return; }
+  if(!setupClasses.length){ toast('No classes','Add at least one class.','a'); return; }
+  if(!prinName||!prinEmail){ toast('Missing principal','Enter the principal name and email.','a'); return; }
+  for(const [i,t] of T.entries()){
+    if(!t.name||!t.email||!t.cls){ toast(`Teacher ${i+1} incomplete`,'Name, email and class are required.','a'); return; }
+  }
+  const emails=[prinEmail,T[0].email,T[1].email];
+  if(new Set(emails).size!==emails.length){ toast('Duplicate email','Principal and teachers need distinct emails.','a'); return; }
+
+  const btn=document.getElementById('s-create-btn');
+  btn.textContent='Creatingâ€¦'; btn.disabled=true;
+  try{
+    const existing=await getDoc(schoolDoc(code));
+    if(existing.exists()){ toast('Code taken', `Workspace ${code} already exists. Pick another code.`, 'r'); btn.textContent='Create Workspace & Enter'; btn.disabled=false; return; }
+    const ts=serverTimestamp();
+    await setDoc(schoolDoc(code),{name,slug:code,timezone:'Asia/Kolkata',academicYear:'2025-2026',plan:'pilot',gateLabel:gate,isActive:true,createdAt:ts});
+    await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',gateLabel:gate,isActive:true});
+    for(const c of setupClasses) await setDoc(ref(code,'classes',c.id),{name:c.label,campusId:'campus-001',academicYear:'2025-2026',studentCount:0});
+    await setDoc(ref(code,'staff','staff-principal'),{name:prinName,email:prinEmail,role:'principal',classIds:[],createdAt:ts});
+    await setDoc(ref(code,'staff','staff-t1'),{name:T[0].name,email:T[0].email,role:'teacher',classIds:[T[0].cls],createdAt:ts});
+    await setDoc(ref(code,'staff','staff-t2'),{name:T[1].name,email:T[1].email,role:'teacher',classIds:[T[1].cls],createdAt:ts});
+    await setDoc(ref(code,'devices','device-001'),{name:`${gate} Reader`,gateLabel:gate,campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
+
+    toast('Workspace created', `${name} is live. Signing you in as principalâ€¦`, 'g');
+    sess={code,staffId:'staff-principal',name:prinName,email:prinEmail,role:'principal',classIds:[]};
+    localStorage.setItem('np',JSON.stringify(sess));
+    document.getElementById('page-setup').classList.add('hidden');
+    await enterApp();
+  }catch(err){
+    toast('Setup failed', err.message, 'r');
+  }finally{
+    btn.textContent='Create Workspace & Enter'; btn.disabled=false;
+  }
+};
 
 /* â”€â”€ ENTER APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 async function enterApp(){
@@ -572,8 +972,11 @@ async function enterApp(){
   document.getElementById('u-name').textContent     = sess.name;
   document.getElementById('u-role').textContent     = sess.role.replace('_',' ');
   document.getElementById('u-avatar').textContent   = sess.name.charAt(0).toUpperCase();
+  try{ document.getElementById('date-pill-txt').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }catch{}
   buildNav();
   checkNotif();
+  try{ const sd=await getDoc(schoolDoc(sess.code)); schoolMeta = sd.exists()?sd.data():{}; }catch{ schoolMeta={}; }
+  await loadStudentIndex();
   await loadEpcCache();
   startTagListener();
   await showPage('dashboard');
@@ -583,7 +986,7 @@ function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_opera
 
 /* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const navItems = {
-  principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart}],
+  principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'classes',l:'Classes',i:IC.doc},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart},{id:'messages',l:'Messages',i:IC.bell}],
   teacher:      [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'class',l:'My Class',i:IC.users},{id:'care',l:'Care Queue',i:IC.heart}],
   gate_operator:[{id:'dashboard',l:'Gate Monitor',i:IC.chart},{id:'tags',l:'Tag Manager',i:IC.tag}],
 };
@@ -607,13 +1010,16 @@ async function showPage(pg){
   const el=document.getElementById('pc');
   el.innerHTML='<div class="loader"><div class="spinner"></div>Loadingâ€¦</div>';
   try{
-    if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : await pgTeacher();
+    if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : await pgTeacherDash();
     else if (pg==='tags')      el.innerHTML = await pgTags();
     else if (pg==='care')      el.innerHTML = await pgCare();
     else if (pg==='students')  el.innerHTML = await pgStudents();
+    else if (pg==='classes')   el.innerHTML = await pgClasses();
+    else if (pg==='messages')  el.innerHTML = await pgMessages();
     else if (pg==='class')     el.innerHTML = await pgTeacher();
     else el.innerHTML='<div class="loader">ðŸš§ Coming soon.</div>';
     if(pg==='tags') await loadRawScans();
+    if(pg==='class') await loadClassScans();
   }catch(err){
     el.innerHTML=`<div class="loader" style="flex-direction:column;gap:8px;color:#b91c1c;">
       <span style="font-size:20px;">âš ï¸</span>
@@ -626,33 +1032,101 @@ async function showPage(pg){
 
 /* â”€â”€ PRINCIPAL DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 async function pgPrincipal(){
-  const t=today(), c=sess.code;
-  const [daySnap,careSnap,evtSnap,devSnap] = await Promise.all([
-    getDocs(col(c,'attendanceDays')).catch(()=>({forEach:()=>{},size:0})),
+  const t=today(), c=sess.code, gate=(schoolMeta.gateLabel)||'Main Gate';
+  const [clsSnap,studSnap,staffSnap,careSnap,evtSnap,devSnap] = await Promise.all([
+    getDocs(col(c,'classes')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{},size:0})),
     getDocs(query(col(c,'events'),orderBy('scannedAt','desc'),limit(8))).catch(()=>({forEach:()=>{},docs:[]})),
     getDocs(col(c,'devices')).catch(()=>({forEach:()=>{}})),
   ]);
+  const classes=[]; clsSnap.forEach(d=>classes.push({id:d.id,...d.data()}));
+  const students=[]; studSnap.forEach(d=>students.push({id:d.id,...d.data()}));
+  const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const teacherFor=cid=>{ const tt=staff.find(s=>s.role==='teacher'&&(s.classIds||[]).includes(cid)); return tt?tt.name:'â€”'; };
 
-  let p=0,a=0,l=0;
-  daySnap.forEach(d=>{ if(d.data().date===t){p+=d.data().presentCount||0;a+=d.data().absentCount||0;l+=d.data().lateCount||0;} });
+  // Pull today's records per class in parallel
+  const recSnaps=await Promise.all(classes.map(cl=>
+    getDocs(subCol(c,'attendanceDays',`${t}_${cl.id}`,'records')).catch(()=>({forEach:()=>{}}))
+  ));
+  const statusByStudent={};
+  recSnaps.forEach(sn=>sn.forEach(d=>{ const r=d.data(); if(!r.studentId) return; const st=r.status||'absent'; const cur=statusByStudent[r.studentId]; if(cur===undefined || (_rank[st]||0)>=(_rank[cur]||0)) statusByStudent[r.studentId]=st; }));
+
+  // Build per-class stats + school totals; "absent" = not scanned in at the entry point today
+  const stats=classes.map(cl=>{
+    const roster=students.filter(s=>s.classId===cl.id);
+    let present=0,late=0; const absentees=[];
+    roster.forEach(s=>{
+      const st=statusByStudent[s.id];
+      if(st==='present') present++; else if(st==='late') late++;
+      else absentees.push({id:s.id,name:`${s.firstName} ${s.lastName}`,classId:cl.id,className:cl.name||cl.id.replace('class-','')});
+    });
+    return {classId:cl.id,name:cl.name||cl.id.replace('class-',''),teacher:teacherFor(cl.id),total:roster.length,present,late,absent:absentees.length,absentees};
+  });
+  const T={enrolled:students.length,present:0,late:0,absent:0};
+  stats.forEach(s=>{T.present+=s.present;T.late+=s.late;T.absent+=s.absent;});
+  const allAbsentees=stats.flatMap(s=>s.absentees);
+  window._absentees=allAbsentees; // used by "Message all"
+  const rate=T.enrolled?Math.round(((T.present+T.late)/T.enrolled)*100):0;
   const care=careSnap.size||0;
   const evts=[]; evtSnap.forEach(d=>evts.push({...d.data()}));
   const devs=[]; devSnap.forEach(d=>devs.push({id:d.id,...d.data()}));
 
+  const classRows=stats.map(s=>{
+    const r=s.total?Math.round(((s.present+s.late)/s.total)*100):0;
+    return `<tr>
+      <td><span class="sn">${s.name}</span></td>
+      <td style="font-size:12px;color:var(--slate5);">${s.teacher}</td>
+      <td><span class="badge bg">${s.present}</span></td>
+      <td><span class="badge ba">${s.late}</span></td>
+      <td><span class="badge ${s.absent?'br':'bx'}">${s.absent}</span></td>
+      <td style="font-weight:800;color:${r>=90?'var(--green)':r>=75?'var(--amber)':'var(--red)'};">${r}%</td>
+    </tr>`;
+  }).join('');
+
+  const absRows=allAbsentees.length?allAbsentees.map(a=>`<div class="fi" id="abs-${a.id}">
+    <div class="fl"><div class="fd bad">${ico(IC.alert,15)}</div>
+      <div><div class="fn">${a.name}</div><div class="fs">Class ${a.className} Â· no entry at ${gate}</div></div></div>
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._markPresent('${a.id}')" title="Present but no card scanned">Mark present</button>
+      <button class="qa-btn" onclick="window._composeFor('${a.id}','${a.name.replace(/'/g,'')}','${a.className}')">Message parent</button>
+    </div>
+  </div>`).join(''):'<div class="loader" style="padding:18px;font-size:12px;">âœ… Everyone is accounted for today.</div>';
+
   return `
   <div class="ph">
-    <div><h1>Principal Overview</h1><p class="sub">Live safety for <span>${c}</span> Â· ${t}</p></div>
-    <button class="btn btn-g">Export Report</button>
+    <div><h1>Executive Overview</h1><p class="sub">${schoolMeta.name||c} Â· ${t} Â· entry point <span>${gate}</span></p></div>
+    <button class="btn btn-o" onclick="window._composeAll()">${ico(IC.bell,15)} Message all absentees (${allAbsentees.length})</button>
+  </div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">${t} &middot; ${schoolMeta.name||c}</div>
+      <h2>Good day, ${sess.name}</h2>
+      <p>${T.present+T.late} of ${T.enrolled} students are in today${allAbsentees.length?` &mdash; ${allAbsentees.length} still to arrive at ${gate}`:` &mdash; everyone is accounted for`}.</p>
+    </div>
+    <div class="hstat"><b>${rate}%</b><span>attendance today</span></div>
   </div>
   <div class="kgrid">
-    ${kpi('Present',p||'â€”',p?`+${p}`:null,IC.users,'bl')}
-    ${kpi('Absent',a||'â€”',a?`-${a}`:null,IC.chart,'rd')}
-    ${kpi('Late',l||'â€”',l?`+${l}`:null,IC.alert,'am')}
-    ${kpi('Care Alerts',care,`-${care}`,IC.heart,'or')}
-    ${kpi('Tag Mappings',Object.keys(epcMap).length,null,IC.tag,'vl')}
+    ${kpi('Enrolled',T.enrolled||'â€”',null,IC.users,'bl')}
+    ${kpi('Present',T.present||'0',null,IC.check,'vl')}
+    ${kpi('Late',T.late||'0',null,IC.alert,'am')}
+    ${kpi('Not at gate',T.absent||'0',T.absent?`-${T.absent}`:null,IC.chart,'rd')}
+    ${kpi('Attendance',rate+'%',null,IC.heart,'or')}
   </div>
-  <div class="tc">
+  <div class="tc" style="align-items:start;">
+    <div class="card">
+      <div class="ct">Attendance by Class</div>
+      ${classes.length?`<table class="rt">
+        <thead><tr><th>Class</th><th>Teacher</th><th>Present</th><th>Late</th><th>Absent</th><th>Rate</th></tr></thead>
+        <tbody>${classRows}</tbody></table>`:'<div class="loader" style="padding:20px;font-size:12px;">No classes yet â€” add classes in Class Manager.</div>'}
+    </div>
+    <div class="cpbg">
+      <div class="cpt">${ico(IC.alert,15)} Not scanned in at ${gate} (${allAbsentees.length})</div>
+      ${absRows}
+    </div>
+  </div>
+  <div class="tc" style="margin-top:18px;">
     <div class="card">
       <div class="ct">Live Campus Activity
         <span class="badge bg" style="font-size:11px;"><span style="width:6px;height:6px;background:var(--green-mid);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 1.5s infinite;"></span>Live</span>
@@ -676,43 +1150,357 @@ async function pgPrincipal(){
   </div>`;
 }
 
-/* â”€â”€ TEACHER DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ TEACHER DASHBOARD â€” weekly summary (Mon-start, auto-rolls) â”€â”€ */
+const shortDate = iso => { try{ return new Date(iso+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }catch{ return iso; } };
+
+async function pgTeacherDash(){
+  const c=sess.code, t=today();
+  const cls=(sess.classIds&&sess.classIds[0])||'class-10A';
+  const clsLabel=cls.replace('class-','');
+  const now=new Date(); const dsm=(now.getDay()+6)%7;           // days since Monday
+  const weekDates=[...Array(5)].map((_,k)=>dOff(-dsm+k));       // Mon..Fri of current week
+  const dayNames=['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const dayShort=['Mon','Tue','Wed','Thu','Fri'];
+
+  const results=await Promise.all([
+    getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
+    ...weekDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${cls}`,'records')).catch(()=>({forEach:()=>{}})))
+  ]);
+  const studSnap=results[0]; const weekSnaps=results.slice(1);
+  const students=[]; studSnap.forEach(dd=>{ const s={id:dd.id,...dd.data()}; if(s.classId===cls) students.push(s); });
+  const byDate=weekDates.map((d,i)=>{ const m={}; weekSnaps[i].forEach(dc=>mergeStatus(m,dc.data())); return m; });
+  const isFuture=weekDates.map(d=>d>t);
+  const hasData=weekDates.map((d,i)=>Object.keys(byDate[i]).length>0);
+
+  const dayStats=weekDates.map((d,i)=>{ let p=0,l=0; students.forEach(s=>{ const st=(byDate[i][s.id]||{}).status; if(st==='present')p++; else if(st==='late')l++; }); return {present:p,late:l,attended:p+l,total:students.length}; });
+
+  const dayCards=weekDates.map((d,i)=>{
+    const st=dayStats[i]; const isToday=d===t;
+    const val = isFuture[i] ? 'â€”' : `${st.attended}/${st.total}`;
+    const sub = isFuture[i] ? 'Upcoming' : (hasData[i] ? `${st.present} present Â· ${st.late} late` : 'No data yet');
+    const pct = (!isFuture[i]&&st.total)?Math.round(st.attended/st.total*100):0;
+    return `<div class="kc" style="flex-direction:column;align-items:stretch;gap:6px;${isToday?'border-color:var(--coral);box-shadow:0 8px 20px rgba(255,95,110,.14);':''}">
+      <div class="kl" style="display:flex;justify-content:space-between;">${dayNames[i]}<span style="color:var(--slate4);font-weight:700;">${shortDate(d)}</span></div>
+      <div class="kv" style="font-size:26px;">${val}</div>
+      <div style="font-size:11px;font-weight:700;color:${isFuture[i]?'var(--slate4)':pct>=90?'var(--green)':pct>=75?'var(--amber)':'var(--red)'};">${sub}</div>
+    </div>`;
+  }).join('');
+
+  const headCells=dayShort.map((n,i)=>`<th style="text-align:center">${n}<div style="font-size:9px;color:var(--slate4);font-weight:600;">${shortDate(weekDates[i])}</div></th>`).join('');
+  const rows=students.map(s=>{
+    const cells=weekDates.map((d,i)=>{
+      const st=(byDate[i][s.id]||{}).status; const ok=st==='present'||st==='late';
+      const dot = (isFuture[i]||!hasData[i]) ? 'x' : (ok?'g':'r');
+      const title = isFuture[i]?'Upcoming':(!hasData[i]?'No data':(st||'absent'));
+      return `<td style="text-align:center"><span class="sdot ${dot}" title="${dayNames[i]}: ${title}"></span></td>`;
+    }).join('');
+    const attended=weekDates.filter((d,i)=>{const st=(byDate[i][s.id]||{}).status;return !isFuture[i]&&hasData[i]&&(st==='present'||st==='late');}).length;
+    const recorded=weekDates.filter((d,i)=>!isFuture[i]&&hasData[i]).length;
+    return `<tr><td><div style="display:flex;align-items:center;gap:9px;">${avatar(s,30)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${s.roll||''}</div></div></div></td>${cells}<td style="text-align:center;font-weight:700;color:var(--slate7);">${attended}/${recorded||0}</td></tr>`;
+  }).join('');
+
+  const weekLabel=`${shortDate(weekDates[0])} â€“ ${shortDate(weekDates[4])}`;
+
+  return `
+  <div class="ph">
+    <div><h1>Dashboard</h1><p class="sub">Weekly summary Â· Class <span>${clsLabel}</span></p></div>
+    <span class="badge bb" style="font-size:12px;padding:7px 12px;">Week of ${weekLabel}</span>
+  </div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Class ${clsLabel} &middot; Mon&ndash;Fri</div>
+      <h2>This week at a glance</h2>
+      <p>Each card shows that day's attendance. The grid below shows every student's day-by-day status &mdash; green if present, red if missed, grey if not yet recorded.</p>
+    </div>
+    <div class="hstat"><b>${students.length}</b><span>students</span></div>
+  </div>
+  <div class="kgrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">${dayCards}</div>
+  <div class="card">
+    <div class="ct">Weekly Attendance Grid
+      <span style="display:flex;align-items:center;gap:12px;font-size:11px;font-weight:600;color:var(--slate4);">
+        <span style="display:flex;align-items:center;gap:5px;"><span class="sdot g"></span>present</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span class="sdot r"></span>missed</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span class="sdot x"></span>not recorded</span>
+      </span>
+    </div>
+    ${students.length?`<div style="overflow-x:auto;"><table class="rt">
+      <thead><tr><th>Student</th>${headCells}<th style="text-align:center">Week</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`:'<div class="loader" style="padding:20px;font-size:12px;">No students in this class yet.</div>'}
+  </div>`;
+}
+
+/* â”€â”€ MY CLASS (editable Entry/Exit roster + history + live scans) â”€â”€ */
+const recRef = (c,dayId,id)=>doc(db,'schools',c,'attendanceDays',dayId,'records',id);
+let curClass='', curDayId='', curStudents=[], curRecMap={};
+
 async function pgTeacher(){
-  const c=sess.code,t=today(),cls='class-10A';
+  const c=sess.code,t=today();
+  const cls=(sess.classIds&&sess.classIds[0])||'class-10A';
+  const clsLabel=cls.replace('class-','');
   const dayId=`${t}_${cls}`;
-  const [recSnap,careSnap]=await Promise.all([
+  curClass=cls; curDayId=dayId;
+
+  const [studSnap,recSnap,careSnap]=await Promise.all([
+    getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
     getDocs(subCol(c,'attendanceDays',dayId,'records')).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'careAlerts'),where('classId','==',cls),where('status','==','open'))).catch(()=>({forEach:()=>{}})),
   ]);
-  const recs=[]; recSnap.forEach(d=>recs.push({...d.data()}));
+  curStudents=[]; studSnap.forEach(d=>{ const s={id:d.id,...d.data()}; if(s.classId===cls) curStudents.push(s); });
+  curRecMap={}; recSnap.forEach(d=>mergeStatus(curRecMap,{id:d.id,...d.data()}));
   const alerts=[]; careSnap.forEach(d=>alerts.push({id:d.id,...d.data()}));
-  const sb=s=>s==='present'?'<span class="badge bg">Present</span>':s==='late'?'<span class="badge ba">Late</span>':'<span class="badge br">Absent</span>';
+
+  // â”€â”€ Attendance history (last 14 recorded days) for verification + status dots â”€â”€
+  const HIST_DAYS=14;
+  const histDates=[...Array(HIST_DAYS)].map((_,i)=>dOff(-i));
+  const histSnaps=await Promise.all(histDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${cls}`,'records')).catch(()=>({forEach:()=>{}}))));
+  const daysWithData=[]; const byDate={};
+  histSnaps.forEach((sn,idx)=>{ const d=histDates[idx]; let any=false; const mm={}; sn.forEach(dd=>{ any=true; mergeStatus(mm,dd.data()); }); if(any){ daysWithData.push(d); byDate[d]=mm; } });
+  const attByStud={}; const histIndex={};
+  curStudents.forEach(s=>{ let att=0; const days={}; daysWithData.forEach(d=>{ const r=byDate[d][s.id]; const status=r?(r.status||'absent'):'absent'; if(status==='present'||status==='late') att++; days[d]={status,entryTime:(r&&(r.entryTime||r.arrivalTime))||'',exitAt:(r&&r.exitAt)||''}; }); attByStud[s.id]=att; histIndex[s.id]={name:`${s.firstName} ${s.lastName}`,roll:s.roll||'',days}; });
+  const wkTotal=daysWithData.length;
+  window._histIndex=histIndex; window._histDates=daysWithData;
+  const dotFor=sid=> !wkTotal ? 'x' : (attByStud[sid]>=wkTotal?'g':'r');
+  const perfect=[];
+  const wkRows=curStudents.map(s=>{
+    const a=attByStud[s.id]||0; const isPerfect=wkTotal>0 && a>=wkTotal;
+    if(isPerfect) perfect.push({id:s.id,name:`${s.firstName} ${s.lastName}`,className:clsLabel});
+    const pct=wkTotal?Math.round((a/wkTotal)*100):0;
+    return `<tr>
+      <td><span class="sn">${s.firstName} ${s.lastName}</span></td>
+      <td style="font-weight:700;color:var(--slate7)">${a}/${wkTotal||0}</td>
+      <td style="min-width:130px"><div style="height:7px;border-radius:4px;background:var(--slate1);overflow:hidden;"><div style="height:100%;width:${pct}%;background:${isPerfect?'var(--grad)':'var(--slate4)'}"></div></div></td>
+      <td>${isPerfect?'<span class="badge bg">Full week</span>':`<span class="badge bx">${pct}%</span>`}</td>
+      <td>${isPerfect?`<button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._composeAppreciation('${s.id}','${(s.firstName+' '+s.lastName).replace(/'/g,'')}','${clsLabel}')">Send appreciation</button>`:''}</td>
+    </tr>`;
+  }).join('');
+  window._perfect=perfect;
+  const inToday=curStudents.filter(s=>{const st=(curRecMap[s.id]||{}).status;return st==='present'||st==='late';}).length;
+
+  const opt=(v,cur,lbl)=>`<option value="${v}" ${cur===v?'selected':''}>${lbl}</option>`;
+  const rows = curStudents.map(s=>{
+    const r=curRecMap[s.id]||{};
+    const status=r.status||'absent';
+    const entry=r.entryTime||r.arrivalTime||'';
+    const exit=r.exitAt||'';
+    const nm=(s.firstName+' '+s.lastName).replace(/'/g,'');
+    const d=dotFor(s.id);
+    const dTitle=d==='g'?'Attended every recorded day':d==='r'?'Missed one or more days':'No history yet';
+    return `<tr>
+      <td><span class="sdot ${d}" title="${dTitle}"></span></td>
+      <td><div style="display:flex;align-items:center;gap:10px;">${avatarBtn(s,38)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${s.roll||''}</div></div></div></td>
+      <td><select id="st_${s.id}" class="ed-in">${opt('present',status,'Present')}${opt('late',status,'Late')}${opt('absent',status,'Absent')}</select></td>
+      <td><input id="en_${s.id}" class="ed-in" value="${entry}" placeholder="08:15 AM" style="width:104px"/></td>
+      <td><input id="ex_${s.id}" class="ed-in" value="${exit}" placeholder="2026-07-11 15:20" style="width:150px"/></td>
+      <td><button class="btn btn-p btn-sm" onclick="window._saveEntry('${s.id}')">Save</button></td>
+      <td><div style="display:flex;gap:5px;flex-wrap:wrap;">
+        <button class="qa-btn" onclick="window._showHistory('${s.id}')" title="Day-by-day history">History</button>
+        <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._markPresent('${s.id}')" title="Mark present without a card">Present</button>
+        <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${clsLabel}')" title="Message parent">Message</button>
+        <button class="qa-btn" onclick="window._openEditStudent('${s.id}')" title="Edit details, class &amp; phone">Edit</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+
   return `
   <div class="ph">
-    <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> Â· ${t}</p></div>
-    <select class="cs"><option>Class 10-A</option><option>Class 10-B</option></select>
+    <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> Â· Class <span>${clsLabel}</span> Â· ${t}</p></div>
+    <span class="badge bb" style="font-size:12px;padding:7px 12px;">Class ${clsLabel}</span>
+  </div>
+  <div class="hero">
+    <div>
+      <div class="eyebrow">${t} &middot; Class ${clsLabel}</div>
+      <h2>Hello, ${sess.name}</h2>
+      <p>${inToday} of ${curStudents.length} students marked in today. Edit any entry below or recognise full-week attendance.</p>
+    </div>
+    <div class="hstat"><b>${inToday}/${curStudents.length}</b><span>in today</span></div>
   </div>
   <div class="tc">
     <div class="card">
-      <div class="ct">Today's Roster â€” 10-A</div>
-      ${recs.length?`<table class="rt">
-        <thead><tr><th>Student</th><th>Status</th><th>Arrival</th><th>Action</th></tr></thead>
-        <tbody>${recs.map(r=>`<tr>
-          <td><span class="sn">${r.firstName} ${r.lastName}</span></td>
-          <td>${sb(r.status)}</td>
-          <td style="font-size:12px;color:var(--slate5);font-weight:600;">${r.arrivalTime}</td>
-          <td><button class="btn btn-g btn-sm">Add Note</button></td>
-        </tr>`).join('')}</tbody>
-      </table>`:'<div class="loader" style="padding:20px;font-size:12px;">No attendance data â€” seed your school first.</div>'}
+      <div class="ct">Attendance â€” ${clsLabel}
+        <span style="display:flex;align-items:center;gap:12px;font-size:11px;font-weight:600;color:var(--slate4);">
+          <span style="display:flex;align-items:center;gap:5px;"><span class="sdot g"></span>all days</span>
+          <span style="display:flex;align-items:center;gap:5px;"><span class="sdot r"></span>missed a day</span>
+        </span>
+      </div>
+      ${curStudents.length?`<div style="overflow-x:auto;"><table class="rt">
+        <thead><tr><th></th><th>Student</th><th>Status</th><th>Entry Time</th><th>Exit Date &amp; Time</th><th>Save</th><th>Actions</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>`:'<div class="loader" style="padding:20px;font-size:12px;">No students in this class yet. Ask your principal to add students in the Classes/Students area.</div>'}
     </div>
-    <div class="cpbg">
-      <div class="cpt">${ico(IC.alert,15)} Action Required (${alerts.length})</div>
-      ${alerts.map(a=>`<div class="cc">
-        <div class="cch"><span class="ccn">${a.studentName}</span><span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span></div>
-        <p class="ccd">${careLabel(a.ruleCode)}</p>
-        <button class="btn btn-o btn-w btn-sm">Draft Parent Note</button>
-      </div>`).join('') || '<p style="color:#9a3412;font-size:12px;opacity:.7;">No open alerts.</p>'}
+    <div>
+      <div class="cpbg">
+        <div class="cpt">${ico(IC.alert,15)} Action Required (${alerts.length})</div>
+        ${alerts.map(a=>`<div class="cc">
+          <div class="cch"><span class="ccn">${a.studentName}</span><span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span></div>
+          <p class="ccd">${careLabel(a.ruleCode)}</p>
+          <button class="btn btn-o btn-w btn-sm" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Parent Note</button>
+        </div>`).join('') || '<p style="color:#9a3412;font-size:12px;opacity:.7;">No open alerts.</p>'}
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <div class="ct">${ico(IC.tag)} Recent Gate Scans</div>
+        <p style="font-size:11px;color:var(--slate5);margin-top:-8px;margin-bottom:10px;">Unknown tag scanned? Assign it to a student below â€” saves instantly.</p>
+        <div id="class-scans"><div class="loader" style="padding:16px;"><div class="spinner"></div></div></div>
+      </div>
     </div>
+  </div>
+  <div class="card" style="margin-top:18px;">
+    <div class="ct">Attendance History &middot; ${clsLabel}
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span style="font-size:11px;font-weight:500;color:var(--slate4);">${wkTotal} recorded day(s)</span>
+        ${perfect.length?`<button class="btn btn-p btn-sm" onclick="window._celebrateAll()">Celebrate all (${perfect.length})</button>`:''}
+      </span>
+    </div>
+    ${curStudents.length?`<div style="overflow-x:auto;"><table class="rt">
+      <thead><tr><th>Student</th><th>Days In</th><th>Week</th><th>Status</th><th>Recognise</th></tr></thead>
+      <tbody>${wkRows}</tbody></table></div>`:'<div class="loader" style="padding:18px;font-size:12px;">No students yet.</div>'}
+  </div>`;
+}
+
+/* Save / modify one student's entry & exit for today */
+window._saveEntry = async (sid) => {
+  const s=curStudents.find(x=>x.id===sid); if(!s) return;
+  const status=(document.getElementById('st_'+sid)||{}).value||'absent';
+  const entryTime=(document.getElementById('en_'+sid)||{}).value.trim();
+  const exitAt=(document.getElementById('ex_'+sid)||{}).value.trim();
+  try{
+    await setDoc(recRef(sess.code,curDayId,sid),{
+      studentId:sid, firstName:s.firstName, lastName:s.lastName, classId:curClass,
+      status, entryTime, arrivalTime:entryTime, exitAt, markedManually:true, updatedAt:serverTimestamp()
+    },{merge:true});
+    curRecMap[sid]={...(curRecMap[sid]||{}),status,entryTime,exitAt};
+    toast(`${s.firstName} ${s.lastName} saved`, `${status} Â· in ${entryTime||'â€”'} Â· out ${exitAt||'â€”'}`, 'g');
+  }catch(e){ toast('Save failed', e.message, 'r'); }
+};
+
+/* Recent scans for the teacher's class â€” assign unknown tags inline */
+async function loadClassScans(){
+  const el=document.getElementById('class-scans'); if(!el) return;
+  try{
+    const snap=await getDocs(query(collection(db,'tags'),orderBy('timestamp','desc'),limit(12)));
+    if(snap.empty){ el.innerHTML='<p style="color:var(--slate4);font-size:12px;text-align:center;padding:12px;">No scans yet.</p>'; return; }
+    const rows=[]; snap.forEach(d=>rows.push({id:d.id,...d.data()}));
+    const studOpts=curStudents.map(s=>`<option value="${s.id}">${s.firstName} ${s.lastName}</option>`).join('');
+    el.innerHTML=rows.map((r,i)=>{
+      const m=epcMap[r.epc]; const known=!!m;
+      return `<div class="rsi" style="flex-direction:column;align-items:stretch;gap:8px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+          <div>
+            <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'âœ“ '+m.studentName:'âš  Unassigned tag'}</div>
+            <div class="epc-code">${r.epc||'â€”'}</div>
+            <div class="scan-meta">Reader: Antenna ${r.antenna||'?'} Â· ${r.timestamp||'â€”'}</div>
+          </div>
+        </div>
+        ${known?'':`<div style="display:flex;gap:6px;">
+          <select id="sc_${i}" class="ed-in" style="flex:1;">${studOpts||'<option value="">No students</option>'}</select>
+          <button class="qa-btn" onclick="window._assignScan('${(r.epc||'').replace(/'/g,'')}','sc_${i}')">Assign &amp; Save</button>
+        </div>`}
+      </div>`;
+    }).join('');
+  }catch(e){ el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">âš  ${e.message}</p>`; }
+}
+
+/* Tag a scanned EPC to a chosen student and persist the mapping */
+window._assignScan = async (epc, selId) => {
+  const sid=(document.getElementById(selId)||{}).value||'';
+  const s=curStudents.find(x=>x.id===sid);
+  if(!epc||!s){ toast('Pick a student','Choose a student to assign this tag to.','a'); return; }
+  const studentName=`${s.firstName} ${s.lastName}`;
+  try{
+    await setDoc(doc(db,'tagMappings',sid),{studentId:sid,studentName,epc,schoolCode:sess.code,classId:s.classId,assignedAt:serverTimestamp()});
+    epcMap[epc]={studentId:sid,studentName,schoolCode:sess.code};
+    toast(`${studentName} tagged`, `EPC ${epc.substring(0,14)}â€¦ mapped`, 'g');
+    await loadClassScans();
+  }catch(e){ toast('Assign failed', e.message, 'r'); }
+};
+
+/* â”€â”€ CLASS MANAGER (principal: add class + tag a teacher) â”€â”€â”€â”€â”€â”€â”€ */
+async function pgClasses(){
+  const c=sess.code;
+  const [clsSnap,staffSnap]=await Promise.all([
+    getDocs(col(c,'classes')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+  ]);
+  const classes=[]; clsSnap.forEach(d=>classes.push({id:d.id,...d.data()}));
+  const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const teachers=staff.filter(s=>s.role==='teacher');
+  const teacherFor=cid=>teachers.find(tt=>(tt.classIds||[]).includes(cid));
+  window._setupTeachers=teachers; // used by save handler
+
+  const tOpts=teachers.map(tt=>`<option value="${tt.id}">${tt.name} (${tt.email})</option>`).join('');
+  const rows=classes.map(cl=>{
+    const tt=teacherFor(cl.id);
+    return `<tr>
+      <td><span class="sn">${cl.name||cl.id.replace('class-','')}</span></td>
+      <td><span class="badge bb">${cl.id}</span></td>
+      <td>${tt?`<span class="badge bg">${tt.name}</span>`:'<span class="badge bx">Unassigned</span>'}</td>
+      <td style="font-size:12px;color:var(--slate5);">${cl.studentCount??'â€”'}</td>
+    </tr>`;
+  }).join('');
+
+  return `
+  <div class="ph"><div><h1>Class Manager</h1><p class="sub">${classes.length} classes Â· ${teachers.length} teachers</p></div></div>
+  <div class="tc" style="align-items:start;">
+    <div class="card">
+      <div class="ct">Classes</div>
+      ${classes.length?`<table class="rt">
+        <thead><tr><th>Class</th><th>ID</th><th>Class Teacher</th><th>Students</th></tr></thead>
+        <tbody>${rows}</tbody></table>`:'<div class="loader" style="padding:20px;font-size:12px;">No classes yet â€” add one on the right.</div>'}
+    </div>
+    <div class="card">
+      <div class="ct">Add a Class</div>
+      <div class="fg"><label>Class Name</label><input id="nc-name" placeholder="e.g. 9-A"/></div>
+      <div class="fg"><label>Tag a Teacher (optional)</label>
+        <select id="nc-teacher"><option value="">â€” None for now â€”</option>${tOpts}</select>
+      </div>
+      <button class="btn btn-p btn-w" onclick="window._addClassRecord()">Add Class</button>
+      <p style="font-size:11px;color:var(--slate5);margin-top:10px;">The tagged teacher will see only this class when they sign in.</p>
+    </div>
+  </div>`;
+}
+
+/* Create a class and (optionally) map a teacher to it */
+window._addClassRecord = async () => {
+  const name=(document.getElementById('nc-name').value||'').trim();
+  const teacherId=(document.getElementById('nc-teacher').value||'').trim();
+  if(!name){ toast('Missing name','Enter a class name.','a'); return; }
+  const cid='class-'+name.replace(/[^A-Za-z0-9]/g,'');
+  try{
+    const existing=await getDoc(ref(sess.code,'classes',cid));
+    if(existing.exists()){ toast('Class exists', `${name} already exists.`, 'a'); return; }
+    await setDoc(ref(sess.code,'classes',cid),{name,campusId:'campus-001',academicYear:'2025-2026',studentCount:0,createdAt:serverTimestamp()});
+    if(teacherId){
+      const tt=(window._setupTeachers||[]).find(x=>x.id===teacherId);
+      const classIds=Array.from(new Set([...((tt&&tt.classIds)||[]),cid]));
+      await setDoc(ref(sess.code,'staff',teacherId),{classIds},{merge:true});
+    }
+    toast('Class added', `${name} created${teacherId?' and teacher tagged':''}.`, 'g');
+    await showPage('classes');
+  }catch(e){ toast('Add failed', e.message, 'r'); }
+};
+
+/* â”€â”€ MESSAGES / DELIVERY LOG (principal) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgMessages(){
+  let msgs=[];
+  try{ const snap=await getDocs(query(col(sess.code,'messages'),orderBy('sentAt','desc'),limit(60))); snap.forEach(d=>msgs.push({id:d.id,...d.data()})); }
+  catch(e){ /* ordering may fail if no sentAt; fall back */ try{ const s2=await getDocs(col(sess.code,'messages')); s2.forEach(d=>msgs.push({id:d.id,...d.data()})); }catch{} }
+  const tplLabel={wellbeing:'Wellbeing',absence:'Absence',late:'Late',appreciation:'Appreciation',custom:'Custom'};
+  const when=m=>{ try{ return m.sentAt?.toDate ? m.sentAt.toDate().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : (m.date||'â€”'); }catch{ return m.date||'â€”'; } };
+  const rows=msgs.map(m=>`<tr>
+    <td><span class="sn">${m.studentName||'â€”'}</span></td>
+    <td><span class="badge bb">${(m.classId||'').replace('class-','')||'â€”'}</span></td>
+    <td><span class="badge bx">${tplLabel[m.template]||m.template||'â€”'}</span></td>
+    <td style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--slate5);">${m.channel||'email'}</td>
+    <td><span class="badge bg">${m.status||'sent'}</span></td>
+    <td style="font-size:12px;color:var(--slate5);">${m.sentBy||'â€”'}</td>
+    <td style="font-size:12px;color:var(--slate5);white-space:nowrap;">${when(m)}</td>
+  </tr>`).join('');
+  return `
+  <div class="ph"><div><h1>Parent Messages</h1><p class="sub">${msgs.length} message${msgs.length!==1?'s':''} logged Â· delivery record</p></div></div>
+  <div class="card">
+    <div class="ct">Delivery Log</div>
+    ${msgs.length?`<div style="overflow-x:auto;"><table class="rt">
+      <thead><tr><th>Student</th><th>Class</th><th>Template</th><th>Channel</th><th>Status</th><th>Sent By</th><th>When</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`:'<div class="loader" style="padding:22px;font-size:12px;">No messages sent yet. Use the dashboard or a class page to message parents.</div>'}
   </div>`;
 }
 
@@ -804,9 +1592,15 @@ window._quickAssign = epc =>{
 /* â”€â”€ CARE PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 async function pgCare(){
   const snap=await getDocs(query(col(sess.code,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{}}));
-  const alerts=[]; snap.forEach(d=>alerts.push({id:d.id,...d.data()}));
+  let alerts=[]; snap.forEach(d=>alerts.push({id:d.id,...d.data()}));
+  // Governance: teachers only see care alerts for their assigned class(es)
+  if(sess.role==='teacher'){
+    const mine=new Set(sess.classIds||[]);
+    alerts=alerts.filter(a=>mine.has(a.classId));
+  }
+  const scope = sess.role==='teacher' ? `Class ${((sess.classIds||[])[0]||'').replace('class-','')}` : 'All classes';
   return `
-  <div class="ph"><div><h1>Care Queue</h1><p class="sub">${alerts.length} open alert${alerts.length!==1?'s':''}</p></div></div>
+  <div class="ph"><div><h1>Care Queue</h1><p class="sub">${scope} Â· ${alerts.length} open alert${alerts.length!==1?'s':''}</p></div></div>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
     ${alerts.length?alerts.map(a=>`<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;">
@@ -815,7 +1609,7 @@ async function pgCare(){
         <span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span>
       </div>
       <p style="font-size:13px;color:var(--slate5);margin-bottom:14px;">${careLabel(a.ruleCode)}</p>
-      <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
+      <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
     </div>`).join(''):'<div class="loader">âœ… No open care alerts.</div>'}
   </div>`;
 }
@@ -829,19 +1623,243 @@ async function pgStudents(){
     <button class="btn btn-p" onclick="window._openAddStudent()">+ Add Student</button>
   </div>
   <div class="card"><div class="ct">All Students</div>
-    <table class="rt"><thead><tr><th>Name</th><th>Roll</th><th>Class</th><th>RFID</th><th>Status</th></tr></thead>
+    <table class="rt"><thead><tr><th>Name</th><th>Guardian Phone</th><th>Roll</th><th>Class</th><th>RFID</th><th>Actions</th></tr></thead>
     <tbody>${studs.map(s=>{
       const tagged=Object.values(epcMap).some(m=>m.studentId===s.id);
-      return `<tr><td><span class="sn">${s.firstName} ${s.lastName}</span></td>
+      const nm=(s.firstName+' '+s.lastName).replace(/'/g,'');
+      return `<tr><td><div style="display:flex;align-items:center;gap:10px;">${avatarBtn(s,34)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${(s.classId||'').replace('class-','Class ')}</div></div></div></td>
+        <td style="font-size:12px;color:var(--slate7);font-weight:600;">${s.parentPhone||'â€”'}</td>
         <td style="font-size:12px;color:var(--slate5);">${s.roll}</td>
         <td><span class="badge bb">${(s.classId||'').replace('class-','')}</span></td>
-        <td>${tagged?'<span class="badge bg">âœ“ Mapped</span>':'<span class="badge br">Unmapped</span>'}</td>
-        <td><span class="badge bg">Active</span></td></tr>`;}).join('')}
+        <td>${tagged?'<span class="badge bg">Mapped</span>':'<span class="badge br">Unmapped</span>'}</td>
+        <td><div style="display:flex;gap:5px;">
+          <button class="qa-btn" onclick="window._openEditStudent('${s.id}')" title="Edit details, class &amp; phone">Edit</button>
+          <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${(s.classId||'').replace('class-','')}')" title="Message parent">Message</button>
+        </div></td></tr>`;}).join('')}
     </tbody></table>
   </div>`;
 }
 
+/* â”€â”€ ADD STUDENT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+window._openAddStudent = async () => {
+  const form = document.getElementById('add-student-form');
+  if(form) form.reset();
+  // Populate class dropdown from the school's actual classes
+  try{
+    const snap=await getDocs(col(sess.code,'classes'));
+    const sel=document.getElementById('f-class');
+    if(sel){
+      const opts=[]; snap.forEach(d=>{ const cl=d.data(); opts.push(`<option value="${d.id}">${cl.name||d.id.replace('class-','')}</option>`); });
+      if(opts.length) sel.innerHTML=opts.join('');
+    }
+  }catch(e){ /* keep default options */ }
+  document.getElementById('add-modal').classList.remove('hidden');
+  setTimeout(()=>{ const f=document.getElementById('f-firstName'); if(f) f.focus(); }, 50);
+};
+
+window._closeModal = () => {
+  document.getElementById('add-modal').classList.add('hidden');
+};
+
+window._saveStudent = async () => {
+  const firstName = document.getElementById('f-firstName').value.trim();
+  const lastName  = document.getElementById('f-lastName').value.trim();
+  const roll      = document.getElementById('f-roll').value.trim();
+  const classId   = document.getElementById('f-class').value;
+  const parentPhone = (document.getElementById('f-phone').value||'').trim();
+  const parentEmail = (document.getElementById('f-parentEmail').value||'').trim();
+  if(!firstName || !lastName || !roll){ toast('Missing details','First name, last name and roll number are required.','a'); return; }
+
+  const btn = document.getElementById('save-student-btn');
+  const orig = btn ? btn.textContent : '';
+  if(btn){ btn.textContent='Savingâ€¦'; btn.disabled=true; }
+
+  try{
+    const id = 'stu-' + Date.now();
+    await setDoc(ref(sess.code,'students',id), {
+      id, firstName, lastName, roll, classId, parentPhone, parentEmail,
+      campusId:'campus-001', isActive:true, photoUrl:'', createdAt:serverTimestamp()
+    });
+    toast(`${firstName} ${lastName} added`, `Roll ${roll} Â· ${classId.replace('class-','Class ')}`, 'g');
+    window._closeModal();
+    if(curPage==='students') await showPage('students');
+  }catch(e){
+    toast('Save failed', e.message, 'r');
+  }finally{
+    if(btn){ btn.textContent=orig||'Add Student'; btn.disabled=false; }
+  }
+};
+
+/* â”€â”€ EDIT STUDENT (details, class, guardian phone) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+window._openEditStudent = async (sid)=>{
+  try{
+    const snap=await getDoc(ref(sess.code,'students',sid));
+    if(!snap.exists()){ toast('Not found','Student record missing.','r'); return; }
+    const s=snap.data();
+    document.getElementById('e-id').value=sid;
+    document.getElementById('e-firstName').value=s.firstName||'';
+    document.getElementById('e-lastName').value=s.lastName||'';
+    document.getElementById('e-roll').value=s.roll||'';
+    document.getElementById('e-guardianName').value=s.guardianName||'';
+    document.getElementById('e-phone').value=s.parentPhone||'';
+    document.getElementById('e-email').value=s.parentEmail||'';
+    const sel=document.getElementById('e-class');
+    const cs=await getDocs(col(sess.code,'classes'));
+    const opts=[]; cs.forEach(d=>{ const cl=d.data(); opts.push(`<option value="${d.id}" ${d.id===s.classId?'selected':''}>${cl.name||d.id.replace('class-','')}</option>`); });
+    sel.innerHTML=opts.join('')||`<option value="${s.classId||''}">${(s.classId||'').replace('class-','')}</option>`;
+    document.getElementById('edit-modal').classList.remove('hidden');
+  }catch(e){ toast('Could not load', e.message,'r'); }
+};
+window._closeEdit = ()=> document.getElementById('edit-modal').classList.add('hidden');
+window._saveEditStudent = async ()=>{
+  const sid=document.getElementById('e-id').value;
+  const firstName=document.getElementById('e-firstName').value.trim();
+  const lastName=document.getElementById('e-lastName').value.trim();
+  const roll=document.getElementById('e-roll').value.trim();
+  const classId=document.getElementById('e-class').value;
+  const guardianName=document.getElementById('e-guardianName').value.trim();
+  const parentPhone=document.getElementById('e-phone').value.trim();
+  const parentEmail=document.getElementById('e-email').value.trim();
+  if(!firstName||!lastName||!roll){ toast('Missing details','First name, last name and roll are required.','a'); return; }
+  const btn=document.getElementById('edit-save-btn'); btn.textContent='Savingâ€¦'; btn.disabled=true;
+  try{
+    await setDoc(ref(sess.code,'students',sid),{firstName,lastName,roll,classId,guardianName,parentPhone,parentEmail,updatedAt:serverTimestamp()},{merge:true});
+    if(studentIndex[sid]) studentIndex[sid]={firstName,lastName,classId};
+    toast('Student updated', `${firstName} ${lastName} saved.`, 'g');
+    window._closeEdit();
+    await showPage(curPage);
+  }catch(e){ toast('Save failed', e.message,'r'); }
+  finally{ btn.textContent='Save Changes'; btn.disabled=false; }
+};
+
+/* â”€â”€ STUDENT ATTENDANCE HISTORY MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+window._closeHist = ()=> document.getElementById('hist-modal').classList.add('hidden');
+window._showHistory = (sid)=>{
+  const h=(window._histIndex||{})[sid]; const dates=window._histDates||[];
+  if(!h){ toast('No history','No attendance history available yet.','a'); return; }
+  document.getElementById('hist-title').textContent=h.name;
+  const present=dates.filter(d=>{const st=h.days[d].status;return st==='present'||st==='late';}).length;
+  document.getElementById('hist-sub').innerHTML=`Roll ${h.roll||'â€”'} Â· attended <strong>${present}/${dates.length}</strong> recorded day(s)`;
+  const body=document.getElementById('hist-body');
+  if(!dates.length){ body.innerHTML='<div class="loader" style="padding:18px;font-size:12px;">No recorded days yet.</div>'; }
+  else body.innerHTML=`<table class="rt"><thead><tr><th></th><th>Date</th><th>Status</th><th>Entry</th><th>Exit</th></tr></thead><tbody>${
+    dates.map(d=>{ const rec=h.days[d]; const ok=rec.status==='present'||rec.status==='late';
+      return `<tr>
+        <td><span class="sdot ${ok?'g':'r'}"></span></td>
+        <td style="font-weight:700;">${d}</td>
+        <td>${rec.status==='present'?'<span class="badge bg">Present</span>':rec.status==='late'?'<span class="badge ba">Late</span>':'<span class="badge br">Absent</span>'}</td>
+        <td style="font-size:12px;color:var(--slate5);">${rec.entryTime||'â€”'}</td>
+        <td style="font-size:12px;color:var(--slate5);">${rec.exitAt||'â€”'}</td>
+      </tr>`; }).join('')
+  }</tbody></table>`;
+  document.getElementById('hist-modal').classList.remove('hidden');
+};
+
+/* â”€â”€ PARENT MESSAGE COMPOSER (simulated / logged) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+let composeTargets = [];   // [{id,name,className}]
+const MSG_TEMPLATES = {
+  wellbeing: (n,s)=>`Dear Parent,\n\nWe noticed ${n} was not scanned in at ${s} today. We simply want to check that all is well at home. Please reply or call the school office at your convenience.\n\nWarm regards,\n${s} Office`,
+  absence:   (n,s)=>`Dear Parent,\n\nOur records show ${n} was marked absent today. Kindly let us know the reason for the absence so we can update our register.\n\nThank you,\n${s} Office`,
+  late:      (n,s)=>`Dear Parent,\n\nThis is a gentle note that ${n} arrived late today. Please help us ensure timely arrival going forward.\n\nThank you,\n${s} Office`,
+  appreciation:(n,s)=>`Dear Parent,\n\nWe're delighted to share that ${n} had full attendance this week at ${s}! Thank you for your support in building such a wonderful routine. Please join us in giving ${n} a well-deserved pat on the back.\n\nWith appreciation,\n${s} Office`,
+  custom:    ()=>''
+};
+
+function openMsgModal(defaultTpl){
+  document.getElementById('msg-tpl').value=defaultTpl||'wellbeing';
+  window._applyTpl();
+  document.getElementById('msg-modal').classList.remove('hidden');
+}
+function composeWith(targets,label,tpl){
+  composeTargets=targets;
+  document.getElementById('msg-to').textContent=label;
+  openMsgModal(tpl);
+}
+window._closeMsg = ()=> document.getElementById('msg-modal').classList.add('hidden');
+
+window._composeFor = (id,name,className)=>
+  composeWith([{id,name,className}], `To: parent of ${name} (Class ${className})`);
+window._composeAll = ()=>{
+  const t=(window._absentees||[]).map(a=>({id:a.id,name:a.name,className:a.className}));
+  if(!t.length){ toast('Nobody to message','Everyone is accounted for today.','a'); return; }
+  composeWith(t, `To: ${t.length} parents of today's absentees`);
+};
+window._composeAppreciation = (id,name,className)=>
+  composeWith([{id,name,className}], `To: parent of ${name} (Class ${className})`, 'appreciation');
+window._celebrateAll = ()=>{
+  const t=(window._perfect||[]).map(a=>({id:a.id,name:a.name,className:a.className}));
+  if(!t.length){ toast('No perfect attendance yet','No students have full attendance this week.','a'); return; }
+  composeWith(t, `To: ${t.length} parents â€” full attendance this week`, 'appreciation');
+};
+window._applyTpl = ()=>{
+  const tpl=document.getElementById('msg-tpl').value;
+  const school=schoolMeta.name||sess.code;
+  const name = composeTargets.length===1 ? composeTargets[0].name : 'your child';
+  document.getElementById('msg-body').value = (MSG_TEMPLATES[tpl]||MSG_TEMPLATES.custom)(name,school);
+};
+window._sendMessages = async ()=>{
+  const body=document.getElementById('msg-body').value.trim();
+  const channel=document.getElementById('msg-channel').value;
+  const tpl=document.getElementById('msg-tpl').value;
+  if(!body){ toast('Empty message','Write a message or pick a template.','a'); return; }
+  if(!composeTargets.length){ toast('No recipients','No parents selected.','a'); return; }
+  const btn=document.getElementById('msg-send-btn'); btn.textContent='Sendingâ€¦'; btn.disabled=true;
+  try{
+    for(const tgt of composeTargets){
+      const personalised = composeTargets.length===1 ? body : body.replace(/your child/g, tgt.name);
+      await addDoc(col(sess.code,'messages'),{
+        studentId:tgt.id, studentName:tgt.name, classId:'class-'+(tgt.className||'').replace(/[^A-Za-z0-9]/g,''),
+        channel, template:tpl, body:personalised, status:'sent',
+        sentBy:sess.name, sentByRole:sess.role, sentAt:serverTimestamp(), date:today()
+      });
+    }
+    toast('Messages logged', `${composeTargets.length} parent message${composeTargets.length>1?'s':''} recorded as sent.`, 'g');
+    window._closeMsg();
+  }catch(e){ toast('Send failed', e.message, 'r'); }
+  finally{ btn.textContent='Log & Send'; btn.disabled=false; }
+};
+
 /* â”€â”€ RENDER HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ STUDENT PHOTO / AVATAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function initials(s){ return ((s.firstName||'?').charAt(0)+(s.lastName||'').charAt(0)).toUpperCase(); }
+function avatar(s,size){ size=size||34;
+  if(s.photoUrl) return `<img src="${s.photoUrl}" alt="" style="width:${size}px;height:${size}px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--slate2);"/>`;
+  return `<span style="width:${size}px;height:${size}px;border-radius:10px;background:var(--grad);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:${Math.round(size*0.38)}px;font-weight:800;flex-shrink:0;">${initials(s)}</span>`;
+}
+function avatarBtn(s,size){ size=size||38;
+  return `<button onclick="window._changePhoto('${s.id}')" title="Upload / change photo" style="border:none;background:none;padding:0;cursor:pointer;position:relative;display:inline-flex;flex-shrink:0;">
+    ${avatar(s,size)}
+    <span style="position:absolute;right:-3px;bottom:-3px;width:16px;height:16px;border-radius:50%;background:var(--coral);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid #fff;">
+      <svg style="width:8px;height:8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M12 4v16m8-8H4"/></svg>
+    </span>
+  </button>`;
+}
+let _photoSid=null;
+window._changePhoto=(sid)=>{ _photoSid=sid; const inp=document.getElementById('photo-input'); if(inp){ inp.value=''; inp.click(); } };
+function resizeImage(file,max){
+  return new Promise((resolve,reject)=>{
+    const img=new Image(); const url=URL.createObjectURL(file);
+    img.onload=()=>{ const scale=Math.min(1,max/Math.max(img.width,img.height));
+      const w=Math.round(img.width*scale), h=Math.round(img.height*scale);
+      const cv=document.createElement('canvas'); cv.width=w; cv.height=h;
+      cv.getContext('2d').drawImage(img,0,0,w,h); URL.revokeObjectURL(url);
+      resolve(cv.toDataURL('image/jpeg',0.82));
+    };
+    img.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error('Could not read image')); };
+    img.src=url;
+  });
+}
+document.getElementById('photo-input').addEventListener('change', async e=>{
+  const file=e.target.files&&e.target.files[0]; if(!file||!_photoSid) return;
+  try{
+    const dataUrl=await resizeImage(file,180);
+    await setDoc(ref(sess.code,'students',_photoSid),{photoUrl:dataUrl},{merge:true});
+    const s=curStudents.find(x=>x.id===_photoSid); if(s) s.photoUrl=dataUrl;
+    toast('Photo updated','Student photo saved.','g');
+    await showPage(curPage);
+  }catch(err){ toast('Upload failed', err.message,'r'); }
+});
+
 function kpi(label,value,trend,iconD,clr){
   const up=trend&&trend.startsWith('+');
   return `<div class="kc"><div><div class="kl">${label}</div><div class="kv">${value}</div>${trend?`<div class="kt ${up?'up':'dn'}">${trend}</div>`:''}</div><div class="ki ${clr}">${ico(iconD,20)}</div></div>`;
@@ -858,6 +1876,14 @@ function careLabel(code){
 }
 
 /* â”€â”€ SEED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+// Idempotent: guarantees the 3 demo staff exist even if the school was seeded earlier
+async function ensureDemoStaff(code){
+  const ts=serverTimestamp();
+  await setDoc(ref(code,'staff','staff-principal'),{name:'Dr. Priya Sharma',email:'principal@demo-01',role:'principal',classIds:[],createdAt:ts});
+  await setDoc(ref(code,'staff','staff-t1'),{name:'Ms. Anjali Rao',email:'teacher.a@demo-01',role:'teacher',classIds:['class-10A'],createdAt:ts});
+  await setDoc(ref(code,'staff','staff-t2'),{name:'Mr. Vikram Nair',email:'teacher.b@demo-01',role:'teacher',classIds:['class-10B'],createdAt:ts});
+}
+
 async function seedSchool(code){
   const snap=await getDoc(schoolDoc(code));
   if(snap.exists()) return;
@@ -866,6 +1892,7 @@ async function seedSchool(code){
   await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',address:'1 School Road',city:'Bangalore',isActive:true});
   await setDoc(ref(code,'classes','class-10A'),{name:'10-A',grade:'10',section:'A',campusId:'campus-001',academicYear:'2025-2026',studentCount:6});
   await setDoc(ref(code,'classes','class-10B'),{name:'10-B',grade:'10',section:'B',campusId:'campus-001',academicYear:'2025-2026',studentCount:5});
+  await ensureDemoStaff(code);
   const ss=[
     {id:'stu-001',firstName:'Alice',  lastName:'Johnson',roll:'10A-01',classId:'class-10A'},
     {id:'stu-002',firstName:'Bob',    lastName:'Smith',  roll:'10A-02',classId:'class-10A'},
