@@ -1,0 +1,917 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NurturePass â€” School Safety Platform</title>
+  <style>
+    :root{
+      --blue:#2563eb;--blue-dark:#1d4ed8;--blue-light:#eff6ff;--blue-mid:#dbeafe;
+      --green:#16a34a;--green-light:#dcfce7;--green-mid:#22c55e;
+      --red:#dc2626;--red-light:#fee2e2;--red-mid:#ef4444;
+      --amber:#d97706;--amber-light:#fef3c7;
+      --orange:#ea580c;--orange-light:#ffedd5;
+      --violet:#7c3aed;--violet-light:#ede9fe;
+      --slate9:#0f172a;--slate8:#1e293b;--slate7:#334155;
+      --slate5:#64748b;--slate4:#94a3b8;--slate2:#e2e8f0;
+      --slate1:#f1f5f9;--slate0:#f8fafc;--white:#fff;
+      --r-sm:8px;--r-md:12px;--r-lg:16px;--r-xl:24px;
+      --sh-sm:0 1px 3px rgba(0,0,0,.08);
+      --sh-md:0 4px 16px rgba(0,0,0,.1);
+      --sh-lg:0 10px 40px rgba(0,0,0,.14);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--slate0);color:var(--slate9);font-size:15px;line-height:1.6;}
+    button{font-family:inherit;cursor:pointer;border:none;background:none;}
+    input,select{font-family:inherit;}
+    .hidden{display:none!important;}
+
+    /* â”€â”€ ANIMATIONS â”€â”€ */
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes slideIn{from{opacity:0;transform:translateX(110%)}to{opacity:1;transform:translateX(0)}}
+    @keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(110%)}}
+    @keyframes popIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+
+    /* â”€â”€ BADGE â”€â”€ */
+    .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+    .bg{background:var(--green-light);color:var(--green);}
+    .br{background:var(--red-light);color:var(--red);}
+    .ba{background:var(--amber-light);color:var(--amber);}
+    .bb{background:var(--blue-mid);color:var(--blue-dark);}
+    .bo{background:var(--orange-light);color:var(--orange);}
+    .bx{background:var(--slate1);color:var(--slate5);}
+
+    /* â”€â”€ BUTTONS â”€â”€ */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:700;line-height:1;transition:opacity .15s,transform .15s;cursor:pointer;border:none;}
+    .btn:hover{opacity:.88;transform:translateY(-1px);}
+    .btn-p{background:var(--blue);color:#fff;}
+    .btn-g{background:#fff;color:var(--slate7);border:2px solid var(--slate2);}
+    .btn-o{background:var(--orange);color:#fff;}
+    .btn-sm{padding:5px 11px;font-size:12px;}
+    .btn-lg{padding:13px 26px;font-size:15px;border-radius:var(--r-lg);}
+    .btn-w{width:100%;}
+
+    /* â”€â”€ CARD â”€â”€ */
+    .card{background:#fff;border-radius:var(--r-lg);border:1px solid var(--slate2);box-shadow:var(--sh-sm);padding:22px;}
+    .ct{font-size:15px;font-weight:800;color:var(--slate8);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+
+    /* â”€â”€ LOGIN â”€â”€ */
+    #page-login{display:flex;min-height:100vh;}
+    .ll{display:none;width:45%;background:linear-gradient(145deg,#1e3a8a,#312e81);padding:52px;color:#fff;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+    @media(min-width:880px){.ll{display:flex;}}
+    .ll::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05);top:-70px;right:-70px;}
+    .lb-icon{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;}
+    .lb-icon svg{width:23px;height:23px;}
+    .lb-name{font-size:28px;font-weight:800;letter-spacing:-.4px;}
+    .l-tag{font-size:22px;font-weight:300;color:rgba(255,255,255,.85);margin-top:20px;line-height:1.45;}
+    .l-tag strong{font-weight:700;color:#fff;}
+    .l-feats{display:flex;flex-direction:column;gap:12px;}
+    .l-feat{display:flex;align-items:flex-start;gap:13px;background:rgba(255,255,255,.08);padding:15px;border-radius:var(--r-md);}
+    .lfi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .lfi svg{width:18px;height:18px;}
+    .lfi.g{background:#16a34a;}.lfi.v{background:#7c3aed;}.lfi.o{background:#ea580c;}
+    .l-feat h3{font-size:13px;font-weight:700;margin-bottom:2px;}
+    .l-feat p{font-size:12px;color:rgba(255,255,255,.65);}
+    .lr{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;background:var(--slate0);}
+    .lbox{width:100%;max-width:420px;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:38px;border:1px solid var(--slate1);}
+    .lbox h2{font-size:26px;font-weight:800;color:var(--slate8);margin-bottom:4px;}
+    .lbox .sub{font-size:14px;color:var(--slate5);margin-bottom:26px;}
+    .fg{margin-bottom:15px;}
+    .fg label{display:block;font-size:12px;font-weight:700;color:var(--slate7);margin-bottom:6px;letter-spacing:.2px;}
+    .fg input,.fg select{width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;transition:border-color .2s;}
+    .fg input:focus,.fg select:focus{border-color:var(--blue);background:#fff;}
+    .l-hint{margin-top:14px;padding:10px 13px;background:var(--blue-light);border-radius:var(--r-sm);font-size:12px;color:var(--blue-dark);border:1px solid var(--blue-mid);}
+
+    /* â”€â”€ APP SHELL â”€â”€ */
+    #page-app{display:flex;min-height:100vh;}
+    .sb{width:244px;flex-shrink:0;background:#fff;border-right:1px solid var(--slate2);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+    .sb-brand{padding:18px 17px 14px;border-bottom:1px solid var(--slate1);}
+    .sb-name{font-size:19px;font-weight:800;color:var(--blue);}
+    .sb-tenant{font-size:10px;color:var(--slate4);font-weight:600;letter-spacing:.9px;text-transform:uppercase;margin-top:1px;}
+    .sb-nav{flex:1;padding:11px 8px;display:flex;flex-direction:column;gap:2px;}
+    .ni{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:var(--r-md);font-size:13px;font-weight:600;color:var(--slate5);transition:background .15s,color .15s;cursor:pointer;}
+    .ni:hover{background:var(--slate0);color:var(--slate8);}
+    .ni.active{background:var(--blue-light);color:var(--blue);font-weight:700;}
+    .ni svg{width:16px;height:16px;flex-shrink:0;}
+    .sb-foot{padding:11px 8px;border-top:1px solid var(--slate1);}
+    .ub{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:var(--r-md);background:var(--slate0);margin-bottom:7px;}
+    .ua{width:33px;height:33px;border-radius:9px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+    .un{font-size:12px;font-weight:700;color:var(--slate8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    .ur{font-size:10px;color:var(--slate4);font-weight:600;text-transform:capitalize;}
+    .so{display:flex;align-items:center;gap:7px;width:100%;padding:9px 12px;border-radius:var(--r-md);color:var(--slate5);font-size:12px;font-weight:600;transition:background .15s,color .15s;}
+    .so:hover{background:var(--red-light);color:var(--red);}
+    .so svg{width:14px;height:14px;}
+    .ma{flex:1;display:flex;flex-direction:column;min-width:0;overflow:auto;}
+    .tb{height:56px;background:#fff;border-bottom:1px solid var(--slate2);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:10;gap:10px;}
+    .tb-l{display:flex;align-items:center;gap:10px;}
+    .tp{font-size:11px;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.6px;}
+    .ts{display:flex;align-items:center;gap:7px;background:var(--green-light);padding:4px 12px;border-radius:999px;}
+    .ts-dot{width:7px;height:7px;border-radius:50%;background:var(--green-mid);animation:pulse 1.5s infinite;}
+    .ts-txt{font-size:11px;font-weight:700;color:var(--green);}
+    .nb-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:700;cursor:pointer;border:none;transition:background .15s;}
+    .nb-btn:hover{background:var(--amber);color:#fff;}
+    .nb-btn svg{width:13px;height:13px;}
+    .pc{padding:22px 26px;max-width:1240px;width:100%;}
+
+    /* â”€â”€ PAGE HEADER â”€â”€ */
+    .ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+    .ph h1{font-size:22px;font-weight:800;color:var(--slate8);margin-bottom:2px;}
+    .ph .sub{font-size:13px;color:var(--slate5);}
+    .ph .sub span{color:var(--blue);font-weight:700;}
+
+    /* â”€â”€ KPI â”€â”€ */
+    .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px;}
+    .kc{background:#fff;border-radius:var(--r-lg);border:1px solid var(--slate2);box-shadow:var(--sh-sm);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:box-shadow .2s,transform .2s;}
+    .kc:hover{box-shadow:var(--sh-md);transform:translateY(-2px);}
+    .kl{font-size:11px;font-weight:700;color:var(--slate5);margin-bottom:4px;letter-spacing:.3px;}
+    .kv{font-size:26px;font-weight:800;color:var(--slate8);line-height:1;}
+    .kt{font-size:11px;font-weight:700;margin-top:3px;}
+    .kt.up{color:var(--green);} .kt.dn{color:var(--red);}
+    .ki{width:44px;height:44px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .ki svg{width:20px;height:20px;}
+    .ki.bl{background:var(--blue-mid);color:var(--blue-dark);}
+    .ki.rd{background:var(--red-light);color:var(--red);}
+    .ki.am{background:var(--amber-light);color:var(--amber);}
+    .ki.or{background:var(--orange-light);color:var(--orange);}
+    .ki.vl{background:var(--violet-light);color:var(--violet);}
+
+    /* â”€â”€ TWO COL â”€â”€ */
+    .tc{display:grid;grid-template-columns:2fr 1fr;gap:18px;}
+    @media(max-width:1080px){.tc{grid-template-columns:1fr;}}
+
+    /* â”€â”€ FEED â”€â”€ */
+    .fi{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--r-md);margin-bottom:7px;background:var(--slate0);border:1px solid transparent;transition:all .15s;animation:popIn .3s ease;}
+    .fi:hover{background:var(--slate1);border-color:var(--slate2);}
+    .fl{display:flex;align-items:center;gap:10px;}
+    .fd{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .fd svg{width:15px;height:15px;}
+    .fd.ok{background:var(--green-mid);color:#fff;} .fd.bad{background:var(--red-mid);color:#fff;}
+    .fn{font-size:13px;font-weight:700;color:var(--slate8);}
+    .fs{font-size:11px;color:var(--slate5);margin-top:1px;}
+    .ft{font-size:11px;font-weight:700;color:var(--slate4);background:#fff;padding:3px 8px;border-radius:6px;white-space:nowrap;}
+
+    /* â”€â”€ DEVICES â”€â”€ */
+    .dp{background:var(--slate8);border-radius:var(--r-lg);padding:20px;color:#fff;}
+    .dp .ct{color:#fff;border-color:rgba(255,255,255,.1);}
+    .di{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:var(--r-md);margin-bottom:7px;}
+    .di.ok{background:rgba(255,255,255,.07);}
+    .di.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);}
+    .dn{font-size:12px;font-weight:700;}
+    .ds{font-size:11px;font-weight:600;margin-top:2px;}
+    .ds.on{color:#4ade80;} .ds.off{color:#f87171;}
+    .dl{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .dl.g{background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.9);}
+    .dl.r{background:#f87171;box-shadow:0 0 8px rgba(248,113,113,.9);animation:pulse 1.5s infinite;}
+
+    /* â”€â”€ TABLE â”€â”€ */
+    .rt{width:100%;border-collapse:collapse;}
+    .rt th{text-align:left;padding:7px 11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate4);border-bottom:2px solid var(--slate1);}
+    .rt td{padding:11px;border-bottom:1px solid var(--slate1);vertical-align:middle;}
+    .rt tbody tr:hover td{background:var(--slate0);}
+    .sn{font-size:13px;font-weight:700;color:var(--slate8);}
+
+    /* â”€â”€ CARE â”€â”€ */
+    .cpbg{background:#fff7ed;border-radius:var(--r-lg);padding:18px;border:1px solid #fed7aa;}
+    .cpt{font-size:13px;font-weight:800;color:#9a3412;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
+    .cpt svg{width:15px;height:15px;}
+    .cc{background:#fff;border-radius:var(--r-md);padding:13px;border:1px solid var(--slate2);box-shadow:var(--sh-sm);margin-bottom:10px;}
+    .cch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+    .ccn{font-size:13px;font-weight:800;color:var(--slate8);}
+    .ccd{font-size:12px;color:var(--slate5);margin-bottom:10px;}
+
+    /* â”€â”€ TAG MANAGER â”€â”€ */
+    .epc-in{width:100%;padding:6px 10px;border:2px solid var(--slate2);border-radius:7px;font-size:11px;font-family:monospace;outline:none;transition:border-color .15s;}
+    .epc-in:focus{border-color:var(--blue);}
+    .epc-in.ok{border-color:var(--green-mid);background:#f0fdf4;}
+    .rsi{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--slate0);border-radius:var(--r-md);margin-bottom:7px;border:1px solid var(--slate1);animation:popIn .3s ease;}
+    .epc-code{font-family:monospace;font-size:11px;color:var(--slate7);font-weight:600;}
+    .scan-meta{font-size:10px;color:var(--slate4);margin-top:2px;}
+    .qa-btn{font-size:11px;padding:4px 9px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid);border-radius:6px;cursor:pointer;font-weight:700;transition:background .15s;white-space:nowrap;}
+    .qa-btn:hover{background:var(--blue);color:#fff;}
+
+    /* â”€â”€ TOAST â”€â”€ */
+    #toasts{position:fixed;top:66px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:9px;width:300px;pointer-events:none;}
+    .tst{padding:12px 14px;border-radius:var(--r-md);font-size:13px;font-weight:700;box-shadow:var(--sh-lg);animation:slideIn .3s ease;pointer-events:all;display:flex;align-items:flex-start;gap:9px;background:#fff;}
+    .tst.out{animation:slideOut .3s ease forwards;}
+    .tst-g{border-left:4px solid var(--green-mid);}
+    .tst-a{border-left:4px solid var(--amber);}
+    .tst-r{border-left:4px solid var(--red-mid);}
+    .tst-title{font-size:12px;font-weight:800;color:var(--slate8);margin-bottom:2px;}
+    .tst-msg{font-size:11px;font-weight:500;color:var(--slate5);}
+    .spinner{width:18px;height:18px;border:3px solid var(--slate2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+    .loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:44px;color:var(--slate4);font-size:13px;font-weight:600;}
+    select.cs{padding:8px 12px;border:2px solid var(--blue-mid);border-radius:var(--r-md);background:#fff;color:var(--blue);font-size:13px;font-weight:700;outline:none;cursor:pointer;}
+  </style>
+</head>
+<body>
+
+<div id="toasts"></div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• LOGIN â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="page-login">
+  <div class="ll">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
+        <div class="lb-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div>
+        <span class="lb-name">NurturePass</span>
+      </div>
+      <p class="l-tag">Every entry recorded.<br/><strong>Every child cared for.</strong></p>
+    </div>
+    <div class="l-feats">
+      <div class="l-feat"><div class="lfi g"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div><div><h3>Real-time RFID Safety</h3><p>Live entry/exit from your Firestore Tags collection.</p></div></div>
+      <div class="l-feat"><div class="lfi v"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div><div><h3>Push Notifications</h3><p>Browser alerts when a student tag is scanned.</p></div></div>
+      <div class="l-feat"><div class="lfi o"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div><h3>Care Alerts</h3><p>Absence patterns flagged automatically for teachers.</p></div></div>
+    </div>
+  </div>
+
+  <div class="lr">
+    <div class="lbox">
+      <h2>Welcome to NurturePass</h2>
+      <p class="sub">Select your school and role to continue.</p>
+
+      <form id="login-form">
+        <div class="fg">
+          <label>School Code</label>
+          <input id="f-code" type="text" placeholder="e.g. DEMO-01" required />
+        </div>
+        <div class="fg">
+          <label>Your Name</label>
+          <input id="f-name" type="text" placeholder="e.g. Dr. Priya Sharma" required />
+        </div>
+        <div class="fg">
+          <label>Your Role</label>
+          <select id="f-role">
+            <option value="principal">Principal / Admin</option>
+            <option value="teacher">Teacher</option>
+            <option value="gate_operator">Gate Operator</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-p btn-lg btn-w" id="login-btn">Enter Dashboard</button>
+      </form>
+
+      <div class="l-hint" style="margin-top:14px;">
+        <strong>Quick demo:</strong> Enter code <strong>DEMO-01</strong>, any name, role <strong>Principal</strong>.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• APP â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="page-app" class="hidden">
+  <aside class="sb">
+    <div class="sb-brand">
+      <div class="sb-name">NurturePass</div>
+      <div class="sb-tenant" id="sb-tenant">â€”</div>
+    </div>
+    <nav class="sb-nav" id="sb-nav"></nav>
+    <div class="sb-foot">
+      <div class="ub">
+        <div class="ua" id="u-avatar">U</div>
+        <div style="overflow:hidden;">
+          <div class="un" id="u-name">â€”</div>
+          <div class="ur" id="u-role">â€”</div>
+        </div>
+      </div>
+      <button class="so" id="so-btn">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <div class="ma">
+    <header class="tb">
+      <div class="tb-l">
+        <span class="tp" id="tp-role">â€”</span>
+        <div class="ts"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connectingâ€¦</span></div>
+        <button onclick="window._refreshFeed()" title="Refresh feed" style="background:var(--slate1);border:1px solid var(--slate2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--slate5);cursor:pointer;display:flex;align-items:center;gap:5px;">
+          <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Refresh
+        </button>
+      </div>
+      <button class="nb-btn hidden" id="notif-btn" onclick="window._askNotif()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+        Enable Notifications
+      </button>
+    </header>
+    <div class="pc" id="pc">
+      <div class="loader"><div class="spinner"></div>Loadingâ€¦</div>
+    </div>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• ADD STUDENT MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div id="add-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeModal()">
+  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:440px;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+      <div>
+        <h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Add New Student</h2>
+        <p style="font-size:13px;color:var(--slate5);margin-top:2px;">Student will be saved to Firestore immediately.</p>
+      </div>
+      <button onclick="window._closeModal()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">Ã—</button>
+    </div>
+    <form id="add-student-form" onsubmit="event.preventDefault();window._saveStudent()">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="fg" style="margin:0">
+          <label>First Name</label>
+          <input id="f-firstName" type="text" placeholder="e.g. Aanya" required />
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Last Name</label>
+          <input id="f-lastName" type="text" placeholder="e.g. Sharma" required />
+        </div>
+      </div>
+      <div class="fg">
+        <label>Roll Number</label>
+        <input id="f-roll" type="text" placeholder="e.g. 10A-07" required />
+      </div>
+      <div class="fg">
+        <label>Class</label>
+        <select id="f-class">
+          <option value="class-10A">Class 10-A</option>
+          <option value="class-10B">Class 10-B</option>
+          <option value="class-9A">Class 9-A</option>
+          <option value="class-9B">Class 9-B</option>
+          <option value="class-8A">Class 8-A</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:6px;">
+        <button type="button" class="btn btn-g btn-w" onclick="window._closeModal()">Cancel</button>
+        <button type="submit" id="save-student-btn" class="btn btn-p btn-w">Add Student</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<script type="module">
+/* â”€â”€ Firebase (Firestore only â€” NO AUTH) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc,
+         getDocs, query, orderBy, limit, where,
+         serverTimestamp, Timestamp, onSnapshot }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const FB = {
+  apiKey:"AIzaSyBigNdP6OA4aoxzDCqgdk7pjuyD95-NItQ",
+  authDomain:"student-21577.firebaseapp.com",
+  projectId:"student-21577",
+  storageBucket:"student-21577.firebasestorage.app",
+  messagingSenderId:"117013253708",
+  appId:"1:117013253708:web:b3f453929d0667cfadeee9"
+};
+const db = getFirestore(initializeApp(FB));
+
+/* â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+let sess = null;
+let epcMap = {};      // epc â†’ { studentId, studentName }
+let unsub  = null;
+let curPage = 'dashboard';
+
+/* â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const schoolDoc = c => doc(db,'schools',c);
+const col = (c,n) => collection(db,'schools',c,n);
+const ref = (c,n,i) => doc(db,'schools',c,n,i);
+const subCol = (c,n,i,s) => collection(db,'schools',c,n,i,s);
+const today = () => new Date().toISOString().split('T')[0];
+const dOff  = d => { const x=new Date(); x.setDate(x.getDate()+d); return x.toISOString().split('T')[0]; };
+
+function ico(d,s=16){ return `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:${s}px;height:${s}px;flex-shrink:0"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="${d}"/></svg>`; }
+const IC = {
+  chart:'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6',
+  users:'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z',
+  alert:'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+  check:'M5 13l4 4L19 7',
+  heart:'M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z',
+  tag:  'M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z',
+  bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
+  out:  'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1',
+  doc:  'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+};
+
+/* â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function toast(title, msg='', type='g'){
+  const el=document.createElement('div');
+  el.className=`tst tst-${type}`;
+  el.innerHTML=`<div>${ico(type==='g'?IC.check:IC.alert,16)}</div><div><div class="tst-title">${title}</div>${msg?`<div class="tst-msg">${msg}</div>`:''}</div>`;
+  document.getElementById('toasts').appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),320);},4200);
+}
+
+/* â”€â”€ Notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+window._askNotif = async () => {
+  if(!('Notification' in window)) return;
+  const p = await Notification.requestPermission();
+  if(p==='granted'){ document.getElementById('notif-btn').classList.add('hidden'); toast('Notifications enabled','You\'ll see alerts for every tag scan.'); }
+};
+function pushNotif(title,body){
+  if('Notification' in window && Notification.permission==='granted')
+    new Notification(title,{body,icon:'https://em-content.zobj.net/source/apple/391/school_1f3eb.png'});
+}
+function checkNotif(){
+  if('Notification' in window && Notification.permission!=='granted')
+    document.getElementById('notif-btn').classList.remove('hidden');
+}
+
+/* â”€â”€ EPC Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function loadEpcCache(){
+  epcMap={};
+  try{
+    const s=await getDocs(collection(db,'tagMappings'));
+    s.forEach(d=>{ epcMap[d.data().epc]=d.data(); });
+    console.log(`ðŸ“¡ ${Object.keys(epcMap).length} EPC mappings loaded`);
+  }catch(e){ console.warn('Could not load tagMappings (check Firestore rules):', e.message); }
+}
+
+/* â”€â”€ Real-time Tags Listener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+// seenIds tracks docs already shown so we only fire on TRULY new scans
+const seenIds = new Set();
+let listenerReady = false;
+
+function setStatus(txt, ok=true){
+  const el = document.getElementById('ts-txt');
+  if(el) el.textContent = txt;
+  const dot = document.querySelector('.ts-dot');
+  if(dot) dot.style.background = ok ? 'var(--green-mid)' : '#f87171';
+}
+
+function startTagListener(){
+  if(unsub){ unsub(); unsub=null; }
+  listenerReady = false;
+  setStatus('Connectingâ€¦');
+
+  unsub = onSnapshot(collection(db,'tags'), snap => {
+    if(!listenerReady){
+      // First snapshot: mark ALL existing docs as already seen
+      snap.docs.forEach(d => seenIds.add(d.id));
+      listenerReady = true;
+      setStatus(`Live Â· ${seenIds.size} scans in DB`);
+      // Also load them into the live feed immediately
+      loadTagsIntoFeed(snap.docs);
+      return;
+    }
+    // Subsequent snapshots: only handle truly NEW docs
+    snap.docChanges().forEach(ch => {
+      if(ch.type === 'added' && !seenIds.has(ch.doc.id)){
+        seenIds.add(ch.doc.id);
+        onNewScan(ch.doc.data());
+      }
+    });
+  }, err => {
+    setStatus('âš  Permission denied â€” fix Firestore rules', false);
+    console.error('Tags listener error:', err.message);
+    toast('Listener failed', 'Retrying in 5s â€” check Firestore rules', 'a');
+    // Auto-retry after 5 seconds
+    setTimeout(startTagListener, 5000);
+  });
+}
+
+// Load existing Tags docs into the live feed on startup
+function loadTagsIntoFeed(docs){
+  const el = document.getElementById('live-feed');
+  if(!el) return;
+  // Sort by timestamp string descending, take last 8
+  const sorted = [...docs]
+    .map(d => ({id:d.id,...d.data()}))
+    .sort((a,b) => (b.timestamp||'').localeCompare(a.timestamp||''))
+    .slice(0, 8);
+  if(!sorted.length) return;
+  // Clear placeholder
+  const placeholder = el.querySelector('.loader');
+  if(placeholder) placeholder.remove();
+  sorted.forEach(data => {
+    const m = epcMap[data.epc];
+    const tmp = document.createElement('div');
+    tmp.innerHTML = feedHTML({
+      _name: m ? m.studentName : `Unknown (${(data.epc||'').substring(0,8)}â€¦)`,
+      ok: !!m,
+      gate: `Antenna ${data.antenna||'?'}`,
+      ts: parseTagTs(data.timestamp)
+    });
+    el.appendChild(tmp.firstChild);
+  });
+}
+
+function parseTagTs(ts){
+  if(!ts) return new Date();
+  try{ return new Date(ts.replace(' ','T')); }catch{ return new Date(); }
+}
+
+function onNewScan(data){
+  const {epc='',antenna='?',timestamp=''} = data;
+  const m = epcMap[epc];
+  const name = m ? m.studentName : null;
+  const short = (epc||'').substring(0,12);
+  if(name){
+    pushNotif(`ðŸŽ“ ${name} entered campus`, `Antenna ${antenna} Â· ${timestamp}`);
+    toast(`${name} entered`, `Antenna ${antenna} Â· ${timestamp}`, 'g');
+    prependFeed({_name:name, ok:true, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+  } else {
+    pushNotif('âš ï¸ Unknown RFID Tag', `EPC: ${epc} Â· Antenna ${antenna}`);
+    toast('Unknown tag scanned', `EPC: ${short}â€¦ Â· Antenna ${antenna}`, 'a');
+    prependFeed({_name:`Unknown (${short}â€¦)`, ok:false, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+  }
+  if(curPage==='tags') loadRawScans();
+  if(curPage==='dashboard') setStatus(`Live Â· last scan ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`);
+}
+
+function prependFeed(e){
+  const el=document.getElementById('live-feed');
+  if(!el) return;
+  const t=document.createElement('div');
+  t.innerHTML=feedHTML(e);
+  el.insertBefore(t.firstChild, el.firstChild);
+  while(el.children.length>20) el.removeChild(el.lastChild);
+}
+
+// Manual refresh button handler
+window._refreshFeed = async () => {
+  seenIds.clear();
+  listenerReady = false;
+  startTagListener();
+  toast('Feed refreshed', 'Reloading all tag scansâ€¦', 'g');
+};
+
+/* â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+document.getElementById('login-form').addEventListener('submit', async e=>{
+  e.preventDefault();
+  const code = document.getElementById('f-code').value.trim().toUpperCase();
+  const name = document.getElementById('f-name').value.trim();
+  const role = document.getElementById('f-role').value;
+  const btn  = document.getElementById('login-btn');
+  btn.textContent='Loadingâ€¦'; btn.disabled=true;
+
+  // Save session locally â€” no Firestore needed for login
+  sess = { code, name, role };
+  localStorage.setItem('np',JSON.stringify(sess));
+
+  // Try to seed school data in background (won't block login)
+  seedSchool(code).catch(err=>console.warn('Seed skipped:',err.message));
+
+  await enterApp();
+  btn.textContent='Enter Dashboard'; btn.disabled=false;
+});
+
+document.getElementById('so-btn').addEventListener('click',()=>{
+  if(unsub){unsub();unsub=null;}
+  sess=null; localStorage.removeItem('np');
+  document.getElementById('page-app').classList.add('hidden');
+  document.getElementById('page-login').classList.remove('hidden');
+  document.getElementById('login-form').reset();
+});
+
+/* â”€â”€ ENTER APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function enterApp(){
+  document.getElementById('page-login').classList.add('hidden');
+  document.getElementById('page-app').classList.remove('hidden');
+  document.getElementById('sb-tenant').textContent  = sess.code;
+  document.getElementById('tp-role').textContent    = roleLabel(sess.role);
+  document.getElementById('u-name').textContent     = sess.name;
+  document.getElementById('u-role').textContent     = sess.role.replace('_',' ');
+  document.getElementById('u-avatar').textContent   = sess.name.charAt(0).toUpperCase();
+  buildNav();
+  checkNotif();
+  await loadEpcCache();
+  startTagListener();
+  await showPage('dashboard');
+}
+
+function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_operator'?'Gate Monitor':'Teacher Portal'; }
+
+/* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+const navItems = {
+  principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart}],
+  teacher:      [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'class',l:'My Class',i:IC.users},{id:'care',l:'Care Queue',i:IC.heart}],
+  gate_operator:[{id:'dashboard',l:'Gate Monitor',i:IC.chart},{id:'tags',l:'Tag Manager',i:IC.tag}],
+};
+
+function buildNav(){
+  const items = navItems[sess.role]||navItems.teacher;
+  document.getElementById('sb-nav').innerHTML = items.map((it,i)=>
+    `<div class="ni ${i===0?'active':''}" data-pg="${it.id}" onclick="window._nav(this,'${it.id}')">
+       ${ico(it.i,16)}<span>${it.l}</span>
+     </div>`).join('');
+}
+window._nav = async (el,pg)=>{
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  await showPage(pg);
+};
+
+/* â”€â”€ PAGE ROUTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function showPage(pg){
+  curPage=pg;
+  const el=document.getElementById('pc');
+  el.innerHTML='<div class="loader"><div class="spinner"></div>Loadingâ€¦</div>';
+  try{
+    if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : await pgTeacher();
+    else if (pg==='tags')      el.innerHTML = await pgTags();
+    else if (pg==='care')      el.innerHTML = await pgCare();
+    else if (pg==='students')  el.innerHTML = await pgStudents();
+    else if (pg==='class')     el.innerHTML = await pgTeacher();
+    else el.innerHTML='<div class="loader">ðŸš§ Coming soon.</div>';
+    if(pg==='tags') await loadRawScans();
+  }catch(err){
+    el.innerHTML=`<div class="loader" style="flex-direction:column;gap:8px;color:#b91c1c;">
+      <span style="font-size:20px;">âš ï¸</span>
+      <strong>${err.message}</strong>
+      <span style="font-size:12px;color:var(--slate5);">Check Firestore rules â†’ allow read, write: if true;</span>
+    </div>`;
+    console.error(err);
+  }
+}
+
+/* â”€â”€ PRINCIPAL DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgPrincipal(){
+  const t=today(), c=sess.code;
+  const [daySnap,careSnap,evtSnap,devSnap] = await Promise.all([
+    getDocs(col(c,'attendanceDays')).catch(()=>({forEach:()=>{},size:0})),
+    getDocs(query(col(c,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{},size:0})),
+    getDocs(query(col(c,'events'),orderBy('scannedAt','desc'),limit(8))).catch(()=>({forEach:()=>{},docs:[]})),
+    getDocs(col(c,'devices')).catch(()=>({forEach:()=>{}})),
+  ]);
+
+  let p=0,a=0,l=0;
+  daySnap.forEach(d=>{ if(d.data().date===t){p+=d.data().presentCount||0;a+=d.data().absentCount||0;l+=d.data().lateCount||0;} });
+  const care=careSnap.size||0;
+  const evts=[]; evtSnap.forEach(d=>evts.push({...d.data()}));
+  const devs=[]; devSnap.forEach(d=>devs.push({id:d.id,...d.data()}));
+
+  return `
+  <div class="ph">
+    <div><h1>Principal Overview</h1><p class="sub">Live safety for <span>${c}</span> Â· ${t}</p></div>
+    <button class="btn btn-g">Export Report</button>
+  </div>
+  <div class="kgrid">
+    ${kpi('Present',p||'â€”',p?`+${p}`:null,IC.users,'bl')}
+    ${kpi('Absent',a||'â€”',a?`-${a}`:null,IC.chart,'rd')}
+    ${kpi('Late',l||'â€”',l?`+${l}`:null,IC.alert,'am')}
+    ${kpi('Care Alerts',care,`-${care}`,IC.heart,'or')}
+    ${kpi('Tag Mappings',Object.keys(epcMap).length,null,IC.tag,'vl')}
+  </div>
+  <div class="tc">
+    <div class="card">
+      <div class="ct">Live Campus Activity
+        <span class="badge bg" style="font-size:11px;"><span style="width:6px;height:6px;background:var(--green-mid);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 1.5s infinite;"></span>Live</span>
+      </div>
+      <div id="live-feed">
+        ${evts.length?evts.map(e=>feedHTML({_name:e._studentName||'Unknown',ok:e.confidence==='high'&&e.direction==='entry',gate:e.gateLabel||'Gate',ts:e.scannedAt?.toDate?e.scannedAt.toDate():new Date()})).join('')
+        :'<div class="loader" style="padding:20px;font-size:12px;">No events yet â€” waiting for tag scansâ€¦</div>'}
+      </div>
+    </div>
+    <div class="dp">
+      <div class="ct" style="color:#fff;border-color:rgba(255,255,255,.1);">Device Health</div>
+      ${devs.length?devs.map(d=>`
+        <div class="di ${d.status==='online'?'ok':'err'}">
+          <div><div class="dn" style="color:${d.status==='online'?'#fff':'#fca5a5'}">${d.name}</div>
+          <div class="ds ${d.status==='online'?'on':'off'}">${d.status==='online'?`Online Â· ${d.readQualityPercent}% read rate`:'Offline'}</div></div>
+          <div class="dl ${d.status==='online'?'g':'r'}"></div>
+        </div>`).join('')
+      :'<p style="color:#94a3b8;font-size:12px;text-align:center;padding:12px;">No devices found</p>'}
+      <button class="btn btn-w" style="margin-top:12px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);">Run Diagnostics</button>
+    </div>
+  </div>`;
+}
+
+/* â”€â”€ TEACHER DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgTeacher(){
+  const c=sess.code,t=today(),cls='class-10A';
+  const dayId=`${t}_${cls}`;
+  const [recSnap,careSnap]=await Promise.all([
+    getDocs(subCol(c,'attendanceDays',dayId,'records')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'careAlerts'),where('classId','==',cls),where('status','==','open'))).catch(()=>({forEach:()=>{}})),
+  ]);
+  const recs=[]; recSnap.forEach(d=>recs.push({...d.data()}));
+  const alerts=[]; careSnap.forEach(d=>alerts.push({id:d.id,...d.data()}));
+  const sb=s=>s==='present'?'<span class="badge bg">Present</span>':s==='late'?'<span class="badge ba">Late</span>':'<span class="badge br">Absent</span>';
+  return `
+  <div class="ph">
+    <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> Â· ${t}</p></div>
+    <select class="cs"><option>Class 10-A</option><option>Class 10-B</option></select>
+  </div>
+  <div class="tc">
+    <div class="card">
+      <div class="ct">Today's Roster â€” 10-A</div>
+      ${recs.length?`<table class="rt">
+        <thead><tr><th>Student</th><th>Status</th><th>Arrival</th><th>Action</th></tr></thead>
+        <tbody>${recs.map(r=>`<tr>
+          <td><span class="sn">${r.firstName} ${r.lastName}</span></td>
+          <td>${sb(r.status)}</td>
+          <td style="font-size:12px;color:var(--slate5);font-weight:600;">${r.arrivalTime}</td>
+          <td><button class="btn btn-g btn-sm">Add Note</button></td>
+        </tr>`).join('')}</tbody>
+      </table>`:'<div class="loader" style="padding:20px;font-size:12px;">No attendance data â€” seed your school first.</div>'}
+    </div>
+    <div class="cpbg">
+      <div class="cpt">${ico(IC.alert,15)} Action Required (${alerts.length})</div>
+      ${alerts.map(a=>`<div class="cc">
+        <div class="cch"><span class="ccn">${a.studentName}</span><span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span></div>
+        <p class="ccd">${careLabel(a.ruleCode)}</p>
+        <button class="btn btn-o btn-w btn-sm">Draft Parent Note</button>
+      </div>`).join('') || '<p style="color:#9a3412;font-size:12px;opacity:.7;">No open alerts.</p>'}
+    </div>
+  </div>`;
+}
+
+/* â”€â”€ TAG MANAGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgTags(){
+  const [studSnap,mapSnap]=await Promise.all([
+    getDocs(col(sess.code,'students')).catch(()=>({forEach:()=>{}})),
+    getDocs(collection(db,'tagMappings')).catch(()=>({forEach:()=>{}})),
+  ]);
+  const studs=[]; studSnap.forEach(d=>studs.push({id:d.id,...d.data()}));
+  const byStud={}; mapSnap.forEach(d=>{ byStud[d.data().studentId]=d.data(); });
+
+  return `
+  <div class="ph"><div><h1>Tag Manager</h1><p class="sub">Map EPC codes from your <strong>Tags</strong> collection to students.</p></div></div>
+  <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--r-md);padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--blue);font-weight:600;display:flex;gap:10px;align-items:center;">
+    ${ico(IC.bell,16)}
+    <span>Once an EPC is mapped, every new scan from that tag fires a <strong>browser notification</strong> with the student's name.</span>
+  </div>
+  <div class="tc" style="align-items:start;">
+    <div class="card">
+      <div class="ct">Student â†’ EPC Assignment</div>
+      ${studs.length?`<table class="rt">
+        <thead><tr><th>Student</th><th>Class</th><th>EPC Code</th><th>Status</th><th>Save</th></tr></thead>
+        <tbody>${studs.map(s=>{
+          const ex=byStud[s.id]; const epcVal=ex?ex.epc:''; const iid=`epc_${s.id}`;
+          return `<tr>
+            <td><div class="sn">${s.firstName} ${s.lastName}</div><div style="font-size:10px;color:var(--slate4)">${s.roll}</div></td>
+            <td><span class="badge bb">${(s.classId||'').replace('class-','')}</span></td>
+            <td><input id="${iid}" class="epc-in ${epcVal?'ok':''}" value="${epcVal}" placeholder="Paste EPCâ€¦"/></td>
+            <td>${epcVal?'<span class="badge bg">âœ“ Mapped</span>':'<span class="badge bx">Unmapped</span>'}</td>
+            <td><button class="btn btn-p btn-sm" onclick="window._saveTag('${s.id}','${s.firstName} ${s.lastName}','${iid}')">Save</button></td>
+          </tr>`;}).join('')}</tbody>
+      </table>`:'<div class="loader" style="padding:20px;font-size:12px;">No students found â€” seed DEMO-01 first.</div>'}
+    </div>
+    <div>
+      <div class="card">
+        <div class="ct">${ico(IC.tag)} Raw Scans <span style="font-size:11px;font-weight:500;color:var(--slate4);">from Tags collection</span></div>
+        <div id="raw-scans"><div class="loader" style="padding:16px;"><div class="spinner"></div></div></div>
+      </div>
+      <div class="card" style="margin-top:14px;background:var(--slate8);color:#fff;">
+        <div class="ct" style="color:#fff;border-color:rgba(255,255,255,.1);">${ico(IC.bell)} Notifications</div>
+        <div style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Status: <span style="color:#4ade80;">${'Notification' in window ? Notification.permission : 'unsupported'}</span></div>
+        <button class="btn btn-w" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="window._askNotif()">
+          ${ico(IC.bell)} Enable Browser Notifications
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+window._saveTag = async (studentId,studentName,inputId)=>{
+  const input=document.getElementById(inputId);
+  const epc=input?input.value.trim():'';
+  if(!epc){toast('EPC missing','Paste the EPC code first.','a');return;}
+  try{
+    await setDoc(doc(db,'tagMappings',studentId),{studentId,studentName,epc,schoolCode:sess.code,assignedAt:serverTimestamp()});
+    epcMap[epc]={studentId,studentName,schoolCode:sess.code};
+    if(input){input.classList.add('ok');}
+    toast(`${studentName} mapped`,`EPC: ${epc.substring(0,14)}â€¦`,'g');
+  }catch(e){toast('Save failed',e.message,'r');}
+};
+
+async function loadRawScans(){
+  const el=document.getElementById('raw-scans'); if(!el) return;
+  try{
+    const snap=await getDocs(query(collection(db,'tags'),orderBy('timestamp','desc'),limit(15)));
+    if(snap.empty){el.innerHTML='<p style="color:var(--slate4);font-size:12px;text-align:center;padding:14px;">No scans yet.</p>';return;}
+    const rows=[]; snap.forEach(d=>rows.push({id:d.id,...d.data()}));
+    el.innerHTML=rows.map(r=>{
+      const m=epcMap[r.epc]; const known=!!m;
+      return `<div class="rsi">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'âœ“ '+m.studentName:'âš  Unknown'}</div>
+          <div class="epc-code">${r.epc||'â€”'}</div>
+          <div class="scan-meta">Antenna ${r.antenna||'?'} Â· ${r.timestamp||'â€”'}</div>
+        </div>
+        ${!known?`<button class="qa-btn" onclick="window._quickAssign('${r.epc}')">Assign â†’</button>`:''}
+      </div>`;}).join('');
+  }catch(e){el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">âš  ${e.message}</p>`;}
+}
+
+window._quickAssign = epc =>{
+  const inputs=document.querySelectorAll('.epc-in:not(.ok)');
+  if(!inputs.length){toast('All assigned','Every student already has a tag.','a');return;}
+  inputs[0].value=epc; inputs[0].focus(); inputs[0].style.borderColor='var(--amber)';
+  toast('EPC pasted','Click Save next to the student to confirm.','a');
+};
+
+/* â”€â”€ CARE PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgCare(){
+  const snap=await getDocs(query(col(sess.code,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{}}));
+  const alerts=[]; snap.forEach(d=>alerts.push({id:d.id,...d.data()}));
+  return `
+  <div class="ph"><div><h1>Care Queue</h1><p class="sub">${alerts.length} open alert${alerts.length!==1?'s':''}</p></div></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+    ${alerts.length?alerts.map(a=>`<div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;">
+        <div><div style="font-size:15px;font-weight:800;">${a.studentName}</div>
+        <div style="font-size:11px;color:var(--slate4);">${(a.classId||'').replace('class-','Class ')}</div></div>
+        <span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span>
+      </div>
+      <p style="font-size:13px;color:var(--slate5);margin-bottom:14px;">${careLabel(a.ruleCode)}</p>
+      <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
+    </div>`).join(''):'<div class="loader">âœ… No open care alerts.</div>'}
+  </div>`;
+}
+
+/* â”€â”€ STUDENTS PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function pgStudents(){
+  const snap=await getDocs(col(sess.code,'students')).catch(()=>({forEach:()=>{}}));
+  const studs=[]; snap.forEach(d=>studs.push({id:d.id,...d.data()}));
+  return `
+  <div class="ph"><div><h1>Student Directory</h1><p class="sub">${studs.length} enrolled</p></div>
+    <button class="btn btn-p" onclick="window._openAddStudent()">+ Add Student</button>
+  </div>
+  <div class="card"><div class="ct">All Students</div>
+    <table class="rt"><thead><tr><th>Name</th><th>Roll</th><th>Class</th><th>RFID</th><th>Status</th></tr></thead>
+    <tbody>${studs.map(s=>{
+      const tagged=Object.values(epcMap).some(m=>m.studentId===s.id);
+      return `<tr><td><span class="sn">${s.firstName} ${s.lastName}</span></td>
+        <td style="font-size:12px;color:var(--slate5);">${s.roll}</td>
+        <td><span class="badge bb">${(s.classId||'').replace('class-','')}</span></td>
+        <td>${tagged?'<span class="badge bg">âœ“ Mapped</span>':'<span class="badge br">Unmapped</span>'}</td>
+        <td><span class="badge bg">Active</span></td></tr>`;}).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+/* â”€â”€ RENDER HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+function kpi(label,value,trend,iconD,clr){
+  const up=trend&&trend.startsWith('+');
+  return `<div class="kc"><div><div class="kl">${label}</div><div class="kv">${value}</div>${trend?`<div class="kt ${up?'up':'dn'}">${trend}</div>`:''}</div><div class="ki ${clr}">${ico(iconD,20)}</div></div>`;
+}
+function feedHTML(e){
+  const t=e.ts instanceof Date?e.ts:new Date();
+  const time=t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  return `<div class="fi"><div class="fl"><div class="fd ${e.ok?'ok':'bad'}">${ico(e.ok?IC.check:IC.alert,15)}</div>
+    <div><div class="fn">${e._name||'Unknown'}</div><div class="fs">${e.ok?'Entry':'Scan'} Â· ${e.gate||'Gate'}</div></div></div>
+    <span class="ft">${time}</span></div>`;
+}
+function careLabel(code){
+  return {'3_consecutive_absences':'Absent for 3 consecutive days.','late_pattern_monthly':'Late 4+ times this month.'}[code]||code||'â€”';
+}
+
+/* â”€â”€ SEED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+async function seedSchool(code){
+  const snap=await getDoc(schoolDoc(code));
+  if(snap.exists()) return;
+  const ts=serverTimestamp(), t=today();
+  await setDoc(schoolDoc(code),{name:`${code} School`,slug:code,timezone:'Asia/Kolkata',academicYear:'2025-2026',plan:'pro',isActive:true,createdAt:ts});
+  await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',address:'1 School Road',city:'Bangalore',isActive:true});
+  await setDoc(ref(code,'classes','class-10A'),{name:'10-A',grade:'10',section:'A',campusId:'campus-001',academicYear:'2025-2026',studentCount:6});
+  await setDoc(ref(code,'classes','class-10B'),{name:'10-B',grade:'10',section:'B',campusId:'campus-001',academicYear:'2025-2026',studentCount:5});
+  const ss=[
+    {id:'stu-001',firstName:'Alice',  lastName:'Johnson',roll:'10A-01',classId:'class-10A'},
+    {id:'stu-002',firstName:'Bob',    lastName:'Smith',  roll:'10A-02',classId:'class-10A'},
+    {id:'stu-003',firstName:'Charlie',lastName:'Davis',  roll:'10A-03',classId:'class-10A'},
+    {id:'stu-004',firstName:'Diana',  lastName:'Ross',   roll:'10A-04',classId:'class-10A'},
+    {id:'stu-005',firstName:'Ethan',  lastName:'Hunt',   roll:'10A-05',classId:'class-10A'},
+    {id:'stu-006',firstName:'Fiona',  lastName:'Green',  roll:'10A-06',classId:'class-10A'},
+  ];
+  for(const s of ss) await setDoc(ref(code,'students',s.id),{...s,campusId:'campus-001',isActive:true,photoUrl:'',createdAt:ts});
+  await setDoc(ref(code,'devices','device-001'),{name:'Main Gate A Reader',gateLabel:'Main Gate A',campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
+  await setDoc(ref(code,'devices','device-002'),{name:'North Gate B Reader',gateLabel:'North Gate B',campusId:'campus-001',status:'online',readQualityPercent:97,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
+  await setDoc(ref(code,'devices','device-003'),{name:'South Gate Reader',gateLabel:'South Gate',campusId:'campus-001',status:'offline',readQualityPercent:0,firmwareVersion:'v3.1.0',lastHeartbeatAt:ts});
+  const ec=col(code,'events');
+  for(const e of[
+    {name:'Alice Johnson', ok:true, gate:'Main Gate A', m:10},
+    {name:'Diana Ross',    ok:true, gate:'Main Gate A', m:18},
+    {name:'Bob Smith',     ok:true, gate:'North Gate B',m:25},
+    {name:'Unknown Tag',   ok:false,gate:'Main Gate A', m:32},
+  ]){ await addDoc(ec,{direction:e.ok?'entry':'unknown',gateLabel:e.gate,campusId:'campus-001',confidence:e.ok?'high':'low',scannedAt:Timestamp.fromDate(new Date(Date.now()-e.m*60000)),notificationStatus:e.ok?'sent':'pending',isCorrected:false,_studentName:e.name}); }
+  const dayId=`${t}_class-10A`;
+  await setDoc(ref(code,'attendanceDays',dayId),{date:t,classId:'class-10A',campusId:'campus-001',totalStudents:6,presentCount:4,absentCount:1,lateCount:1,isReconciled:false,isLocked:false});
+  for(const r of[
+    {studentId:'stu-001',firstName:'Alice',  lastName:'Johnson',status:'present',arrivalTime:'08:15 AM'},
+    {studentId:'stu-002',firstName:'Bob',    lastName:'Smith',  status:'late',   arrivalTime:'08:45 AM'},
+    {studentId:'stu-003',firstName:'Charlie',lastName:'Davis',  status:'absent', arrivalTime:'â€”'},
+    {studentId:'stu-004',firstName:'Diana',  lastName:'Ross',   status:'present',arrivalTime:'08:12 AM'},
+    {studentId:'stu-005',firstName:'Ethan',  lastName:'Hunt',   status:'present',arrivalTime:'08:18 AM'},
+    {studentId:'stu-006',firstName:'Fiona',  lastName:'Green',  status:'present',arrivalTime:'08:10 AM'},
+  ]) await addDoc(subCol(code,'attendanceDays',dayId,'records'),{...r,markedManually:false});
+  await addDoc(col(code,'careAlerts'),{studentId:'stu-003',studentName:'Charlie Davis',classId:'class-10A',ruleCode:'3_consecutive_absences',priority:'high',status:'open',createdAt:ts});
+  await addDoc(col(code,'careAlerts'),{studentId:'stu-002',studentName:'Bob Smith',classId:'class-10A',ruleCode:'late_pattern_monthly',priority:'medium',status:'open',createdAt:ts});
+  console.log('âœ… School seeded:',code);
+  toast('School data seeded!','Dashboard is now populated with demo data.','g');
+}
+
+/* â”€â”€ AUTO RESTORE SESSION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+(async()=>{
+  try{
+    const s=JSON.parse(localStorage.getItem('np'));
+    if(s&&s.code&&s.role){ sess=s; await enterApp(); return; }
+  }catch{}
+  document.getElementById('page-login').classList.remove('hidden');
+  document.getElementById('page-app').classList.add('hidden');
+})();
+</script>
+</body>
+</html>
+
+

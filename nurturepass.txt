@@ -1,0 +1,1093 @@
+NurturePass
+Web App UI / UX Screen-by-Screen Build Specification
+Build guide for a multi-tenant RFID attendance, school-safety, parent-communication and AI-assisted care platform in React + PostgreSQL.
+Screens
+30 buildable pages
+Components
+50+ reusable units
+Personas
+Principal, teacher, gate, admin
+Implementation
+React + PostgreSQL + edge agent
+How to work through the document
+Start with the app shell, tenant login, design tokens and permission model; then follow screen numbers in build order.
+Each screen includes a visual wireframe, core components, data/API needs, exception states and definition of done.
+AI screens are intentionally human-in-the-loop: explainable, role-aware, editable and never autonomous.
+1. Experience foundation and build rules
+Product promise
+Every entry recorded. Every child cared for.
+Experience tone
+Calm, warm, reliable and school-first.
+Security model
+school_id tenancy + role claims + DB row-level security.
+Core journeys
+Arrival
+Tag read → direction classifies entry → attendance updates → parent notification follows consent → dashboards refresh.
+Exit
+Antenna sequence confirms exit → exit event stored → parent alert sent → no entry/exit ambiguity hidden from operators.
+Care Loop
+Attendance pattern → evidence shown → teacher adds context → editable parent note draft → human review → send.
+Operations
+Reader heartbeat/read quality → device alert → operator diagnoses safely → exception/ticket/audit trail.
+AI
+Scoped aggregates + approved evidence → insight/draft → teacher/principal reviews → action is only human initiated.
+Non-negotiables
+No continuous tracking: use only defined school checkpoints.
+No automatic child safety, wellbeing or attendance decisions.
+No parent message is sent through a channel without recorded consent.
+Manual corrections never overwrite source RFID events; they create auditable correction records.
+Teachers see only their assigned classes; gate operators see only data needed to solve gates/tags.
+2. Shared component system
+Navigation
+AppShell + SideNav + TopBar
+Filters
+URL-synchronised FilterBar
+Data
+Accessible tables, cards and timelines
+Safety
+AuditTimeline + ConfirmDialog + PermissionGate
+Component
+Purpose
+Design requirements
+Main pages
+AppShell
+Role-aware navigation and tenant context.
+Persistent shell, responsive drawer, keyboard support.
+All logged-in screens
+KPIStatCard
+High-priority metric and drill-down.
+Label + value + context + CTA; no decorative-only numbers.
+Dashboards, devices, reports
+FilterBar
+Date/campus/class/status/search.
+Reflect state in URL; reset; save view later.
+Lists, reports, attendance
+DataTable
+Searchable row-level work.
+Loading, empty, sort, pagination, row CTA.
+Students, tags, events, care
+StatusBadge
+Makes operational state obvious.
+Text + colour + icon; match domain state taxonomy.
+Every table/card
+Activity/AuditTimeline
+Evidence and change history.
+Precise time, source, actor and action.
+Student, event, consent, care
+Drawer/Modal/ConfirmDialog
+Context without losing place.
+Focus trap; destructive confirmation; audit fields.
+Corrections, tags, message send
+AIInsightCard
+Explainable AI assistance.
+Evidence, reason, caveat, review action, feedback.
+AI centre, Care Loop
+01. Tenant Login
+Route
+/:schoolSlug/login
+Roles
+All school users
+Release
+MVP
+Purpose: 
+Authenticate users inside the correct school workspace and make school data isolation visible.
+Layout: 
+Split-screen: value proposition on the left; school workspace, email and password form on the right.
+Primary actions: 
+Sign in • Reset password • Switch workspace
+Associated components
+Brand lock-up
+Workspace selector
+Email input
+Password input
+Forgot-password link
+Sign-in button
+Help/administrator link
+Core data: 
+school.display_name • school.logo_url • user.email • authentication session
+API touchpoints: 
+POST /auth/login • GET /public/tenant/:slug
+States: 
+Invalid credentials • Account locked • SAML/MFA optional • Network unavailable
+Definition of done
+Correct tenant branding loads from school slug.
+Login never reveals whether another tenant user exists.
+Show clear validation and accessible focus states.
+02. Forgot Password & MFA
+Route
+/:schoolSlug/recover
+Roles
+All school users
+Release
+MVP
+Purpose: 
+Allow secure account recovery without exposing school or user data.
+Layout: 
+Centered secure form with two-step progress indicator.
+Primary actions: 
+Unlock account • View audit • Update policy • Export logs
+Associated components
+Progress stepper
+Email input
+OTP input
+Password strength meter
+Show/hide password
+Resend timer
+Core data: 
+user email • OTP issue timestamp • password policy
+API touchpoints: 
+POST /auth/password/request • POST /auth/password/verify • POST /auth/password/reset
+States: 
+Expired OTP • Too many attempts • MFA required • Password policy fail
+Definition of done
+OTP expiry and retry limits are enforced.
+Password policy is explained before submit.
+All recovery actions are audit logged.
+03. First-Time School Setup
+Route
+/setup
+Roles
+School Admin
+Release
+MVP
+Purpose: 
+Complete minimum configuration required before the school goes live.
+Layout: 
+Five-step wizard with a persistent completion rail and validation summary.
+Primary actions: 
+Add campus • Invite users • Configure readers • View checklist
+Associated components
+Step navigator
+School profile form
+Campus cards
+Academic-year controls
+Timezone selector
+Save & continue
+Readiness checklist
+Core data: 
+school profile • campus list • academic year • timezone
+API touchpoints: 
+GET /schools/current • PATCH /schools/current • POST /campuses
+States: 
+Incomplete required item • Duplicate school code • Unsaved changes • Setup complete
+Definition of done
+Wizard prevents go-live until core fields are complete.
+Admin can save and resume safely.
+Every action has a visible completion state.
+04. Principal Dashboard
+Route
+/dashboard/principal
+Roles
+Principal, School Admin
+Release
+MVP
+Purpose: 
+Show a complete safety, attendance and care summary in one glance.
+Layout: 
+KPI row; live campus activity; attendance trend; class visibility; care alerts; device status.
+Primary actions: 
+View absentees • Open Care Loop • Export report • Device health
+Associated components
+KPIStatCard
+LiveActivityTimeline
+AttendanceTrendChart
+ClassSummaryList
+CareAlertCard
+DeviceHealthCard
+Date filter
+QuickActionMenu
+Core data: 
+daily attendance • live events • class rollup • care alerts • device heartbeat
+API touchpoints: 
+GET /dashboard/principal • GET /attendance/summary • GET /devices/health
+States: 
+No events yet • Partial data sync • Device offline • Permission restricted
+Definition of done
+All statistics are scoped to school and selected campus.
+Clicking a KPI opens an appropriately filtered page.
+Dashboard refreshes live activity without reloading.
+05. Teacher Dashboard
+Route
+/dashboard/teacher
+Roles
+Teacher, Class Teacher
+Release
+MVP
+Purpose: 
+Give each teacher an immediate picture of their assigned class and the next action needed.
+Layout: 
+Class selector, present/absent/late cards, student list, care prompts, parent-note queue.
+Primary actions: 
+Open class list • Draft note • Mark reason • View weekly trend
+Associated components
+ClassSelector
+KPIStatCard
+StudentAttendanceTable
+CarePromptCard
+ParentNoteQueue
+QuickFilters
+Core data: 
+teacher classes • student attendance • care alerts • parent communication status
+API touchpoints: 
+GET /dashboard/teacher • GET /classes/:id/attendance • GET /care-alerts?classId=:id
+States: 
+No class assigned • Attendance not yet available • Teacher is substitute • Parent contact missing
+Definition of done
+Teacher sees only assigned classes and students.
+All care actions are auditable.
+The route is usable on tablet/mobile.
+06. Gate Operator Dashboard
+Route
+/dashboard/gate
+Roles
+Gate Operator, School Admin
+Release
+MVP
+Purpose: 
+Let the gate operator monitor readers, resolve exceptions and avoid manual registers.
+Layout: 
+Reader status row, live stream, exception panel, manual correction CTA.
+Primary actions: 
+Pause stream • Resolve exception • Search tag • Create manual event • Raise device issue
+Associated components
+ReaderStatusCard
+LiveEventFeed
+GateTabs
+ExceptionCard
+ManualCorrectionModal
+SearchByTag
+Core data: 
+raw scans • classified events • reader status • notification status
+API touchpoints: 
+GET /events/live • GET /devices/health • POST /attendance/corrections
+States: 
+No reader connection • Unknown tag • Duplicate event • Low-confidence direction
+Definition of done
+Live feed updates in under 5 seconds from server receipt.
+Manual corrections require reason and user confirmation.
+Unknown tag does not expose student data.
+07. Live Gate Monitor
+Route
+/gates/live
+Roles
+Gate Operator, School Admin, Principal (read only)
+Release
+MVP
+Purpose: 
+Show real-time entry/exit events and their operational exceptions.
+Layout: 
+Gate tabs on top; central feed; exception rail to the right.
+Primary actions: 
+Filter gate • Open event • Retry notification • Map tag • Create manual correction
+Associated components
+GateSelector
+LiveEventCard
+DirectionBadge
+ReaderStatus
+ExceptionDrawer
+EventSearch
+SSE/WebSocket connection indicator
+Core data: 
+event time • student/staff reference • direction • gate • confidence • notification delivery
+API touchpoints: 
+GET /events/live?gateId= • GET /events/:id • POST /events/:id/retry-notification
+States: 
+Stream reconnecting • No event • Event is low confidence • Tag unresolved
+Definition of done
+Direction and confidence are visually distinct.
+The monitor works even if a parent notification service is down.
+Feed remains readable at high scan volume.
+08. Gate Event Detail & Correction
+Route
+/events/:eventId
+Roles
+Gate Operator, School Admin
+Release
+MVP
+Purpose: 
+Inspect one event and correct it transparently where real-world conditions demand it.
+Layout: 
+Event record header; evidence and tag metadata; correction timeline; audit panel.
+Primary actions: 
+Correct event • Retry alert • Open student • Raise device issue
+Associated components
+EventHeader
+ConfidenceBadge
+ReaderEvidenceCard
+CorrectionForm
+ReasonDropdown
+AuditTimeline
+NotificationRetryButton
+Core data: 
+event • raw reads • tag assignment • manual correction • audit log
+API touchpoints: 
+GET /events/:id • GET /events/:id/raw-reads • POST /events/:id/correct
+States: 
+Event locked after payroll/report closure • Duplicate correction • No permission • No raw evidence
+Definition of done
+Original event is immutable.
+Correction stores before/after values, reason, actor and timestamp.
+No notification is silently resent.
+09. Exceptions Queue
+Route
+/exceptions
+Roles
+Gate Operator, School Admin
+Release
+MVP
+Purpose: 
+Ensure every meaningful scanning, tag, delivery or direction anomaly is resolved.
+Layout: 
+Severity filters, exception table, side preview, resolution controls.
+Primary actions: 
+Assign owner • Resolve selected • Open device • Export queue
+Associated components
+SeverityFilter
+ExceptionTable
+StatusBadge
+AssigneeDropdown
+ResolutionDrawer
+SLAIndicator
+Core data: 
+exception type • severity • created time • event reference • assignee • resolution
+API touchpoints: 
+GET /exceptions • PATCH /exceptions/:id • POST /exceptions/bulk-acknowledge
+States: 
+No exceptions • SLA breached • Assigned to another user • Resolved
+Definition of done
+Only unresolved exceptions contribute to alert counts.
+Bulk actions have confirmation.
+Resolution reason is mandatory for critical items.
+10. Student Directory
+Route
+/students
+Roles
+Teacher (restricted), Principal, School Admin
+Release
+MVP
+Purpose: 
+Find a student quickly and access context without exposing more information than needed.
+Layout: 
+Search and filters; data table; add/import actions; slide-out preview.
+Primary actions: 
+Add student • Import CSV • Manage tags • Export list
+Associated components
+GlobalSearch
+FilterBar
+StudentTable
+Avatar
+StatusBadge
+BulkImportButton
+StudentPreviewDrawer
+Core data: 
+student master • class enrollment • current presence • tag status • care status
+API touchpoints: 
+GET /students • POST /students/import • GET /students/:id
+States: 
+No result • Student inactive • No tag • Import validation errors
+Definition of done
+Teacher view is restricted to assigned students.
+Search supports name, roll number and RFID tag.
+No parent contact is shown in table view by default.
+11. Student Profile
+Route
+/students/:studentId
+Roles
+Teacher (assigned class), Principal, School Admin
+Release
+MVP
+Purpose: 
+Bring attendance, presence, tag, parent communication and care history into one protected profile.
+Layout: 
+Identity header; tab strip; KPI cards; today timeline; care panel.
+Primary actions: 
+Send note • Review attendance • Replace tag • Edit parent contact • Mark care context
+Associated components
+StudentIdentityHeader
+TabBar
+AttendanceKPI
+PresenceTimeline
+CareAlert
+ParentNoteCTA
+TagStatusCard
+Core data: 
+student master • today event • attendance summary • care alert • parent contacts • tag assignment
+API touchpoints: 
+GET /students/:id • GET /students/:id/timeline • GET /students/:id/care
+States: 
+No current entry • No parent consent • Tag disabled • Student inactive
+Definition of done
+Sensitive contact data is permission gated.
+The page makes no automated wellbeing decision.
+Every parent message opens review before send.
+12. Class Directory & Detail
+Route
+/classes/:classId
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Give class teachers a focused operational view of the whole class.
+Layout: 
+Class header; attendance KPIs; student roster; absentees; weekly trend; care actions.
+Primary actions: 
+Send reminder • Open Care Loop • Export class • Mark context
+Associated components
+ClassHeader
+AttendanceKPI
+ClassRosterTable
+AbsenceReasonChip
+AttendanceTrend
+CareQueuePreview
+Core data: 
+class master • enrollment • daily summary • class care alerts
+API touchpoints: 
+GET /classes/:id • GET /classes/:id/attendance • GET /classes/:id/students
+States: 
+No students • Attendance window not complete • Class teacher absent • Read-only role
+Definition of done
+Class data respects academic year.
+Absent counts reconcile to roster.
+Teacher only sees their own assigned class.
+13. RFID Tag Management
+Route
+/tags
+Roles
+School Admin, Gate Operator (limited)
+Release
+MVP
+Purpose: 
+Assign, replace, deactivate and audit every RFID credential.
+Layout: 
+Tag inventory cards; search; assignment table; assignment/replacement modal; lost-tag queue.
+Primary actions: 
+Assign tag • Bulk import • Disable tag • Audit history
+Associated components
+TagSearch
+TagInventoryKPI
+AssignmentTable
+TagStatusBadge
+AssignTagModal
+DisableTagDialog
+BulkImport
+Core data: 
+tag EPC • person type • status • assigned date • last seen • replacement chain
+API touchpoints: 
+GET /tags • POST /tags/assign • POST /tags/:id/disable • POST /tags/import
+States: 
+Unassigned tag • Duplicate EPC • Tag already assigned • Lost tag • Expired temporary pass
+Definition of done
+EPC values are unique per tenant.
+Replacing a tag auto-disables prior tag only after confirmation.
+All assignment changes are in audit log.
+14. Daily Attendance
+Route
+/attendance/daily
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Provide a reconciled daily school attendance view built from gate events and manual context.
+Layout: 
+Date/campus filters; KPI rollup; grade/class breakdown; attendance table; exception banner.
+Primary actions: 
+Export daily • Open exceptions • Send absence reminder • View grades
+Associated components
+DateFilter
+CampusFilter
+AttendanceKPIs
+GradeBreakdown
+AttendanceTable
+ReconciliationBanner
+ExportButton
+Core data: 
+attendance_day • entry/exit event rollup • manual corrections • class roster
+API touchpoints: 
+GET /attendance/daily • GET /attendance/daily/summary • POST /attendance/reconcile
+States: 
+Holiday • No school day • Incomplete gate sync • Manual correction pending
+Definition of done
+Attendance status definitions are consistent across pages.
+Export contains selected scope and timestamp.
+Users see a reconciliation warning when scan data is incomplete.
+15. Class Attendance
+Route
+/attendance/classes/:classId
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Allow a teacher to take ownership of class-level attendance quality and context.
+Layout: 
+Roster table with current status, arrival time, reason field and save/reconcile controls.
+Primary actions: 
+Save draft • Submit • Mark reasons • Export roster
+Associated components
+ClassSelector
+RosterTable
+StatusPill
+AttendanceReasonEditor
+BulkActionToolbar
+SaveDraftButton
+ReconcileButton
+Core data: 
+class roster • daily status • events • absence reason • manual adjustment
+API touchpoints: 
+GET /attendance/classes/:id • PATCH /attendance/:studentId • POST /attendance/classes/:id/reconcile
+States: 
+Read-only after lock • No gate event • Student added mid-day • Duplicate correction
+Definition of done
+Manual attendance cannot overwrite source events silently.
+Teacher must supply a reason for a manual correction.
+Lock deadlines are configurable by school.
+16. Staff Attendance
+Route
+/staff/attendance
+Roles
+HR Admin, School Admin, Principal (summary)
+Release
+MVP
+Purpose: 
+Use the same trusted gate infrastructure for staff attendance while keeping staff workflows separate.
+Layout: 
+Staff KPIs, department filters, staff table, late/absence exceptions, monthly export.
+Primary actions: 
+Export payroll • Review late • Edit shift • Open staff profile
+Associated components
+DepartmentFilter
+StaffAttendanceTable
+LateArrivalCard
+ShiftRulePanel
+ExportButton
+Core data: 
+staff master • shift • entry exit events • attendance day • approval
+API touchpoints: 
+GET /staff/attendance • GET /staff/attendance/summary • POST /staff/attendance/correct
+States: 
+Shift not configured • Overnight shift • No exit event • Payroll locked
+Definition of done
+Student and staff datasets are separated by permission.
+Shift rules are configurable.
+HR exports use selected date range and are audit logged.
+17. Reports & Exports
+Route
+/reports
+Roles
+Principal, School Admin, HR Admin
+Release
+MVP
+Purpose: 
+Make recurring operational and leadership reporting self-service.
+Layout: 
+Report catalogue cards, date/campus filters, saved reports, export queue.
+Primary actions: 
+New report • Schedule report • Open exports • Manage access
+Associated components
+ReportCard
+FilterBar
+SavedReportList
+ExportQueue
+ScheduleReportModal
+DownloadLink
+Core data: 
+report definitions • filters • export job • saved reports
+API touchpoints: 
+GET /reports • POST /reports/run • POST /reports/schedule • GET /exports/:id
+States: 
+No data • Export processing • Export failed • Permission restricted
+Definition of done
+Every export has scope/date/time metadata.
+Sensitive reports are not sharable outside tenant.
+A report preserves applied filters in title.
+18. Care Loop Queue
+Route
+/care
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Surface attendance patterns that merit a human, supportive follow-up.
+Layout: 
+Summary KPIs, pattern filters, care queue, ownership and note-status indicators.
+Primary actions: 
+Assign teacher • Draft note • Resolve selected • View rules
+Associated components
+CareKPI
+PatternFilter
+CareAlertTable
+AssigneeChip
+PriorityBadge
+DraftStatusBadge
+BulkAssign
+Core data: 
+care rule • student status • evidence window • owner • note status
+API touchpoints: 
+GET /care-alerts • PATCH /care-alerts/:id • POST /care-alerts/assign
+States: 
+No alerts • Awaiting teacher • Parent note pending • Dismissed • Escalated
+Definition of done
+No alert labels a child as a risk.
+Every alert displays evidence and rule.
+Only authorised educators can view care context.
+19. Care Alert Detail
+Route
+/care/:alertId
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Explain the pattern, support a teacher’s decision and manage parent outreach transparently.
+Layout: 
+Alert header, evidence, attendance timeline, suggested actions, note drafting status, audit log.
+Primary actions: 
+Add context • Draft note • Dismiss • Escalate
+Associated components
+AlertHeader
+EvidenceCard
+AttendanceTimeline
+ContextEditor
+AIRecommendationCard
+MessageDraftPreview
+AuditTimeline
+Core data: 
+alert • rule evidence • student attendance • teacher note • message draft • audit events
+API touchpoints: 
+GET /care-alerts/:id • PATCH /care-alerts/:id/context • POST /care-alerts/:id/draft-message
+States: 
+Evidence unavailable • Parent has opted out • Teacher lacks class access • Alert closed
+Definition of done
+AI text is always a draft and editable.
+The page provides evidence before a recommendation.
+Dismissing must require a reason.
+20. Messages & Parent Note Composer
+Route
+/messages/compose
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Enable warm, school-approved parent communication without automatic sending.
+Layout: 
+Recipient context left, editable message centre, channel/status right, AI assist beneath.
+Primary actions: 
+Create message • Manage templates • View delivery • Open approvals
+Associated components
+RecipientSummary
+TemplateSelector
+RichTextEditor
+ChannelSelector
+ConsentBadge
+AIRewriteToolbar
+PreviewButton
+SendForApprovalButton
+Core data: 
+guardian contacts • consent • template • message draft • approval workflow
+API touchpoints: 
+GET /messages/templates • POST /messages/drafts • POST /messages/:id/send
+States: 
+No consent • No eligible channel • Template missing • Approval required • Delivery failed
+Definition of done
+Teacher reviews all AI-assisted content.
+Delivery channel is constrained by consent.
+Messages are shown in audit history.
+21. Notification Delivery Centre
+Route
+/notifications
+Roles
+School Admin, Principal (summary)
+Release
+MVP
+Purpose: 
+Make message delivery reliable, visible and recoverable.
+Layout: 
+Delivery KPIs, channel filters, message timeline/table, retry controls, provider status.
+Primary actions: 
+Retry failures • Export log • Provider health • Manage templates
+Associated components
+DeliveryKPI
+ChannelFilter
+NotificationTable
+DeliveryBadge
+RetryButton
+ProviderHealthPanel
+Core data: 
+notification • channel • template • sent time • delivery receipt • failure reason
+API touchpoints: 
+GET /notifications • POST /notifications/:id/retry • GET /integrations/health
+States: 
+Queued • Sent • Delivered • Failed • Suppressed due to consent
+Definition of done
+No suppressed message can be retried without a valid consent change.
+Delivery receipts are kept separately from message body where required.
+Failures show an actionable reason.
+22. Gates & Devices
+Route
+/devices
+Roles
+School Admin, Gate Operator (read/limited edit)
+Release
+MVP
+Purpose: 
+Manage physical readers, gates, antenna placement and operational health.
+Layout: 
+Campus filter; device KPI; device cards/table; status map; add-reader wizard.
+Primary actions: 
+Add reader • Test device • View health • Maintenance mode
+Associated components
+CampusFilter
+DeviceHealthCard
+GateMap
+DeviceTable
+AddDeviceWizard
+ReaderConfigDrawer
+Core data: 
+device • gate • campus • firmware • heartbeat • read quality • antenna config
+API touchpoints: 
+GET /devices • POST /devices • PATCH /devices/:id • GET /devices/:id/health
+States: 
+Online • Offline • Degraded • Maintenance mode • Unprovisioned
+Definition of done
+Device data is scoped to campus.
+A device cannot be deleted while historic events reference it.
+Maintenance mode clearly impacts live monitoring.
+23. Device Detail & Diagnostics
+Route
+/devices/:deviceId
+Roles
+School Admin, Gate Operator
+Release
+MVP
+Purpose: 
+Provide an understandable technical view for local support and remote troubleshooting.
+Layout: 
+Health header; live telemetry; antenna signal chart; connectivity; maintenance and ticket actions.
+Primary actions: 
+Run test • Set maintenance • Open ticket • View scans
+Associated components
+DeviceIdentityHeader
+HeartbeatStatus
+TelemetryChart
+AntennaCard
+FirmwareInfo
+MaintenanceLog
+CreateSupportTicket
+Core data: 
+heartbeat • network • firmware • antenna RSSI • scan volume • incident history
+API touchpoints: 
+GET /devices/:id • GET /devices/:id/telemetry • POST /devices/:id/test • POST /support/tickets
+States: 
+No telemetry • Disconnected • Firmware mismatch • Edge agent buffering
+Definition of done
+Technical data does not show student PII unnecessarily.
+Test action has a confirmation and non-disruptive warning.
+Maintenance events are auditable.
+24. AI Insights Centre
+Route
+/ai/insights
+Roles
+Principal, School Admin, Teacher (class-limited)
+Release
+MVP
+Purpose: 
+Present explainable AI-assisted prioritisation with teacher and school controls.
+Layout: 
+AI overview; insight cards; detailed evidence/recommendation; review controls; guardrail banner.
+Primary actions: 
+Open insight • Explain evidence • Draft message • Provide feedback • Disable rule for review
+Associated components
+AIGuardrailBanner
+AIInsightCard
+EvidencePanel
+RecommendationPanel
+ExplainButton
+FeedbackButtons
+ModelStatusPanel
+Core data: 
+insight • evidence • rule/model version • recommendation • human action • feedback
+API touchpoints: 
+GET /ai/insights • POST /ai/insights/:id/feedback • POST /ai/insights/:id/draft
+States: 
+AI unavailable • No new insights • Human review required • Low confidence
+Definition of done
+No autonomous action occurs.
+Every insight provides source data and explanation.
+AI output is not used to label or profile children.
+25. AI Copilot: Ask NurturePass
+Route
+/ai/copilot
+Roles
+Teacher, Principal, School Admin
+Release
+MVP
+Purpose: 
+Let authorised users ask controlled natural-language questions about the data they are allowed to see.
+Layout: 
+Prompt panel; suggested questions; answer thread; cited data links; privacy and scope banner.
+Primary actions: 
+New question • Open sources • View policies • Give feedback
+Associated components
+PromptInput
+SuggestedQuestionChips
+ChatThread
+SourceCitationCard
+ScopeBadge
+CopyAnswerButton
+FeedbackControls
+Core data: 
+current role scope • attendance aggregates • care queue • device health
+API touchpoints: 
+POST /ai/copilot/query • GET /ai/copilot/suggestions
+States: 
+No access to requested data • No result • Ambiguous question • AI service unavailable
+Definition of done
+Copilot enforces row-level permissions.
+Answers show data sources/pages used.
+No prompt sends raw parent contacts unless user is authorised.
+26. AI Message Draft Review
+Route
+/ai/message-drafts/:draftId
+Roles
+Teacher, Principal approval (optional)
+Release
+MVP
+Purpose: 
+Convert AI assistance into safe, empathetic, human-approved communication.
+Layout: 
+Student context left, editable message centre, policy/consent rail, review/send controls.
+Primary actions: 
+Edit draft • Preview • Send message • Discard
+Associated components
+StudentContextCard
+AIReasoningSummary
+EditableDraft
+ToneSelector
+ConsentBadge
+ChannelPreview
+ApprovalWorkflow
+SendButton
+Core data: 
+student attendance • care context • draft • guardian consent • channel options • approval state
+API touchpoints: 
+GET /ai/message-drafts/:id • PATCH /ai/message-drafts/:id • POST /ai/message-drafts/:id/submit
+States: 
+Parent opted out • Draft needs review • Approval pending • No delivery channel
+Definition of done
+Send is disabled until a human review checkbox is completed.
+Reasoning is concise and does not expose sensitive inference.
+Teacher can discard the draft.
+27. Emergency Muster Mode
+Route
+/safety/muster
+Roles
+Principal, School Admin, Gate Operator
+Release
+Phase 2 / Later
+Purpose: 
+Support accountable headcounts during drills or emergencies using defined checkpoints, not continuous tracking.
+Layout: 
+Emergency header; muster point selector; expected/confirmed/missing cards; list requiring manual check; action rail.
+Primary actions: 
+Start drill • Assign checks • Export list • Close event
+Associated components
+EmergencyBanner
+MusterKPIs
+MusterPointSelector
+MissingPersonTable
+LastConfirmedCheckpoint
+ManualConfirmButton
+IncidentLog
+Core data: 
+active roster • checkpoint events • manual confirmation • drill log
+API touchpoints: 
+POST /muster/start • GET /muster/:id • POST /muster/:id/confirm
+States: 
+Drill not active • Incomplete roster • Checkpoint unavailable • Emergency active
+Definition of done
+Use only approved school safety workflows.
+No claim of real-time location outside checkpoints.
+All manual confirmations include staff name and timestamp.
+28. Authorised Pickup & Early Exit
+Route
+/safety/pickup
+Roles
+Gate Operator, School Admin, Teacher (request only)
+Release
+Phase 2 / Later
+Purpose: 
+Add controlled exit workflows for early pickup and authorised guardians in a later phase.
+Layout: 
+Pickup request queue; student/guardian verification panel; approval status; exit confirmation.
+Primary actions: 
+Verify guardian • Approve exit • View history • Notify parent
+Associated components
+PickupQueue
+StudentVerificationCard
+AuthorisedGuardianList
+QRorPINVerifier
+ApprovalBadge
+ExitConfirmButton
+Core data: 
+pickup request • guardian master • consent • approval • exit event
+API touchpoints: 
+GET /pickup/requests • POST /pickup/verify • POST /pickup/:id/approve
+States: 
+Guardian not authorised • Consent missing • Request expired • Identity not verified
+Definition of done
+This feature is labelled Phase 2.
+Do not permit exit without a recorded approval.
+All exit approvals are auditable.
+29. Integrations & Webhooks
+Route
+/settings/integrations
+Roles
+School Admin, Platform Admin
+Release
+Phase 2 / Later
+Purpose: 
+Manage parent messaging, school information system, outbound webhooks and secure API credentials.
+Layout: 
+Integration cards; connection health; configuration drawers; event subscription controls.
+Primary actions: 
+Test connection • Add webhook • Rotate key • View logs
+Associated components
+IntegrationCard
+ConnectionStatus
+WebhookTable
+SecretVaultStatus
+TestConnectionButton
+EventSubscriptionToggle
+Core data: 
+provider config • status • webhook URL • event type • last delivery
+API touchpoints: 
+GET /integrations • POST /integrations/:id/test • POST /webhooks • POST /api-keys/rotate
+States: 
+Disconnected • Credentials invalid • Webhook failing • Rate limit reached
+Definition of done
+Secrets are never shown after save.
+Test sends use safe test payloads.
+Outbound events have retry and delivery log.
+30. Settings: Consent, Retention & Audit
+Route
+/settings/governance
+Roles
+School Admin, Principal (read), Platform Admin
+Release
+Phase 2 / Later
+Purpose: 
+Operationalise privacy-by-design controls, consent, retention and auditability.
+Layout: 
+Settings side navigation, consent KPI, record table, retention controls, audit trail entry point.
+Primary actions: 
+Send consent reminder • Update retention policy • Export audit log • View policy history
+Associated components
+SettingsNav
+ConsentKPI
+ConsentTable
+RetentionPolicyControl
+AuditLogLink
+PolicyNotice
+Core data: 
+guardian consent • retention period • audit summary • school policy version
+API touchpoints: 
+GET /governance/consent • PATCH /governance/retention • GET /audit-logs
+States: 
+Consent pending • Policy update requires confirmation • Retention processing • Read only
+Definition of done
+No notification is sent outside permission.
+Retention changes are restricted and audit logged.
+Policy notice clearly says data is checkpoint-based, not continuous tracking.
+3. AI design: pilot capability and guardrails
+Principle
+AI assists; staff decide.
+Pilot focus
+Summaries, drafts, pattern prompts, device anomalies.
+Review
+Human approval before any sensitive action.
+Scope
+Tenant + role + data-purpose limited.
+Capability
+Value
+Inputs
+Output
+Human control
+Weekly briefing
+Leadership clarity
+Daily rollups, class trends
+Plain-language summary
+Principal reviews
+Care prompt
+Timely supportive check-in
+Rules: absence, late, pattern
+Evidence-based prompt
+Teacher decides context/action
+Message draft
+Time-saving empathy
+Selected evidence, approved template
+Editable note
+Teacher edits/approves
+Device anomaly
+Less downtime
+Heartbeat, RSSI, scan-rate
+Explainable technical alert
+Operator validates
+Copilot
+Faster answers
+Role-scoped data
+Answer with sources
+User verifies
+Guardrails to implement before AI goes live
+Show evidence and a concise “why surfaced” explanation for every AI insight.
+Never use AI to label children, infer a diagnosis, approve exit, decide safety status or auto-send communications.
+Run AI queries through the same tenant/role filters as standard APIs.
+Retain a minimal audit record: action type, source IDs, user decision and feedback; avoid storing unnecessary raw prompts.
+Provide a “Not helpful / Incorrect evidence” feedback path and an administrative kill switch for every rule/feature.
+4. Developer build plan: page-by-page sequence
+Frontend
+React + TypeScript
+State/data
+TanStack Query + URL filters + local UI state
+Backend
+REST + server-sent events/websocket
+Database
+PostgreSQL with tenant and RLS controls
+Sprint
+Screens
+Build focus
+Exit criteria
+1
+01–03, 29–30
+App shell, tenancy, auth, setup, consent/role governance.
+School admin can enter a tenant and set up basic master data.
+2
+06–09, 22–23
+Reader edge ingestion, gate monitor, direction logic, exceptions, device health.
+Reliable live event feed with correction/audit flows.
+3
+04–05, 10–17
+Principal/teacher screens, student/class profiles, tags, attendance, reports.
+School can operate a daily attendance cycle end-to-end.
+4
+18–21
+Care Loop, parent messages, consent-aware notification delivery.
+Teacher can review pattern, draft/edit/send note and see delivery status.
+5
+24–26
+AI centre, explainable insights, AI drafts, scoped Copilot.
+AI actions stay reviewable, role-limited and controllable.
+After pilot
+27–28
+Muster and authorised pickup after operational proof.
+School approves safety workflow design and scenario testing.
+Per-page definition of done
+Role/tenant permission guard exists at API and UI layer.
+Loading, empty, error, no-permission and reconnect states are designed.
+Primary write actions create audit records.
+Filters sync to URL and exports retain selected context.
+Page works at desktop and tablet widths; gate mode handles busy real-time use.
+Unit test permission/state logic plus one end-to-end school scenario.
