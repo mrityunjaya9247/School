@@ -55,11 +55,11 @@ const TenantLogin = ({ onLogin }) => {
                         <div className="w-12 h-12 bg-white/20 backdrop-blur-lg rounded-2xl flex items-center justify-center">
                             <IconActivity />
                         </div>
-                        <h1 className="text-5xl font-extrabold tracking-tight">NurturePass</h1>
+                        <h1 className="text-5xl font-extrabold tracking-tight">AARNA</h1>
                     </div>
                     <p className="text-3xl font-light text-blue-100 leading-snug max-w-lg">
-                        Every entry recorded.<br/>
-                        <span className="font-semibold text-white">Every child cared for.</span>
+                        Attendance automated.<br/>
+                        <span className="font-semibold text-white">Safety assured.</span>
                     </p>
                 </div>
 
@@ -361,7 +361,7 @@ const AppShell = ({ user, onLogout, children }) => {
                         <div className="bg-blue-600 text-white p-1.5 rounded-lg mr-2">
                             <IconActivity />
                         </div>
-                        NurturePass
+                        AARNA
                     </h1>
                 </div>
                 

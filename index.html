@@ -3,48 +3,50 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NurturePass â€” School Safety Platform</title>
+  <title>AARNA — School Safety Platform</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@500;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root{
       --font:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      --font-display:'Plus Jakarta Sans','Inter',sans-serif;
-      --blue:#4f46e5;--blue-dark:#4338ca;--blue-light:#eef2ff;--blue-mid:#dfe3ff;
-      --green:#0d9488;--green-light:#d0fbf3;--green-mid:#14b8a6;
-      --red:#e11d48;--red-light:#ffe4e8;--red-mid:#f43f5e;
-      --amber:#d97706;--amber-light:#fef2d6;
-      --orange:#ea580c;--orange-light:#ffe8d6;
-      --violet:#0d9488;--violet-light:#d0fbf3;
-      --slate9:#0b1120;--slate8:#1e293b;--slate7:#3a4658;
-      --slate5:#64748b;--slate4:#9aa6b8;--slate2:#e5e8f0;
-      --slate1:#eef1f7;--slate0:#f5f6fb;--white:#fff;
-      --coral:#ff6f61;--coral-2:#ff8a5c;--coral-light:#ffe9e4;
-      --navy:#1b1a3a;--navy-2:#232149;--navy-soft:#2c2a52;
-      --canvas:#e9e8f2;
-      --r-sm:8px;--r-md:12px;--r-lg:18px;--r-xl:24px;
-      --grad:linear-gradient(135deg,#ff7d5c 0%,#ff5f7e 100%);
-      --sh-sm:0 1px 2px rgba(16,24,40,.05),0 1px 3px rgba(16,24,40,.08);
-      --sh-md:0 6px 16px rgba(16,24,40,.08),0 2px 6px rgba(16,24,40,.05);
-      --sh-lg:0 24px 50px rgba(30,27,75,.20);
+      --font-display:'Lora',Cambria,Georgia,"Times New Roman",serif;
+      --blue:#cc5a35;--blue-dark:#a8461f;--blue-light:#fbe9df;--blue-mid:#f0c7ab;
+      --green:#4a7c59;--green-light:#e2ecdf;--green-mid:#6fa07d;
+      --red:#b5432e;--red-light:#f6ddd4;--red-mid:#c85f45;
+      --amber:#c98a1c;--amber-light:#f8e8c9;
+      --orange:#c9772f;--orange-light:#f3ddc4;
+      --violet:#a2685c;--violet-light:#f1ddd6;
+      --slate9:#2e2318;--slate8:#3a2d24;--slate7:#55453a;
+      --slate5:#8a7a6c;--slate4:#a99a8c;--slate2:#e6d9c8;
+      --slate1:#f1e8db;--slate0:#f4ede3;--white:#fff;--white-warm:#fbf6ee;
+      --coral:#e0623a;--coral-2:#c9772f;--coral-light:#fbe9df;
+      --navy:#3a2d24;--navy-2:#2e2318;--navy-soft:#4a3a2c;
+      --canvas:#ece2d3;
+      --r-sm:10px;--r-md:16px;--r-lg:22px;--r-xl:28px;
+      --grad:linear-gradient(160deg,#e2734a 0%,#c8552f 100%);
+      --sh-sm:-3px -3px 8px rgba(255,255,255,.75),4px 4px 10px rgba(168,118,78,.20);
+      --sh-md:-6px -6px 16px rgba(255,255,255,.8),8px 8px 20px rgba(168,118,78,.26);
+      --sh-lg:-10px -10px 24px rgba(255,255,255,.85),12px 12px 30px rgba(168,118,78,.32);
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html,body{height:100%;}
     body{font-family:var(--font);background:var(--canvas);color:var(--slate8);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.005em;}
-    h1,h2,h3{font-family:var(--font-display);letter-spacing:-.02em;}
+    h1,h2,h3{font-family:var(--font-display);letter-spacing:-.005em;text-wrap:balance;}
     button{font-family:inherit;cursor:pointer;border:none;background:none;}
+    button:active{transform:translateY(0) scale(.98);filter:brightness(.97);}
+    button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
     input,select{font-family:inherit;}
     .hidden{display:none!important;}
 
-    /* â”€â”€ ANIMATIONS â”€â”€ */
+    /* ── ANIMATIONS ── */
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
     @keyframes spin{to{transform:rotate(360deg)}}
     @keyframes slideIn{from{opacity:0;transform:translateX(110%)}to{opacity:1;transform:translateX(0)}}
     @keyframes slideOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(110%)}}
     @keyframes popIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 
-    /* â”€â”€ BADGE â”€â”€ */
+    /* ── BADGE ── */
     .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;}
     .bg{background:var(--green-light);color:var(--green);}
     .br{background:var(--red-light);color:var(--red);}
@@ -53,68 +55,78 @@
     .bo{background:var(--orange-light);color:var(--orange);}
     .bx{background:var(--slate1);color:var(--slate5);}
 
-    /* â”€â”€ BUTTONS â”€â”€ */
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:700;line-height:1;transition:opacity .15s,transform .15s;cursor:pointer;border:none;}
-    .btn:hover{opacity:.88;transform:translateY(-1px);}
-    .btn-p{background:var(--grad);color:#fff;box-shadow:0 4px 12px rgba(79,70,229,.28);}
-    .btn-g{background:#fff;color:var(--slate7);border:2px solid var(--slate2);}
+    /* ── BUTTONS ── */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r-md);font-size:13px;font-weight:700;line-height:1;transition:opacity .15s,transform .15s,box-shadow .15s;cursor:pointer;border:none;}
+    .btn:hover{opacity:.92;transform:translateY(-1px);}
+    .btn-p{background:var(--grad);color:#fff;box-shadow:0 6px 16px -4px rgba(168,70,31,.4),inset 0 1px 0 rgba(255,255,255,.22);}
+    .btn-g{background:var(--white-warm);color:var(--slate7);border:2px solid var(--slate2);}
     .btn-o{background:var(--orange);color:#fff;}
     .btn-sm{padding:5px 11px;font-size:12px;}
     .btn-lg{padding:13px 26px;font-size:15px;border-radius:var(--r-lg);}
     .btn-w{width:100%;}
 
-    /* â”€â”€ CARD â”€â”€ */
-    .card{background:#fff;border-radius:20px;border:1px solid var(--slate1);box-shadow:var(--sh-sm);padding:24px;}
-    .ct{font-family:var(--font-display);font-size:16px;font-weight:800;letter-spacing:-.01em;color:var(--slate9);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+    /* ── CARD ── */
+    .card{background:var(--white-warm);border-radius:var(--r-xl);border:1px solid rgba(168,118,78,.10);box-shadow:var(--sh-sm);padding:24px;}
+    .ct{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:0;color:var(--slate9);margin-bottom:16px;padding:11px 15px;border-radius:var(--r-sm);background:var(--slate1);display:flex;align-items:center;justify-content:space-between;gap:10px;}
 
-    /* â”€â”€ LOGIN â”€â”€ */
+    /* ── LOGIN ── */
     #page-login{display:flex;min-height:100vh;}
-    .ll{display:none;width:45%;background:linear-gradient(150deg,#1b1a3a 0%,#2c2a52 60%,#3a2f55 100%);padding:52px;color:#fff;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+    .ll{display:none;width:45%;background:linear-gradient(155deg,var(--navy) 0%,var(--navy-2) 55%,var(--navy-soft) 100%);padding:52px;color:#fff;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
     @media(min-width:880px){.ll{display:flex;}}
-    .ll::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.05);top:-70px;right:-70px;}
-    .lb-icon{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:12px;display:flex;align-items:center;justify-content:center;}
+    .ll::before{content:'';position:absolute;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(224,115,74,.28),transparent 70%);top:-90px;right:-90px;filter:blur(6px);}
+    .lb-icon{width:44px;height:44px;background:rgba(255,255,255,.14);border-radius:13px;display:flex;align-items:center;justify-content:center;}
     .lb-icon svg{width:23px;height:23px;}
-    .lb-name{font-size:28px;font-weight:800;letter-spacing:-.4px;}
-    .l-tag{font-size:22px;font-weight:300;color:rgba(255,255,255,.85);margin-top:20px;line-height:1.45;}
-    .l-tag strong{font-weight:700;color:#fff;}
+    .lb-name{font-family:var(--font-display);font-size:27px;font-weight:700;letter-spacing:-.01em;}
+    .l-tag{font-family:var(--font-display);font-size:21px;font-weight:400;color:rgba(255,255,255,.88);margin-top:20px;line-height:1.42;}
+    .l-tag strong{font-weight:700;color:#f0c9ae;}
     .l-feats{display:flex;flex-direction:column;gap:12px;}
-    .l-feat{display:flex;align-items:flex-start;gap:13px;background:rgba(255,255,255,.08);padding:15px;border-radius:var(--r-md);}
-    .lfi{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .l-feat{display:flex;align-items:flex-start;gap:13px;background:rgba(255,255,255,.07);padding:15px;border-radius:var(--r-md);border:1px solid rgba(255,255,255,.06);}
+    .lfi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .lfi svg{width:18px;height:18px;}
-    .lfi.g{background:#0d9488;}.lfi.v{background:#ff6f61;}.lfi.o{background:#ea580c;}
+    .lfi.g{background:#5c8a6a;}.lfi.v{background:#e0623a;}.lfi.o{background:#c9772f;}
     .l-feat h3{font-size:13px;font-weight:700;margin-bottom:2px;}
-    .l-feat p{font-size:12px;color:rgba(255,255,255,.65);}
+    .l-feat p{font-size:12px;color:rgba(255,255,255,.62);}
     .lr{flex:1;display:flex;align-items:center;justify-content:center;padding:28px;background:var(--slate0);}
-    .lbox{width:100%;max-width:420px;background:#fff;border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:38px;border:1px solid var(--slate1);}
-    .lbox h2{font-size:26px;font-weight:800;color:var(--slate8);margin-bottom:4px;}
+    .lbox{width:100%;max-width:420px;background:var(--white-warm);border-radius:var(--r-xl);box-shadow:var(--sh-lg);padding:38px;border:1px solid rgba(168,118,78,.10);}
+    .lbox h2{font-family:var(--font-display);font-size:25px;font-weight:700;color:var(--slate8);margin-bottom:4px;}
     .lbox .sub{font-size:14px;color:var(--slate5);margin-bottom:26px;}
     .fg{margin-bottom:15px;}
     .fg label{display:block;font-size:12px;font-weight:700;color:var(--slate7);margin-bottom:6px;letter-spacing:.2px;}
     .fg input,.fg select{width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;transition:border-color .2s;}
-    .fg input:focus,.fg select:focus{border-color:var(--blue);background:#fff;}
+    .fg input:focus,.fg select:focus{border-color:var(--blue);background:var(--white-warm);}
     .l-hint{margin-top:14px;padding:10px 13px;background:var(--blue-light);border-radius:var(--r-sm);font-size:12px;color:var(--blue-dark);border:1px solid var(--blue-mid);}
 
-    /* â”€â”€ APP SHELL (framed, floating on canvas) â”€â”€ */
-    #page-app{display:flex;min-height:calc(100vh - 32px);margin:16px;background:#fff;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px rgba(27,26,58,.16);}
+    /* ── APP SHELL (framed, floating on canvas) ── */
+    #page-app{display:flex;min-height:calc(100vh - 32px);margin:16px;background:var(--white-warm);border-radius:30px;overflow:hidden;box-shadow:0 30px 70px -14px rgba(120,80,50,.30),0 10px 26px -8px rgba(120,80,50,.16);}
     .sb{width:236px;flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;overflow-y:auto;}
     .sb-brand{padding:22px 20px 16px;}
-    .sb-name{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-.02em;color:#fff;}
-    .sb-tenant{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;letter-spacing:.9px;text-transform:uppercase;margin-top:2px;}
+    .sb-name{font-family:var(--font-display);font-size:20px;font-weight:700;letter-spacing:-.01em;color:#fff;}
+    .sb-tenant{font-size:10px;color:rgba(255,255,255,.42);font-weight:600;letter-spacing:.9px;text-transform:uppercase;margin-top:2px;}
     .sb-nav{flex:1;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
-    .ni{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;font-size:13.5px;font-weight:600;color:rgba(255,255,255,.6);transition:background .15s,color .15s,box-shadow .2s;cursor:pointer;position:relative;}
-    .ni:hover{background:rgba(255,255,255,.07);color:#fff;}
-    .ni.active{background:var(--grad);color:#fff;font-weight:700;box-shadow:0 10px 22px rgba(255,95,110,.4);}
+    .ni{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--r-md);font-size:13.5px;font-weight:600;color:rgba(255,255,255,.58);transition:background .15s,color .15s,box-shadow .2s;cursor:pointer;position:relative;}
+    .ni:hover{background:rgba(255,255,255,.06);color:#fff;}
+    .ni.active{background:var(--grad);color:#fff;font-weight:700;box-shadow:0 10px 22px -6px rgba(200,85,47,.55);}
     .ni svg{width:17px;height:17px;flex-shrink:0;}
     .sb-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);}
-    .ub{display:flex;align-items:center;gap:10px;padding:10px;border-radius:14px;background:rgba(255,255,255,.06);margin-bottom:8px;}
-    .ua{width:34px;height:34px;border-radius:10px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
+    .ub{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r-md);background:rgba(255,255,255,.055);margin-bottom:8px;}
+    .ua{width:34px;height:34px;border-radius:11px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
     .un{font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    .ur{font-size:10px;color:rgba(255,255,255,.45);font-weight:600;text-transform:capitalize;}
-    .so{display:flex;align-items:center;gap:8px;width:100%;padding:10px 13px;border-radius:12px;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;transition:background .15s,color .15s;}
-    .so:hover{background:rgba(244,63,94,.18);color:#fda4af;}
+    .ur{font-size:10px;color:rgba(255,255,255,.42);font-weight:600;text-transform:capitalize;}
+    .so{display:flex;align-items:center;gap:8px;width:100%;padding:10px 13px;border-radius:var(--r-sm);color:rgba(255,255,255,.58);font-size:12px;font-weight:600;transition:background .15s,color .15s;}
+    .so:hover{background:rgba(181,67,46,.22);color:#e8b3a2;}
     .so svg{width:14px;height:14px;}
     .ma{flex:1;display:flex;flex-direction:column;min-width:0;overflow:auto;background:var(--slate0);}
-    .tb{height:64px;background:#fff;border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:10;gap:10px;}
+    .tb{height:64px;background:var(--white-warm);border-bottom:1px solid var(--slate1);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:10;gap:10px;}
+
+    /* ── SCHOOL ANNOUNCEMENT MARQUEE ── */
+    .marquee-wrap{overflow:hidden;white-space:nowrap;background:var(--grad);padding:9px 0;position:sticky;top:64px;z-index:9;box-shadow:0 2px 8px -2px rgba(168,70,31,.3);}
+    .marquee-track{display:inline-block;padding-left:100%;color:#fff;font-size:12.5px;font-weight:700;animation:marqueeScroll 22s linear infinite;}
+    .marquee-track .marquee-time{opacity:.78;font-weight:600;margin-left:12px;font-size:11px;}
+    @keyframes marqueeScroll{from{transform:translateX(0);}to{transform:translateX(-100%);}}
+    @media (prefers-reduced-motion:reduce){
+      .marquee-track{animation:none;padding-left:20px;white-space:normal;}
+      .marquee-wrap{white-space:normal;}
+    }
     .tb-l{display:flex;align-items:center;gap:10px;}
     .tp{font-size:11px;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.6px;}
     .ts{display:flex;align-items:center;gap:7px;background:var(--green-light);padding:4px 12px;border-radius:999px;}
@@ -123,33 +135,71 @@
     .nb-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:var(--amber-light);color:var(--amber);font-size:11px;font-weight:700;cursor:pointer;border:none;transition:background .15s;}
     .nb-btn:hover{background:var(--amber);color:#fff;}
     .nb-btn svg{width:13px;height:13px;}
+
+    /* ── NOTIFICATION BELL ── */
+    .notif-wrap{position:relative;}
+    .notif-btn2{position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:var(--r-md);background:var(--slate0);border:1px solid var(--slate1);color:var(--slate7);cursor:pointer;transition:background .15s,color .15s;}
+    .notif-btn2:hover{background:var(--blue-light);color:var(--blue-dark);}
+    .notif-btn2 svg{width:16px;height:16px;}
+    .notif-badge{position:absolute;top:-4px;right:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--red);color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;line-height:1;}
+    .notif-dd{position:absolute;top:calc(100% + 8px);right:0;width:320px;max-height:380px;overflow-y:auto;background:var(--white-warm);border-radius:var(--r-lg);box-shadow:var(--sh-lg);border:1px solid rgba(168,118,78,.12);padding:8px;z-index:200;}
+    .notif-item{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border-radius:var(--r-sm);cursor:pointer;transition:background .15s;}
+    .notif-item:hover{background:var(--slate0);}
+    .notif-item.urgent .ni-title{color:var(--red);}
+    .ni-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;}
+    .ni-dot.a{background:var(--amber);} .ni-dot.r{background:var(--red);}
+    .ni-title{font-size:12.5px;font-weight:700;color:var(--slate8);}
+    .ni-sub{font-size:11px;color:var(--slate5);margin-top:2px;}
+    .notif-empty{padding:20px;text-align:center;font-size:12px;color:var(--slate4);}
+
+    /* ── WATCHLIST STAR ── */
+    .watch-btn{width:26px;height:26px;flex-shrink:0;border-radius:8px;background:var(--slate0);border:1px solid var(--slate1);color:var(--slate4);font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s,color .15s,transform .1s;}
+    .watch-btn:hover{background:var(--amber-light);color:var(--amber);transform:scale(1.08);}
+    .watch-btn.on{background:var(--amber-light);color:var(--amber);border-color:var(--amber);}
+
+    /* ── OMNI-SEARCH ── */
+    .omni-wrap{position:relative;}
+    .omni-bar{display:flex;align-items:center;gap:10px;background:var(--white-warm);border:1px solid var(--slate2);border-radius:999px;padding:12px 20px;box-shadow:var(--sh-sm);transition:box-shadow .15s,border-color .15s;}
+    .omni-bar:focus-within{border-color:var(--blue-mid);box-shadow:var(--sh-md);}
+    .omni-bar svg{width:18px;height:18px;color:var(--slate4);flex-shrink:0;}
+    .omni-bar input{flex:1;border:none;outline:none;background:transparent;font-size:14px;color:var(--slate8);font-family:inherit;}
+    .omni-bar input::placeholder{color:var(--slate4);}
+    .omni-dd{position:absolute;top:calc(100% + 8px);left:0;right:0;max-height:420px;overflow-y:auto;background:var(--white-warm);border-radius:var(--r-lg);box-shadow:var(--sh-lg);border:1px solid rgba(168,118,78,.12);padding:8px;z-index:150;}
+
+    /* ── STATS TREND CHART ── */
+    .stats-chart{display:flex;align-items:flex-end;gap:4px;padding:6px 2px 0;overflow-x:auto;}
+    .stats-bar-col{flex:1 0 10px;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:8px;}
+    .stats-bar-track{width:100%;height:130px;background:var(--slate1);border-radius:4px;overflow:hidden;display:flex;align-items:flex-end;}
+    .stats-bar-fill{width:100%;border-radius:3px 3px 0 0;}
+    .stats-bar-lbl{font-size:8.5px;color:var(--slate4);white-space:nowrap;}
+
     .pc{padding:22px 26px;max-width:1240px;width:100%;}
 
-    /* â”€â”€ PAGE HEADER â”€â”€ */
+    /* ── PAGE HEADER ── */
     .ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
-    .ph h1{font-size:27px;font-weight:800;color:var(--slate9);margin-bottom:3px;}
+    .ph h1{font-family:var(--font-display);font-size:27px;font-weight:700;color:var(--slate9);margin-bottom:3px;}
     .ph .sub{font-size:13px;color:var(--slate5);}
     .ph .sub span{color:var(--coral);font-weight:700;}
 
-    /* â”€â”€ HERO BANNER â”€â”€ */
-    .hero{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 60%,var(--navy-soft) 100%);border-radius:22px;padding:28px 30px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
-    .hero::after{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,111,97,.55),rgba(255,95,126,0));}
+    /* ── HERO BANNER ── */
+    .hero{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--navy) 0%,var(--navy-2) 60%,var(--navy-soft) 100%);border-radius:var(--r-xl);padding:28px 30px;color:#fff;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:18px;}
+    .hero::after{content:'';position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(224,115,74,.5),rgba(224,115,74,0));}
     .hero .eyebrow{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.7px;}
-    .hero h2{font-family:var(--font-display);font-size:25px;font-weight:800;margin:7px 0 5px;letter-spacing:-.02em;}
-    .hero p{font-size:13.5px;color:rgba(255,255,255,.72);max-width:520px;}
-    .hero .hstat{position:relative;z-index:1;text-align:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:16px;padding:14px 20px;flex-shrink:0;}
-    .hero .hstat b{font-family:var(--font-display);font-size:28px;font-weight:800;display:block;line-height:1;}
-    .hero .hstat span{font-size:11px;color:rgba(255,255,255,.7);font-weight:600;}
+    .hero h2{font-family:var(--font-display);font-size:24px;font-weight:700;margin:7px 0 5px;letter-spacing:-.005em;}
+    .hero p{font-size:13.5px;color:rgba(255,255,255,.7);max-width:520px;}
+    .hero .hstat{position:relative;z-index:1;text-align:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);border-radius:var(--r-md);padding:14px 20px;flex-shrink:0;}
+    .hero .hstat b{font-family:var(--font-display);font-size:27px;font-weight:700;display:block;line-height:1;}
+    .hero .hstat span{font-size:11px;color:rgba(255,255,255,.68);font-weight:600;}
 
-    /* â”€â”€ KPI â”€â”€ */
+    /* ── KPI ── */
     .kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:22px;}
-    .kc{background:#fff;border-radius:20px;border:1px solid var(--slate1);box-shadow:var(--sh-sm);padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:box-shadow .2s,transform .2s,border-color .2s;position:relative;overflow:hidden;}
+    .kc{background:var(--white-warm);border-radius:var(--r-xl);border:1px solid rgba(168,118,78,.10);box-shadow:var(--sh-sm);padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:10px;transition:box-shadow .2s,transform .2s;position:relative;overflow:hidden;}
     .kc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--grad);opacity:0;transition:opacity .2s;}
-    .kc:hover{box-shadow:var(--sh-md);transform:translateY(-3px);border-color:var(--coral-light);}
+    .kc:hover{box-shadow:var(--sh-md);transform:translateY(-3px);}
     .kc:hover::before{opacity:1;}
     .kl{font-size:11.5px;font-weight:700;color:var(--slate5);margin-bottom:5px;letter-spacing:.4px;text-transform:uppercase;}
-    .kv{font-family:var(--font-display);font-size:31px;font-weight:800;color:var(--slate9);line-height:1;letter-spacing:-.02em;}
-    .kt{font-size:11px;font-weight:700;margin-top:3px;}
+    .kv{font-family:var(--font-display);font-size:30px;font-weight:700;color:var(--slate9);line-height:1;letter-spacing:-.01em;font-variant-numeric:tabular-nums;}
+    .kt{font-size:11px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums;}
     .kt.up{color:var(--green);} .kt.dn{color:var(--red);}
     .ki{width:44px;height:44px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .ki svg{width:20px;height:20px;}
@@ -159,24 +209,24 @@
     .ki.or{background:var(--orange-light);color:var(--orange);}
     .ki.vl{background:var(--violet-light);color:var(--violet);}
 
-    /* â”€â”€ TWO COL â”€â”€ */
+    /* ── TWO COL ── */
     .tc{display:grid;grid-template-columns:2fr 1fr;gap:18px;}
     @media(max-width:1080px){.tc{grid-template-columns:1fr;}}
 
-    /* â”€â”€ FEED â”€â”€ */
+    /* ── FEED ── */
     .fi{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--r-md);margin-bottom:7px;background:var(--slate0);border:1px solid transparent;transition:all .15s;animation:popIn .3s ease;}
     .fi:hover{background:var(--slate1);border-color:var(--slate2);}
     .fl{display:flex;align-items:center;gap:10px;}
-    .fd{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .fd{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
     .fd svg{width:15px;height:15px;}
     .fd.ok{background:var(--green-mid);color:#fff;} .fd.bad{background:var(--red-mid);color:#fff;}
     .fn{font-size:13px;font-weight:700;color:var(--slate8);}
     .fs{font-size:11px;color:var(--slate5);margin-top:1px;}
-    .ft{font-size:11px;font-weight:700;color:var(--slate4);background:#fff;padding:3px 8px;border-radius:6px;white-space:nowrap;}
+    .ft{font-size:11px;font-weight:700;color:var(--slate4);background:var(--white-warm);padding:3px 8px;border-radius:8px;white-space:nowrap;}
 
-    /* â”€â”€ DEVICES â”€â”€ */
+    /* ── DEVICES ── */
     .dp{background:var(--slate8);border-radius:var(--r-lg);padding:20px;color:#fff;}
-    .dp .ct{color:#fff;border-color:rgba(255,255,255,.1);}
+    .dp .ct{color:#fff;background:rgba(255,255,255,.08);font-family:var(--font-display);font-weight:700;}
     .di{display:flex;align-items:center;justify-content:space-between;padding:11px 12px;border-radius:var(--r-md);margin-bottom:7px;}
     .di.ok{background:rgba(255,255,255,.07);}
     .di.err{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);}
@@ -187,41 +237,46 @@
     .dl.g{background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.9);}
     .dl.r{background:#f87171;box-shadow:0 0 8px rgba(248,113,113,.9);animation:pulse 1.5s infinite;}
 
-    /* â”€â”€ TABLE â”€â”€ */
+    /* ── TABLE ── */
     .rt{width:100%;border-collapse:collapse;}
     .rt th{text-align:left;padding:7px 11px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--slate4);border-bottom:2px solid var(--slate1);}
     .rt td{padding:11px;border-bottom:1px solid var(--slate1);vertical-align:middle;}
     .rt tbody tr:hover td{background:var(--slate0);}
+    .rt tbody tr.rt-link{cursor:pointer;}
+    .rt tbody tr.rt-link:hover td{background:var(--blue-light);}
+    .rt tbody tr.rt-link:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;}
+    .rt tbody tr.rt-hl td{background:var(--blue-light);animation:rowHl 1.6s ease 1;}
+    @keyframes rowHl{0%,100%{background:var(--blue-light);}50%{background:var(--blue-mid);}}
     .sn{font-size:13px;font-weight:700;color:var(--slate8);}
 
-    /* â”€â”€ CARE â”€â”€ */
-    .cpbg{background:#fff7ed;border-radius:var(--r-lg);padding:18px;border:1px solid #fed7aa;}
-    .cpt{font-size:13px;font-weight:800;color:#9a3412;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
+    /* ── CARE ── */
+    .cpbg{background:#fbe8d6;border-radius:var(--r-lg);padding:18px;border:1px solid #eec9a0;}
+    .cpt{font-size:13px;font-weight:800;color:#8a4420;margin-bottom:13px;display:flex;align-items:center;gap:7px;}
     .cpt svg{width:15px;height:15px;}
-    .cc{background:#fff;border-radius:var(--r-md);padding:13px;border:1px solid var(--slate2);box-shadow:var(--sh-sm);margin-bottom:10px;}
+    .cc{background:var(--white-warm);border-radius:var(--r-md);padding:14px;border:none;box-shadow:var(--sh-sm);margin-bottom:10px;}
     .cch{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
     .ccn{font-size:13px;font-weight:800;color:var(--slate8);}
     .ccd{font-size:12px;color:var(--slate5);margin-bottom:10px;}
 
-    /* â”€â”€ TAG MANAGER â”€â”€ */
+    /* ── TAG MANAGER ── */
     .sdot{width:11px;height:11px;border-radius:50%;display:inline-block;flex-shrink:0;}
     .sdot.g{background:var(--green-mid);box-shadow:0 0 0 3px var(--green-light);}
     .sdot.r{background:var(--red-mid);box-shadow:0 0 0 3px var(--red-light);}
     .sdot.x{background:var(--slate4);}
-    .ed-in{padding:6px 9px;border:2px solid var(--slate2);border-radius:7px;font-size:12px;font-weight:600;color:var(--slate8);background:#fff;outline:none;transition:border-color .15s;font-family:inherit;}
+    .ed-in{padding:6px 9px;border:2px solid var(--slate2);border-radius:9px;font-size:12px;font-weight:600;color:var(--slate8);background:var(--white-warm);outline:none;transition:border-color .15s;font-family:inherit;}
     .ed-in:focus{border-color:var(--blue);}
-    .epc-in{width:100%;padding:6px 10px;border:2px solid var(--slate2);border-radius:7px;font-size:11px;font-family:monospace;outline:none;transition:border-color .15s;}
+    .epc-in{width:100%;padding:6px 10px;border:2px solid var(--slate2);border-radius:9px;font-size:11px;font-family:ui-monospace,Consolas,monospace;outline:none;transition:border-color .15s;}
     .epc-in:focus{border-color:var(--blue);}
-    .epc-in.ok{border-color:var(--green-mid);background:#f0fdf4;}
+    .epc-in.ok{border-color:var(--green-mid);background:#eaf2ea;}
     .rsi{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--slate0);border-radius:var(--r-md);margin-bottom:7px;border:1px solid var(--slate1);animation:popIn .3s ease;}
-    .epc-code{font-family:monospace;font-size:11px;color:var(--slate7);font-weight:600;}
+    .epc-code{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--slate7);font-weight:600;}
     .scan-meta{font-size:10px;color:var(--slate4);margin-top:2px;}
-    .qa-btn{font-size:11px;padding:4px 9px;background:var(--blue-light);color:var(--blue);border:1px solid var(--blue-mid);border-radius:6px;cursor:pointer;font-weight:700;transition:background .15s;white-space:nowrap;}
+    .qa-btn{font-size:11px;padding:4px 9px;background:var(--blue-light);color:var(--blue-dark);border:1px solid var(--blue-mid);border-radius:8px;cursor:pointer;font-weight:700;transition:background .15s;white-space:nowrap;}
     .qa-btn:hover{background:var(--blue);color:#fff;}
 
-    /* â”€â”€ TOAST â”€â”€ */
+    /* ── TOAST ── */
     #toasts{position:fixed;top:66px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:9px;width:300px;pointer-events:none;}
-    .tst{padding:12px 14px;border-radius:var(--r-md);font-size:13px;font-weight:700;box-shadow:var(--sh-lg);animation:slideIn .3s ease;pointer-events:all;display:flex;align-items:flex-start;gap:9px;background:#fff;}
+    .tst{padding:12px 14px;border-radius:var(--r-md);font-size:13px;font-weight:700;box-shadow:var(--sh-lg);animation:slideIn .3s ease;pointer-events:all;display:flex;align-items:flex-start;gap:9px;background:var(--white-warm);}
     .tst.out{animation:slideOut .3s ease forwards;}
     .tst-g{border-left:4px solid var(--green-mid);}
     .tst-a{border-left:4px solid var(--amber);}
@@ -230,22 +285,22 @@
     .tst-msg{font-size:11px;font-weight:500;color:var(--slate5);}
     .spinner{width:18px;height:18px;border:3px solid var(--slate2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
     .loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:44px;color:var(--slate4);font-size:13px;font-weight:600;}
-    select.cs{padding:8px 12px;border:2px solid var(--blue-mid);border-radius:var(--r-md);background:#fff;color:var(--blue);font-size:13px;font-weight:700;outline:none;cursor:pointer;}
+    select.cs{padding:8px 12px;border:2px solid var(--blue-mid);border-radius:var(--r-md);background:var(--white-warm);color:var(--blue-dark);font-size:13px;font-weight:700;outline:none;cursor:pointer;}
   </style>
 </head>
 <body>
 
 <div id="toasts"></div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• LOGIN â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ═══════════════════ LOGIN ═══════════════════ -->
 <div id="page-login">
   <div class="ll">
     <div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;">
         <div class="lb-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg></div>
-        <span class="lb-name">NurturePass</span>
+        <span class="lb-name">AARNA</span>
       </div>
-      <p class="l-tag">Every entry recorded.<br/><strong>Every child cared for.</strong></p>
+      <p class="l-tag">Attendance automated.<br/><strong>Safety assured.</strong></p>
     </div>
     <div class="l-feats">
       <div class="l-feat"><div class="lfi g"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></div><div><h3>Real-time RFID Safety</h3><p>Live entry/exit from your Firestore Tags collection.</p></div></div>
@@ -256,7 +311,7 @@
 
   <div class="lr">
     <div class="lbox">
-      <h2>Welcome to NurturePass</h2>
+      <h2>Welcome to AARNA</h2>
       <p class="sub">Sign in to your school workspace.</p>
 
       <form id="login-form">
@@ -284,7 +339,7 @@
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• APP â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ═══════════════════ APP ═══════════════════ -->
 <div id="page-setup" class="hidden" style="min-height:100vh;background:var(--slate0);display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;overflow:auto;">
   <div style="width:100%;max-width:640px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
@@ -292,7 +347,7 @@
         <div style="width:38px;height:38px;background:var(--blue);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:20px;height:20px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
         </div>
-        <div><div style="font-size:20px;font-weight:800;color:var(--blue);">NurturePass</div><div style="font-size:11px;color:var(--slate4);font-weight:600;letter-spacing:.6px;text-transform:uppercase;">Workspace Setup</div></div>
+        <div><div style="font-size:20px;font-weight:800;color:var(--blue);">AARNA</div><div style="font-size:11px;color:var(--slate4);font-weight:600;letter-spacing:.6px;text-transform:uppercase;">Workspace Setup</div></div>
       </div>
       <button type="button" onclick="window._closeSetup()" class="btn btn-g btn-sm">Back to sign in</button>
     </div>
@@ -337,16 +392,16 @@
 <div id="page-app" class="hidden">
   <aside class="sb">
     <div class="sb-brand">
-      <div class="sb-name">NurturePass</div>
-      <div class="sb-tenant" id="sb-tenant">â€”</div>
+      <div class="sb-name">AARNA</div>
+      <div class="sb-tenant" id="sb-tenant">—</div>
     </div>
     <nav class="sb-nav" id="sb-nav"></nav>
     <div class="sb-foot">
       <div class="ub">
         <div class="ua" id="u-avatar">U</div>
         <div style="overflow:hidden;">
-          <div class="un" id="u-name">â€”</div>
-          <div class="ur" id="u-role">â€”</div>
+          <div class="un" id="u-name">—</div>
+          <div class="ur" id="u-role">—</div>
         </div>
       </div>
       <button class="so" id="so-btn">
@@ -359,14 +414,21 @@
   <div class="ma">
     <header class="tb">
       <div class="tb-l">
-        <span class="tp" id="tp-role">â€”</span>
-        <div class="ts"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connectingâ€¦</span></div>
+        <span class="tp" id="tp-role">—</span>
+        <div class="ts"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connecting…</span></div>
         <button onclick="window._refreshFeed()" title="Refresh feed" style="background:var(--slate1);border:1px solid var(--slate2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--slate5);cursor:pointer;display:flex;align-items:center;gap:5px;">
           <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           Refresh
         </button>
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
+        <div class="notif-wrap" id="notif-wrap">
+          <button class="notif-btn2" id="app-notif-btn" onclick="window._toggleNotifDD()" title="Notifications">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            <span class="notif-badge hidden" id="notif-badge">0</span>
+          </button>
+          <div class="notif-dd hidden" id="notif-dd"></div>
+        </div>
         <button class="nb-btn hidden" id="notif-btn" onclick="window._askNotif()">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
           Enable Notifications
@@ -381,21 +443,22 @@
         </button>
       </div>
     </header>
+    <div id="marquee-wrap" class="marquee-wrap hidden"></div>
     <div class="pc" id="pc">
-      <div class="loader"><div class="spinner"></div>Loadingâ€¦</div>
+      <div class="loader"><div class="spinner"></div>Loading…</div>
     </div>
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• ADD STUDENT MODAL â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
-<div id="add-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeModal()">
-  <div style="background:#fff;border-radius:20px;padding:32px;width:100%;max-width:440px;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+<!-- ═══════════════════ ADD STUDENT MODAL ═══════════════════ -->
+<div id="add-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeModal()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:32px;width:100%;max-width:440px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
       <div>
         <h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Add New Student</h2>
         <p style="font-size:13px;color:var(--slate5);margin-top:2px;">Student will be saved to Firestore immediately.</p>
       </div>
-      <button onclick="window._closeModal()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">Ã—</button>
+      <button onclick="window._closeModal()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">×</button>
     </div>
     <form id="add-student-form" onsubmit="event.preventDefault();window._saveStudent()">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
@@ -434,10 +497,10 @@
   </div>
 </div>
 
-<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• SCRIPT â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<!-- ═══════════════════ SCRIPT ═══════════════════ -->
 <!-- EDIT STUDENT -->
-<div id="edit-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeEdit()">
-  <div style="background:#fff;border-radius:20px;padding:30px;width:100%;max-width:480px;max-height:88vh;overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+<div id="edit-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeEdit()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:480px;max-height:88vh;overflow:auto;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div><h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Edit Student</h2>
       <p style="font-size:13px;color:var(--slate5);margin-top:2px;">Update details, class and guardian contact.</p></div>
@@ -467,8 +530,8 @@
 <input id="photo-input" type="file" accept="image/*" style="display:none"/>
 
 <!-- STUDENT ATTENDANCE HISTORY -->
-<div id="hist-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeHist()">
-  <div style="background:#fff;border-radius:20px;padding:28px;width:100%;max-width:560px;max-height:82vh;overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+<div id="hist-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeHist()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:28px;width:100%;max-width:560px;max-height:82vh;overflow:auto;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
       <h2 id="hist-title" style="font-size:20px;font-weight:800;color:var(--slate8);">Attendance history</h2>
       <button onclick="window._closeHist()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;border:none;cursor:pointer;">&times;</button>
@@ -479,8 +542,8 @@
 </div>
 
 <!-- PARENT MESSAGE COMPOSER -->
-<div id="msg-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeMsg()">
-  <div style="background:#fff;border-radius:20px;padding:30px;width:100%;max-width:520px;box-shadow:0 24px 64px rgba(0,0,0,.22);margin:16px;">
+<div id="msg-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeMsg()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:520px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div>
         <h2 style="font-size:20px;font-weight:800;color:var(--slate8);">Message Parents</h2>
@@ -511,12 +574,64 @@
   </div>
 </div>
 
+<!-- CLASS HEALTH REVIEW THREAD -->
+<div id="review-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeReview()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:0;width:100%;max-width:560px;max-height:86vh;display:flex;flex-direction:column;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;overflow:hidden;">
+    <div style="padding:24px 28px 16px;border-bottom:1px solid var(--slate1);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0;">
+      <div>
+        <h2 style="font-size:19px;font-weight:800;color:var(--slate8);" id="rev-title">Class Review</h2>
+        <p style="font-size:12px;color:var(--slate5);margin-top:3px;" id="rev-sub">&mdash;</p>
+      </div>
+      <button onclick="window._closeReview()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <div id="rev-body" style="padding:20px 28px;overflow-y:auto;flex:1;"></div>
+    <div id="rev-footer" style="padding:16px 28px;border-top:1px solid var(--slate1);flex-shrink:0;"></div>
+  </div>
+</div>
+
+<!-- CLASS STATS -->
+<div id="stats-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeStats()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:0;width:min(1120px,96vw);height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);overflow:hidden;">
+    <div style="padding:20px 26px 14px;border-bottom:1px solid var(--slate1);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0;">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--slate8);">Class Stats</h2>
+        <p style="font-size:12px;color:var(--slate5);margin-top:3px;" id="stats-teacher-line">&mdash;</p>
+      </div>
+      <button onclick="window._closeStats()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <div style="padding:14px 26px;border-bottom:1px solid var(--slate1);display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;flex-shrink:0;background:var(--slate0);">
+      <div class="fg" style="margin:0;min-width:200px;"><label>Class</label>
+        <select id="stats-class" onchange="window._statsClassChange()"></select>
+      </div>
+      <div class="fg" style="margin:0;min-width:190px;"><label>Date range</label>
+        <select id="stats-range" onchange="window._statsRangeChange()">
+          <option value="today">Current day</option>
+          <option value="yesterday">Last day</option>
+          <option value="week">Current week</option>
+          <option value="lastweek">Last week</option>
+          <option value="month" selected>Current month</option>
+          <option value="lastmonth">Last month</option>
+          <option value="ytd">Current year to date</option>
+          <option value="custom">Custom date…</option>
+        </select>
+      </div>
+      <div id="stats-custom-wrap" class="hidden" style="display:flex;align-items:flex-end;gap:8px;">
+        <div class="fg" style="margin:0;"><label>From</label><input type="date" id="stats-from"/></div>
+        <div class="fg" style="margin:0;"><label>To</label><input type="date" id="stats-to"/></div>
+        <button class="btn btn-p btn-sm" style="margin-bottom:1px;" onclick="window._statsApplyCustom()">Apply</button>
+      </div>
+      <span id="stats-range-label" style="font-size:11px;color:var(--slate5);margin-left:auto;white-space:nowrap;">&mdash;</span>
+    </div>
+    <div id="stats-body" style="padding:20px 26px;overflow-y:auto;flex:1;"></div>
+  </div>
+</div>
+
 <script type="module">
-/* â”€â”€ Firebase (Firestore only â€” NO AUTH) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Firebase (Firestore only — NO AUTH) ───────────────────── */
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc,
-         getDocs, query, orderBy, limit, where,
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc,
+         getDocs, query, orderBy, limit, where, arrayUnion,
          serverTimestamp, Timestamp, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -530,15 +645,17 @@ const FB = {
 };
 const db = getFirestore(initializeApp(FB));
 
-/* â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── State ─────────────────────────────────────────────────── */
 let sess = null;
-let epcMap = {};      // epc â†’ { studentId, studentName }
+let epcMap = {};      // epc → { studentId, studentName }
 let unsub  = null;
 let curPage = 'dashboard';
+let _focusClassId = null; // set by _goClass() to highlight/scroll to a class on the Classes page
+let _focusStudentId = null; // set by omni-search to highlight/scroll to a student on the Students page
 let schoolMeta = {};  // { name, gateLabel, ... } for the active school
-let studentIndex = {}; // studentId â†’ { firstName, lastName, classId }
+let studentIndex = {}; // studentId → { firstName, lastName, classId }
 
-/* â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Helpers ───────────────────────────────────────────────── */
 const schoolDoc = c => doc(db,'schools',c);
 const col = (c,n) => collection(db,'schools',c,n);
 const ref = (c,n,i) => doc(db,'schools',c,n,i);
@@ -562,7 +679,7 @@ const IC = {
   doc:  'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
 };
 
-/* â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Toast ─────────────────────────────────────────────────── */
 function toast(title, msg='', type='g'){
   const el=document.createElement('div');
   el.className=`tst tst-${type}`;
@@ -571,7 +688,7 @@ function toast(title, msg='', type='g'){
   setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),320);},4200);
 }
 
-/* â”€â”€ Notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Notifications ─────────────────────────────────────────── */
 window._askNotif = async () => {
   if(!('Notification' in window)) return;
   const p = await Notification.requestPermission();
@@ -586,13 +703,472 @@ function checkNotif(){
     document.getElementById('notif-btn').classList.remove('hidden');
 }
 
-/* â”€â”€ EPC Cache â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Class Health ──────────────────────────────────────────── */
+// Rolling attendance rate for one class over the trailing `days` days.
+// Skips days with no recorded data at all (weekends, holidays, days not yet run).
+async function classHealthStats(c, classId, roster, days=30){
+  const dates=[...Array(days)].map((_,i)=>dOff(-i));
+  const snaps=await Promise.all(dates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${classId}`,'records')).catch(()=>({forEach:()=>{}}))));
+  let attended=0, possible=0;
+  snaps.forEach(sn=>{
+    const m={}; sn.forEach(dd=>mergeStatus(m,dd.data()));
+    if(!Object.keys(m).length) return; // no data recorded that day — skip, don't count as absent
+    roster.forEach(s=>{ possible++; const st=(m[s.id]||{}).status; if(st==='present'||st==='late') attended++; });
+  });
+  const pct = possible ? Math.round((attended/possible)*100) : null;
+  const status = pct===null ? 'nodata' : pct>=80 ? 'good' : pct>=60 ? 'medium' : 'poor';
+  return {pct, status};
+}
+function healthLabel(s){ return s==='good'?'Good health':s==='medium'?'Medium health':s==='poor'?'Poor health':'No data yet'; }
+function healthBadgeClass(s){ return s==='good'?'bg':s==='medium'?'ba':s==='poor'?'br':'bx'; }
+
+/* ── Class Health Reviews (principal ⇄ teacher discussion thread) ──── */
+function daysSince(ts){ try{ const d=ts?.toDate?ts.toDate():new Date(ts); return Math.max(0,Math.floor((Date.now()-d.getTime())/86400000)); }catch{ return 0; } }
+function fmtWhen(ts){ try{ const d=ts?.toDate?ts.toDate():new Date(ts); return d.toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }catch{ return '—'; } }
+function suggestReviewMsg(className,pct,status){
+  if(status==='nodata') return `I don't see any recorded attendance for Class ${className} in the last 30 days — can you check that daily attendance is being marked?`;
+  if(status==='poor')   return `Class ${className}'s attendance is at ${pct}% this month, which needs attention. Can we find time to discuss what's driving the absences and agree on next steps?`;
+  if(status==='medium') return `Class ${className}'s attendance is at ${pct}% this month — trending below target. Let's discuss what might help bring it up.`;
+  return `Class ${className}'s attendance is at ${pct}% this month — great work. Flagging for visibility and to note anything worth watching.`;
+}
+
+let _revDraft=null; // pending compose context, {classId,className,teacherId,teacherName,healthPct,healthStatus}
+
+window._openReviewCompose = (classId,className,teacherId,teacherName,healthPct,healthStatus)=>{
+  if(!teacherId){ toast('No teacher assigned','Tag a teacher to this class first in Class Manager.','a'); return; }
+  _revDraft={classId,className,teacherId,teacherName,healthPct:(healthPct===null||healthPct===undefined)?null:Number(healthPct),healthStatus};
+  document.getElementById('rev-title').textContent = `New review · ${className}`;
+  document.getElementById('rev-sub').innerHTML = `To <b>${teacherName}</b> · ${healthLabel(healthStatus)}${healthPct!=null?` (${healthPct}%)`:''}`;
+  document.getElementById('rev-body').innerHTML = `
+    <div class="fg" style="margin-bottom:0;"><label>Message to ${teacherName}</label>
+      <textarea id="rev-msg" rows="6" style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;">${suggestReviewMsg(className,healthPct,healthStatus)}</textarea>
+    </div>`;
+  document.getElementById('rev-footer').innerHTML = `
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-g btn-w" onclick="window._closeReview()">Cancel</button>
+      <button type="button" class="btn btn-p btn-w" onclick="window._submitReview()">Send Review</button>
+    </div>`;
+  document.getElementById('review-modal').classList.remove('hidden');
+};
+
+window._submitReview = async ()=>{
+  const msg=(document.getElementById('rev-msg').value||'').trim();
+  if(!msg){ toast('Add a message','Write a short note before sending.','a'); return; }
+  const d=_revDraft; if(!d) return;
+  try{
+    await addDoc(col(sess.code,'classReviews'),{
+      classId:d.classId, className:d.className,
+      teacherId:d.teacherId, teacherName:d.teacherName,
+      createdBy:sess.staffId, createdByName:sess.name,
+      healthPct:d.healthPct, healthStatus:d.healthStatus,
+      status:'pending', createdAt:serverTimestamp(),
+      acknowledgedAt:null, needsPrincipalAck:false, principalAckAt:null,
+      comments:[{by:'principal',name:sess.name,text:msg,at:Timestamp.now()}]
+    });
+    toast('Review sent', `${d.teacherName} will see this on her dashboard.`, 'g');
+    window._closeReview();
+    if(curPage==='classes') await showPage('classes');
+    await refreshAppNotifs();
+  }catch(e){ toast('Send failed', e.message, 'r'); }
+};
+
+window._openReviewThread = async (reviewId)=>{
+  try{
+    const snap=await getDoc(ref(sess.code,'classReviews',reviewId));
+    if(!snap.exists()){ toast('Not found','This review no longer exists.','a'); return; }
+    _revDraft=null;
+    renderReviewThread({id:snap.id,...snap.data()});
+    document.getElementById('review-modal').classList.remove('hidden');
+  }catch(e){ toast('Could not open', e.message, 'r'); }
+};
+
+function renderReviewThread(rev){
+  document.getElementById('rev-title').textContent = `${rev.className} · Review thread`;
+  const other = sess.role==='principal' ? rev.teacherName : rev.createdByName;
+  document.getElementById('rev-sub').innerHTML = `With <b>${other}</b> · ${healthLabel(rev.healthStatus)}${rev.healthPct!=null?` (${rev.healthPct}%)`:''} · started ${fmtWhen(rev.createdAt)}`;
+
+  const comments=rev.comments||[];
+  document.getElementById('rev-body').innerHTML = comments.map(cm=>`
+    <div style="display:flex;flex-direction:column;align-items:${cm.by==='principal'?'flex-end':'flex-start'};margin-bottom:10px;">
+      <div style="max-width:82%;padding:10px 13px;border-radius:14px;font-size:13px;line-height:1.45;
+        background:${cm.by==='principal'?'var(--blue-light)':'var(--slate1)'};
+        color:${cm.by==='principal'?'var(--blue-dark)':'var(--slate8)'};
+        ${cm.by==='principal'?'border-bottom-right-radius:4px;':'border-bottom-left-radius:4px;'}">${cm.text}</div>
+      <span style="font-size:10.5px;color:var(--slate4);margin-top:3px;">${cm.name} · ${fmtWhen(cm.at)}</span>
+    </div>`).join('') || '<p style="font-size:12px;color:var(--slate5);">No messages yet.</p>';
+
+  const overdue = rev.status==='pending' && daysSince(rev.createdAt)>=2;
+  let footer='';
+  if(sess.role==='teacher'){
+    footer = `
+      <div class="fg" style="margin-bottom:10px;"><label>Your response</label>
+        <textarea id="rev-reply" rows="3" style="width:100%;padding:10px 12px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:13px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;" placeholder="Share context and next steps…"></textarea>
+      </div>
+      <button type="button" class="btn btn-p btn-w" onclick="window._teacherReply('${rev.id}')">Send Response</button>`;
+  } else if(sess.role==='principal'){
+    footer = `
+      ${overdue?`<div style="background:var(--red-light);color:var(--red);border-radius:var(--r-sm);padding:8px 11px;font-size:11.5px;font-weight:700;margin-bottom:10px;">Not yet acknowledged by ${rev.teacherName} · sent ${daysSince(rev.createdAt)}d ago</div>`:''}
+      ${rev.needsPrincipalAck?`<button type="button" class="btn btn-p btn-w" style="margin-bottom:8px;" onclick="window._principalAck('${rev.id}')">Acknowledge response</button>`:''}
+      <div class="fg" style="margin-bottom:10px;"><label>Add a follow-up</label>
+        <textarea id="rev-reply" rows="2" style="width:100%;padding:10px 12px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:13px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;" placeholder="Optional follow-up note…"></textarea>
+      </div>
+      <button type="button" class="btn btn-g btn-w" onclick="window._principalFollowUp('${rev.id}')">Add Comment</button>`;
+  }
+  document.getElementById('rev-footer').innerHTML = footer;
+}
+
+window._teacherReply = async (reviewId)=>{
+  const text=(document.getElementById('rev-reply').value||'').trim();
+  if(!text){ toast('Add a response','Write something before sending.','a'); return; }
+  try{
+    await updateDoc(ref(sess.code,'classReviews',reviewId),{
+      comments: arrayUnion({by:'teacher',name:sess.name,text,at:Timestamp.now()}),
+      status:'acknowledged', acknowledgedAt:serverTimestamp(), needsPrincipalAck:true
+    });
+    toast('Response sent','Your principal will be notified.','g');
+    await window._openReviewThread(reviewId);
+    await refreshAppNotifs();
+    if(curPage==='class') await showPage('class');
+  }catch(e){ toast('Send failed', e.message, 'r'); }
+};
+
+window._principalFollowUp = async (reviewId)=>{
+  const text=(document.getElementById('rev-reply').value||'').trim();
+  if(!text){ toast('Add a note','Write something before sending.','a'); return; }
+  try{
+    await updateDoc(ref(sess.code,'classReviews',reviewId),{
+      comments: arrayUnion({by:'principal',name:sess.name,text,at:Timestamp.now()})
+    });
+    toast('Comment added','Saved to the thread.','g');
+    await window._openReviewThread(reviewId);
+    await refreshAppNotifs();
+  }catch(e){ toast('Save failed', e.message, 'r'); }
+};
+
+window._principalAck = async (reviewId)=>{
+  try{
+    await updateDoc(ref(sess.code,'classReviews',reviewId),{needsPrincipalAck:false, principalAckAt:serverTimestamp()});
+    toast('Acknowledged','Marked as reviewed.','g');
+    await window._openReviewThread(reviewId);
+    await refreshAppNotifs();
+  }catch(e){ toast('Failed', e.message, 'r'); }
+};
+
+window._closeReview = ()=> document.getElementById('review-modal').classList.add('hidden');
+
+/* ── Notification bell (principal: teacher replies + overdue acks; teacher: pending reviews) ── */
+let _lastNotifCount=-1;
+async function refreshAppNotifs(){
+  const btn=document.getElementById('app-notif-btn'); if(!btn || !sess) return;
+  let items=[];
+  try{
+    const snap=await getDocs(query(col(sess.code,'classReviews'), orderBy('createdAt','desc'), limit(50)));
+    const all=[]; snap.forEach(d=>all.push({id:d.id,...d.data()}));
+    if(sess.role==='principal'){
+      all.forEach(r=>{
+        if(r.needsPrincipalAck){
+          const last=(r.comments||[])[ (r.comments||[]).length-1 ];
+          items.push({id:r.id,urgent:false,title:`${r.teacherName} responded · ${r.className}`,sub:last?fmtWhen(last.at):''});
+        }
+        if(r.status==='pending' && daysSince(r.createdAt)>=2){
+          items.push({id:r.id,urgent:true,title:`${r.teacherName} hasn't acknowledged · ${r.className}`,sub:`Sent ${daysSince(r.createdAt)}d ago`});
+        }
+      });
+    } else if(sess.role==='teacher'){
+      const mine=new Set(sess.classIds||[]);
+      all.forEach(r=>{
+        if(!mine.has(r.classId)) return;
+        if(r.status==='pending'){
+          items.push({id:r.id,urgent:daysSince(r.createdAt)>=2,title:`Principal review · ${r.className}`,sub:`${healthLabel(r.healthStatus)} · ${fmtWhen(r.createdAt)}`});
+        }
+      });
+    }
+  }catch(e){ console.warn('notif refresh failed:', e.message); }
+  if(_lastNotifCount!==-1 && items.length>_lastNotifCount){ toast('New notification', items[0]?.title||'You have a new update.', 'a'); }
+  _lastNotifCount=items.length;
+  renderNotifDD(items);
+}
+function renderNotifDD(items){
+  const badge=document.getElementById('notif-badge'), dd=document.getElementById('notif-dd');
+  if(!badge||!dd) return;
+  if(items.length){ badge.textContent=items.length>9?'9+':items.length; badge.classList.remove('hidden'); }
+  else badge.classList.add('hidden');
+  dd.innerHTML = items.length ? items.map(it=>`
+    <div class="notif-item ${it.urgent?'urgent':''}" onclick="window._openReviewThread('${it.id}');window._closeNotifDD();">
+      <div class="ni-dot ${it.urgent?'r':'a'}"></div>
+      <div><div class="ni-title">${it.title}</div><div class="ni-sub">${it.sub}</div></div>
+    </div>`).join('') : `<div class="notif-empty">You're all caught up.</div>`;
+}
+window._toggleNotifDD = ()=> document.getElementById('notif-dd').classList.toggle('hidden');
+window._closeNotifDD  = ()=> document.getElementById('notif-dd').classList.add('hidden');
+document.addEventListener('click', (e)=>{
+  const wrap=document.getElementById('notif-wrap');
+  if(wrap && !wrap.contains(e.target)) window._closeNotifDD();
+});
+
+/* ── CLASS STATS (trend, narrative, outstanding students) ───────── */
+const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let _statsCtx={classes:[],staff:[],students:[]};
+let _statsToken=0;
+
+function rangeToDates(rangeKey, fromStr, toStr){
+  const iso=d=>d.toISOString().split('T')[0];
+  const now=new Date(); now.setHours(0,0,0,0);
+  const startOfWeek=d=>{ const x=new Date(d); const dow=(x.getDay()+6)%7; x.setDate(x.getDate()-dow); return x; };
+  let from,to,label;
+  if(rangeKey==='today'){ from=to=new Date(now); label='Today'; }
+  else if(rangeKey==='yesterday'){ from=to=new Date(now.getTime()-86400000); label='Yesterday'; }
+  else if(rangeKey==='week'){ from=startOfWeek(now); to=new Date(now); label='This week'; }
+  else if(rangeKey==='lastweek'){ const sow=startOfWeek(now); to=new Date(sow.getTime()-86400000); from=new Date(sow.getTime()-7*86400000); label='Last week'; }
+  else if(rangeKey==='month'){ from=new Date(now.getFullYear(),now.getMonth(),1); to=new Date(now); label='This month'; }
+  else if(rangeKey==='lastmonth'){ from=new Date(now.getFullYear(),now.getMonth()-1,1); to=new Date(now.getFullYear(),now.getMonth(),0); label='Last month'; }
+  else if(rangeKey==='ytd'){ from=new Date(now.getFullYear(),0,1); to=new Date(now); label='Year to date'; }
+  else { // custom
+    from=fromStr?new Date(fromStr+'T00:00:00'):new Date(now);
+    to=toStr?new Date(toStr+'T00:00:00'):new Date(now);
+    label='Custom range';
+  }
+  if(to>now) to=new Date(now);
+  if(from>to){ const x=from; from=to; to=x; }
+  const dates=[]; const cur=new Date(from); let guard=0;
+  while(cur<=to && guard<400){ dates.push(iso(cur)); cur.setDate(cur.getDate()+1); guard++; }
+  return {dates, label:`${label} · ${shortDate(dates[0])} – ${shortDate(dates[dates.length-1])}`};
+}
+
+// grid[date][classId] = Map(studentId -> latest record)
+async function fetchAttendanceGrid(c, dates, classIds){
+  const tasks=[], index=[];
+  dates.forEach(d=>classIds.forEach(cid=>{
+    tasks.push(getDocs(subCol(c,'attendanceDays',`${d}_${cid}`,'records')).catch(()=>({forEach:()=>{}})));
+    index.push([d,cid]);
+  }));
+  const snaps=await Promise.all(tasks);
+  const grid={};
+  snaps.forEach((sn,i)=>{
+    const [d,cid]=index[i]; const m={}; sn.forEach(dd=>mergeStatus(m,dd.data()));
+    grid[d]=grid[d]||{}; grid[d][cid]=m;
+  });
+  return grid;
+}
+
+function buildDailySeries(grid, dates, classIds, studentsByClass){
+  return dates.map(d=>{
+    let present=0,total=0,hasData=false;
+    classIds.forEach(cid=>{
+      const m=(grid[d]||{})[cid]||{};
+      if(Object.keys(m).length) hasData=true;
+      (studentsByClass[cid]||[]).forEach(s=>{ total++; const st=(m[s.id]||{}).status; if(st==='present'||st==='late') present++; });
+    });
+    return {date:d, weekday:new Date(d+'T00:00:00').getDay(), present, total, hasData, pct: hasData&&total?Math.round(present/total*100):null};
+  });
+}
+function buildStudentStats(grid, dates, classIds, studentsByClass){
+  const per={};
+  classIds.forEach(cid=>(studentsByClass[cid]||[]).forEach(s=>{ per[s.id]={name:`${s.firstName} ${s.lastName}`,classId:cid,recorded:0,attended:0}; }));
+  dates.forEach(d=>classIds.forEach(cid=>{
+    const m=(grid[d]||{})[cid]; if(!m||!Object.keys(m).length) return;
+    (studentsByClass[cid]||[]).forEach(s=>{ per[s.id].recorded++; const st=(m[s.id]||{}).status; if(st==='present'||st==='late') per[s.id].attended++; });
+  }));
+  return Object.values(per);
+}
+function buildClassAgg(grid, dates, classIds, studentsByClass){
+  return classIds.map(cid=>{
+    let present=0,total=0;
+    dates.forEach(d=>{ const m=(grid[d]||{})[cid]; if(!m||!Object.keys(m).length) return;
+      (studentsByClass[cid]||[]).forEach(s=>{ total++; const st=(m[s.id]||{}).status; if(st==='present'||st==='late') present++; }); });
+    return {classId:cid, pct: total?Math.round(present/total*100):null};
+  });
+}
+function outstandingStudents(perStudent, n=5){
+  return perStudent.filter(s=>s.recorded>=Math.min(3,s.recorded)&&s.recorded>0)
+    .map(s=>({...s, pct:Math.round(s.attended/s.recorded*100)}))
+    .sort((a,b)=>b.pct-a.pct||b.recorded-a.recorded).slice(0,n);
+}
+function bucketSeries(daily, maxBars=24){
+  if(daily.length<=maxBars) return daily.map(d=>({label:shortDate(d.date), pct:d.pct}));
+  const size=Math.ceil(daily.length/maxBars), out=[];
+  for(let i=0;i<daily.length;i+=size){
+    const chunk=daily.slice(i,i+size).filter(d=>d.hasData);
+    out.push({label:shortDate(daily[i].date), pct: chunk.length?Math.round(chunk.reduce((s,d)=>s+d.pct,0)/chunk.length):null});
+  }
+  return out;
+}
+function statsChartHTML(buckets){
+  return `<div class="stats-chart">${buckets.map(b=>{
+    const clr = b.pct==null?'var(--slate2)':b.pct>=80?'var(--green-mid)':b.pct>=60?'var(--amber)':'var(--red-mid)';
+    return `<div class="stats-bar-col" title="${b.label}: ${b.pct!=null?b.pct+'%':'no data'}">
+      <div class="stats-bar-track"><div class="stats-bar-fill" style="height:${b.pct??2}%;background:${clr};"></div></div>
+      <span class="stats-bar-lbl">${b.label}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+function buildNarrative(scopeLabel, daily, perStudent){
+  const recorded=daily.filter(d=>d.hasData);
+  if(!recorded.length) return `No attendance has been recorded for ${scopeLabel} in this period yet.`;
+  const avg=Math.round(recorded.reduce((s,d)=>s+d.pct,0)/recorded.length);
+  const status = avg>=80?'good':avg>=60?'medium':'poor';
+  const s=[`${scopeLabel} averaged <b>${avg}%</b> attendance over this period (${healthLabel(status)}).`];
+  if(recorded.length>=4){
+    const mid=Math.floor(recorded.length/2);
+    const a=recorded.slice(0,mid).reduce((x,d)=>x+d.pct,0)/mid;
+    const b=recorded.slice(mid).reduce((x,d)=>x+d.pct,0)/(recorded.length-mid);
+    if(Math.abs(b-a)>=5) s.push(`Attendance has been ${b>a?'improving':'declining'} through the period, from an average of ${Math.round(a)}% to ${Math.round(b)}%.`);
+  }
+  const byWd={}; recorded.forEach(d=>{ (byWd[d.weekday]=byWd[d.weekday]||[]).push(d.pct); });
+  const wdAvgs=Object.entries(byWd).filter(([,a])=>a.length>=2).map(([wd,a])=>({wd:+wd,avg:a.reduce((x,y)=>x+y,0)/a.length}));
+  if(wdAvgs.length>=3){
+    wdAvgs.sort((a,b)=>a.avg-b.avg);
+    const worst=wdAvgs[0], best=wdAvgs[wdAvgs.length-1];
+    if(best.avg-worst.avg>=8) s.push(`${WD[worst.wd]}s tend to run lowest (avg ${Math.round(worst.avg)}%), while ${WD[best.wd]}s run highest (avg ${Math.round(best.avg)}%) — worth checking what's different about those days.`);
+  }
+  const withAbs=perStudent.filter(x=>x.recorded>0).map(x=>({...x,absences:x.recorded-x.attended})).sort((a,b)=>b.absences-a.absences);
+  const totalAbs=withAbs.reduce((x,y)=>x+y.absences,0);
+  if(totalAbs>0){
+    const top3=withAbs.slice(0,3).filter(x=>x.absences>0);
+    const top3Sum=top3.reduce((x,y)=>x+y.absences,0);
+    if(top3.length && top3Sum/totalAbs>=0.3) s.push(`A small group — ${top3.map(x=>x.name).join(', ')} — accounts for ${Math.round(top3Sum/totalAbs*100)}% of all missed days in this period; a targeted conversation with them could move the number quickly.`);
+  } else if(status==='good'){
+    s.push(`No concentrated absence pattern stands out — attendance is consistently strong across the roster.`);
+  }
+  return s.join(' ');
+}
+
+window._openStats = async (preselectClassId)=>{
+  const c=sess.code;
+  const [clsSnap,staffSnap,studSnap]=await Promise.all([
+    getDocs(col(c,'classes')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
+  ]);
+  const classes=[]; clsSnap.forEach(d=>classes.push({id:d.id,...d.data()}));
+  const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const students=[]; studSnap.forEach(d=>students.push({id:d.id,...d.data()}));
+  _statsCtx={classes,staff,students};
+
+  const teacherFor=cid=>staff.find(s=>s.role==='teacher'&&(s.classIds||[]).includes(cid));
+  const sel=document.getElementById('stats-class');
+  sel.innerHTML = `<option value="all">All Classes (school-wide)</option>` +
+    classes.map(cl=>`<option value="${cl.id}">${cl.name||cl.id.replace('class-','')}</option>`).join('');
+  sel.dataset.teachers = JSON.stringify(Object.fromEntries(classes.map(cl=>{ const tt=teacherFor(cl.id); return [cl.id, tt?tt.name:'Unassigned']; })));
+  sel.value = (preselectClassId && classes.some(cl=>cl.id===preselectClassId)) ? preselectClassId : 'all';
+  document.getElementById('stats-range').value='month';
+  document.getElementById('stats-custom-wrap').classList.add('hidden');
+  document.getElementById('stats-modal').classList.remove('hidden');
+  window._statsClassChange();
+};
+window._openStatsForClass = (classId)=> window._openStats(classId);
+window._closeStats = ()=> document.getElementById('stats-modal').classList.add('hidden');
+window._statsClassChange = ()=>{
+  const sel=document.getElementById('stats-class');
+  const teachers=JSON.parse(sel.dataset.teachers||'{}');
+  const line = sel.value==='all' ? 'All classes · multiple teachers' : `Class teacher: ${teachers[sel.value]||'Unassigned'}`;
+  document.getElementById('stats-teacher-line').textContent = line;
+  _statsRender();
+};
+window._statsRangeChange = ()=>{
+  const isCustom = document.getElementById('stats-range').value==='custom';
+  document.getElementById('stats-custom-wrap').classList.toggle('hidden', !isCustom);
+  if(!isCustom) _statsRender();
+};
+window._statsApplyCustom = ()=>{
+  const from=document.getElementById('stats-from').value, to=document.getElementById('stats-to').value;
+  if(!from||!to){ toast('Pick both dates','Choose a start and end date.','a'); return; }
+  _statsRender();
+};
+
+async function _statsRender(){
+  const token=++_statsToken;
+  const body=document.getElementById('stats-body');
+  body.innerHTML='<div class="loader"><div class="spinner"></div>Crunching attendance… this can take a few seconds for long ranges.</div>';
+  const c=sess.code;
+  const classId=document.getElementById('stats-class').value;
+  const rangeKey=document.getElementById('stats-range').value;
+  const {dates,label}=rangeToDates(rangeKey, document.getElementById('stats-from').value, document.getElementById('stats-to').value);
+  document.getElementById('stats-range-label').textContent = `${label} · ${dates.length} day${dates.length!==1?'s':''}`;
+
+  const {classes,students}=_statsCtx;
+  const classIds = classId==='all' ? classes.map(cl=>cl.id) : [classId];
+  const studentsByClass={}; classIds.forEach(cid=>studentsByClass[cid]=students.filter(s=>s.classId===cid));
+
+  const grid=await fetchAttendanceGrid(c,dates,classIds);
+  if(token!==_statsToken) return; // a newer request superseded this one
+
+  const daily=buildDailySeries(grid,dates,classIds,studentsByClass);
+  const perStudent=buildStudentStats(grid,dates,classIds,studentsByClass);
+  const scopeLabel = classId==='all' ? 'Your school' : `Class ${(classes.find(cl=>cl.id===classId)||{}).name||classId.replace('class-','')}`;
+  const narrative=buildNarrative(scopeLabel,daily,perStudent);
+  const top=outstandingStudents(perStudent,5);
+  const buckets=bucketSeries(daily);
+  const recorded=daily.filter(d=>d.hasData);
+  const avg=recorded.length?Math.round(recorded.reduce((s,d)=>s+d.pct,0)/recorded.length):null;
+  const status=avg==null?'nodata':avg>=80?'good':avg>=60?'medium':'poor';
+
+  let reviewHTML='';
+  if(classId!=='all' && sess.role==='principal'){
+    const cls=classes.find(cl=>cl.id===classId)||{};
+    const clsName=cls.name||classId.replace('class-','');
+    const nameEsc=clsName.replace(/'/g,'');
+    const tt=_statsCtx.staff.find(s=>s.role==='teacher'&&(s.classIds||[]).includes(classId));
+    const teacherEsc=tt?tt.name.replace(/'/g,''):'';
+    const revSnap=await getDocs(query(col(c,'classReviews'),orderBy('createdAt','desc'),limit(60))).catch(()=>({forEach:()=>{}}));
+    let lastRev=null; revSnap.forEach(d=>{ if(!lastRev){ const r={id:d.id,...d.data()}; if(r.classId===classId) lastRev=r; } });
+    if(token!==_statsToken) return;
+    let action;
+    if(!tt) action=`<button class="btn btn-g btn-w" disabled style="opacity:.5;cursor:not-allowed;">No teacher assigned</button>`;
+    else if(!lastRev) action=`<button class="btn btn-o btn-w" onclick="window._closeStats();window._openReviewCompose('${classId}','${nameEsc}','${tt.id}','${teacherEsc}',${avg},'${status}')">Submit Review</button>`;
+    else if(lastRev.needsPrincipalAck) action=`<button class="btn btn-o btn-w" onclick="window._closeStats();window._openReviewThread('${lastRev.id}')">New reply · View thread</button>`;
+    else if(lastRev.status==='pending') action=`<button class="btn btn-g btn-w" onclick="window._closeStats();window._openReviewThread('${lastRev.id}')">Awaiting teacher · View thread</button>`;
+    else action=`<button class="btn btn-g btn-w" onclick="window._closeStats();window._openReviewCompose('${classId}','${nameEsc}','${tt.id}','${teacherEsc}',${avg},'${status}')">Comment / New review</button>`;
+    reviewHTML=`<div class="card" style="margin-top:16px;">
+      <div class="ct">Take action</div>
+      <p style="font-size:12px;color:var(--slate5);margin-bottom:12px;">Teacher: ${tt?tt.name:'Unassigned'}</p>
+      ${action}
+    </div>`;
+  }
+
+  let compareHTML='';
+  if(classId==='all'){
+    const agg=buildClassAgg(grid,dates,classIds,studentsByClass)
+      .map(a=>({...a, name:(classes.find(cl=>cl.id===a.classId)||{}).name||a.classId.replace('class-','')}))
+      .filter(a=>a.pct!=null);
+    const ranked=[...agg].sort((a,b)=>b.pct-a.pct);
+    const bestRows=ranked.slice(0,5).map(a=>`<tr><td><span class="sn">${a.name}</span></td><td><span class="badge ${healthBadgeClass(a.pct>=80?'good':a.pct>=60?'medium':'poor')}">${a.pct}%</span></td></tr>`).join('');
+    const worstRows=[...ranked].reverse().slice(0,5).map(a=>`<tr><td><span class="sn">${a.name}</span></td><td><span class="badge ${healthBadgeClass(a.pct>=80?'good':a.pct>=60?'medium':'poor')}">${a.pct}%</span></td></tr>`).join('');
+    compareHTML = `<div class="tc" style="margin-top:16px;">
+      <div class="card"><div class="ct">Best classes this period</div>${bestRows?`<table class="rt"><tbody>${bestRows}</tbody></table>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
+      <div class="card"><div class="ct">Needs attention this period</div>${worstRows?`<table class="rt"><tbody>${worstRows}</tbody></table>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
+    </div>`;
+  }
+
+  body.innerHTML = `
+    <div class="kgrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:18px;">
+      <div class="kc"><div class="kl">Average attendance</div><div class="kv">${avg!=null?avg+'%':'—'}</div></div>
+      <div class="kc"><div class="kl">Health</div><div class="kv" style="font-size:18px;"><span class="badge ${healthBadgeClass(status)}">${healthLabel(status)}</span></div></div>
+      <div class="kc"><div class="kl">Days with data</div><div class="kv">${recorded.length}/${dates.length}</div></div>
+    </div>
+    <div class="card">
+      <div class="ct">Attendance trend</div>
+      ${buckets.length?statsChartHTML(buckets):'<p style="font-size:12px;color:var(--slate5);">No data to chart yet.</p>'}
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <div class="ct">${ico(IC.chart,15)} Narrative</div>
+      <p style="font-size:13px;line-height:1.6;color:var(--slate7);">${narrative}</p>
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <div class="ct">${ico(IC.heart,15)} Outstanding students</div>
+      ${top.length?top.map(s=>`<div class="row" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--slate1);"><span class="sn">${s.name}</span><span class="badge bg">${s.pct}% · ${s.attended}/${s.recorded}</span></div>`).join(''):'<p style="font-size:12px;color:var(--slate5);">Not enough recorded days yet to highlight anyone.</p>'}
+    </div>
+    ${reviewHTML}
+    ${compareHTML}`;
+}
+
+/* ── EPC Cache ─────────────────────────────────────────────── */
 async function loadEpcCache(){
   epcMap={};
   try{
     const s=await getDocs(collection(db,'tagMappings'));
     s.forEach(d=>{ epcMap[d.data().epc]=d.data(); });
-    console.log(`ðŸ“¡ ${Object.keys(epcMap).length} EPC mappings loaded`);
+    console.log(`📡 ${Object.keys(epcMap).length} EPC mappings loaded`);
   }catch(e){ console.warn('Could not load tagMappings (check Firestore rules):', e.message); }
 }
 
@@ -639,7 +1215,7 @@ window._markPresent = async (sid)=>{
   if(ok) toast('Marked present','Attendance recorded manually (no card needed).','g');
 };
 
-/* â”€â”€ Real-time Tags Listener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Real-time Tags Listener ───────────────────────────────── */
 // seenIds tracks docs already shown so we only fire on TRULY new scans
 const seenIds = new Set();
 let listenerReady = false;
@@ -654,14 +1230,14 @@ function setStatus(txt, ok=true){
 function startTagListener(){
   if(unsub){ unsub(); unsub=null; }
   listenerReady = false;
-  setStatus('Connectingâ€¦');
+  setStatus('Connecting…');
 
   unsub = onSnapshot(collection(db,'tags'), snap => {
     if(!listenerReady){
       // First snapshot: mark ALL existing docs as already seen
       snap.docs.forEach(d => seenIds.add(d.id));
       listenerReady = true;
-      setStatus(`Live Â· ${seenIds.size} scans in DB`);
+      setStatus(`Live · ${seenIds.size} scans in DB`);
       // Also load them into the live feed immediately
       loadTagsIntoFeed(snap.docs);
       return;
@@ -674,9 +1250,9 @@ function startTagListener(){
       }
     });
   }, err => {
-    setStatus('âš  Permission denied â€” fix Firestore rules', false);
+    setStatus('⚠ Permission denied — fix Firestore rules', false);
     console.error('Tags listener error:', err.message);
-    toast('Listener failed', 'Retrying in 5s â€” check Firestore rules', 'a');
+    toast('Listener failed', 'Retrying in 5s — check Firestore rules', 'a');
     // Auto-retry after 5 seconds
     setTimeout(startTagListener, 5000);
   });
@@ -699,7 +1275,7 @@ function loadTagsIntoFeed(docs){
     const m = epcMap[data.epc];
     const tmp = document.createElement('div');
     tmp.innerHTML = feedHTML({
-      _name: m ? m.studentName : `Unknown (${(data.epc||'').substring(0,8)}â€¦)`,
+      _name: m ? m.studentName : `Unknown (${(data.epc||'').substring(0,8)}…)`,
       ok: !!m,
       gate: `Antenna ${data.antenna||'?'}`,
       ts: parseTagTs(data.timestamp)
@@ -719,17 +1295,17 @@ function onNewScan(data){
   const name = m ? m.studentName : null;
   const short = (epc||'').substring(0,12);
   if(name){
-    pushNotif(`ðŸŽ“ ${name} entered campus`, `Antenna ${antenna} Â· ${timestamp}`);
-    toast(`${name} entered`, `Antenna ${antenna} Â· ${timestamp}`, 'g');
+    pushNotif(`🎓 ${name} entered campus`, `Antenna ${antenna} · ${timestamp}`);
+    toast(`${name} entered`, `Antenna ${antenna} · ${timestamp}`, 'g');
     prependFeed({_name:name, ok:true, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
     if(m.studentId) accountForStudent(m.studentId,false);
   } else {
-    pushNotif('âš ï¸ Unknown RFID Tag', `EPC: ${epc} Â· Antenna ${antenna}`);
-    toast('Unknown tag scanned', `EPC: ${short}â€¦ Â· Antenna ${antenna}`, 'a');
-    prependFeed({_name:`Unknown (${short}â€¦)`, ok:false, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
+    pushNotif('⚠️ Unknown RFID Tag', `EPC: ${epc} · Antenna ${antenna}`);
+    toast('Unknown tag scanned', `EPC: ${short}… · Antenna ${antenna}`, 'a');
+    prependFeed({_name:`Unknown (${short}…)`, ok:false, gate:`Antenna ${antenna}`, ts:parseTagTs(timestamp)});
   }
   if(curPage==='tags') loadRawScans();
-  if(curPage==='dashboard') setStatus(`Live Â· last scan ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`);
+  if(curPage==='dashboard') setStatus(`Live · last scan ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`);
 }
 
 /* Override with batched, non-flooding scan handling (no per-student popup) */
@@ -784,10 +1360,10 @@ window._refreshFeed = async () => {
   seenIds.clear();
   listenerReady = false;
   startTagListener();
-  toast('Feed refreshed', 'Reloading all tag scansâ€¦', 'g');
+  toast('Feed refreshed', 'Reloading all tag scans…', 'g');
 };
 
-/* â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── LOGIN ─────────────────────────────────────────────────── */
 // Populate the email dropdown from the school's provisioned staff (so returning users pick, not type)
 async function loadEmailOptions(){
   const code=(document.getElementById('f-code').value||'').trim().toUpperCase();
@@ -815,7 +1391,7 @@ document.getElementById('login-form').addEventListener('submit', async e=>{
   const code  = document.getElementById('f-code').value.trim().toUpperCase();
   const email = document.getElementById('f-email').value.trim().toLowerCase();
   const btn   = document.getElementById('login-btn');
-  btn.textContent='Signing inâ€¦'; btn.disabled=true;
+  btn.textContent='Signing in…'; btn.disabled=true;
 
   try{
     // DEMO-01 auto-provisions itself so the demo works out of the box
@@ -833,7 +1409,7 @@ document.getElementById('login-form').addEventListener('submit', async e=>{
     }
     const d = snap.docs[0];
     const st = d.data();
-    sess = { code, staffId:d.id, name:st.name, email:st.email, role:st.role, classIds:st.classIds||[] };
+    sess = { code, staffId:d.id, name:st.name, email:st.email, role:st.role, classIds:st.classIds||[], watchClassIds:st.watchClassIds||[] };
     localStorage.setItem('np',JSON.stringify(sess));
     await enterApp();
   }catch(err){
@@ -854,7 +1430,7 @@ window._signOut = ()=>{
 };
 document.getElementById('so-btn').addEventListener('click', window._signOut);
 
-/* â”€â”€ SCHOOL SETUP WIZARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── SCHOOL SETUP WIZARD ───────────────────────────────────── */
 let setupClasses = [];
 const classIdFrom = label => 'class-' + label.replace(/[^A-Za-z0-9]/g,'');
 
@@ -887,7 +1463,7 @@ window._removeClass = (id) => {
 
 function renderClassChips(){
   const el=document.getElementById('s-class-chips'); if(!el) return;
-  if(!setupClasses.length){ el.innerHTML='<span style="font-size:12px;color:var(--slate4);">No classes yet â€” add at least one.</span>'; return; }
+  if(!setupClasses.length){ el.innerHTML='<span style="font-size:12px;color:var(--slate4);">No classes yet — add at least one.</span>'; return; }
   el.innerHTML=setupClasses.map(c=>`<span class="badge bb" style="font-size:12px;padding:6px 10px;gap:6px;">${c.label}
     <button type="button" onclick="window._removeClass('${c.id}')" style="background:none;border:none;color:var(--blue-dark);cursor:pointer;font-weight:800;font-size:14px;line-height:1;padding:0;">&times;</button></span>`).join('');
 }
@@ -938,7 +1514,7 @@ window._createSchool = async () => {
   if(new Set(emails).size!==emails.length){ toast('Duplicate email','Principal and teachers need distinct emails.','a'); return; }
 
   const btn=document.getElementById('s-create-btn');
-  btn.textContent='Creatingâ€¦'; btn.disabled=true;
+  btn.textContent='Creating…'; btn.disabled=true;
   try{
     const existing=await getDoc(schoolDoc(code));
     if(existing.exists()){ toast('Code taken', `Workspace ${code} already exists. Pick another code.`, 'r'); btn.textContent='Create Workspace & Enter'; btn.disabled=false; return; }
@@ -951,8 +1527,8 @@ window._createSchool = async () => {
     await setDoc(ref(code,'staff','staff-t2'),{name:T[1].name,email:T[1].email,role:'teacher',classIds:[T[1].cls],createdAt:ts});
     await setDoc(ref(code,'devices','device-001'),{name:`${gate} Reader`,gateLabel:gate,campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
 
-    toast('Workspace created', `${name} is live. Signing you in as principalâ€¦`, 'g');
-    sess={code,staffId:'staff-principal',name:prinName,email:prinEmail,role:'principal',classIds:[]};
+    toast('Workspace created', `${name} is live. Signing you in as principal…`, 'g');
+    sess={code,staffId:'staff-principal',name:prinName,email:prinEmail,role:'principal',classIds:[],watchClassIds:[]};
     localStorage.setItem('np',JSON.stringify(sess));
     document.getElementById('page-setup').classList.add('hidden');
     await enterApp();
@@ -963,7 +1539,7 @@ window._createSchool = async () => {
   }
 };
 
-/* â”€â”€ ENTER APP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── ENTER APP ─────────────────────────────────────────────── */
 async function enterApp(){
   document.getElementById('page-login').classList.add('hidden');
   document.getElementById('page-app').classList.remove('hidden');
@@ -980,11 +1556,15 @@ async function enterApp(){
   await loadEpcCache();
   startTagListener();
   await showPage('dashboard');
+  refreshAppNotifs();
+  loadAnnouncement();
+  setInterval(refreshAppNotifs, 45000);
+  setInterval(loadAnnouncement, 45000);
 }
 
 function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_operator'?'Gate Monitor':'Teacher Portal'; }
 
-/* â”€â”€ NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── NAV ───────────────────────────────────────────────────── */
 const navItems = {
   principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'classes',l:'Classes',i:IC.doc},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart},{id:'messages',l:'Messages',i:IC.bell}],
   teacher:      [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'class',l:'My Class',i:IC.users},{id:'care',l:'Care Queue',i:IC.heart}],
@@ -1004,11 +1584,181 @@ window._nav = async (el,pg)=>{
   await showPage(pg);
 };
 
-/* â”€â”€ PAGE ROUTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Principal's personal watchlist — pin any class so it always surfaces on her dashboard,
+   independent of where it ranks in Top 10 / Bottom 10. Stored on her own staff record. */
+async function _persistWatchlist(){
+  await setDoc(ref(sess.code,'staff',sess.staffId),{watchClassIds:sess.watchClassIds},{merge:true});
+  localStorage.setItem('np',JSON.stringify(sess));
+  if(curPage==='dashboard'||curPage==='classes') await showPage(curPage);
+}
+window._toggleWatch = async (classId)=>{
+  if(!sess || sess.role!=='principal') return;
+  const set=new Set(sess.watchClassIds||[]);
+  const nowWatching = !set.has(classId);
+  if(nowWatching) set.add(classId); else set.delete(classId);
+  sess.watchClassIds=[...set];
+  try{
+    await _persistWatchlist();
+    toast(nowWatching?'Added to watchlist':'Removed from watchlist', '', 'g');
+  }catch(e){ toast('Could not update watchlist', e.message, 'r'); }
+};
+/* Explicit "add" for the dashboard's class picker — never removes, so re-picking
+   an already-pinned class is a harmless no-op rather than un-pinning it. */
+window._addToWatchlist = async ()=>{
+  if(!sess || sess.role!=='principal') return;
+  const sel=document.getElementById('watch-add-select');
+  const classId=sel&&sel.value;
+  if(!classId){ toast('Pick a class','Choose a class from the dropdown first.','a'); return; }
+  const set=new Set(sess.watchClassIds||[]);
+  if(set.has(classId)){ toast('Already pinned','That class is already on your watchlist.','a'); return; }
+  set.add(classId);
+  sess.watchClassIds=[...set];
+  try{
+    await _persistWatchlist();
+    toast('Added to watchlist', '', 'g');
+  }catch(e){ toast('Could not update watchlist', e.message, 'r'); }
+};
+
+/* Jump from any "class" reference elsewhere (e.g. the dashboard's Attendance by
+   Class table) straight to that class's row on the Classes tab. */
+window._goClass = async (classId)=>{
+  _focusClassId = classId;
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const navEl = document.querySelector('.ni[data-pg="classes"]');
+  if(navEl) navEl.classList.add('active');
+  await showPage('classes');
+};
+/* Same, but to a student's row on the Students tab. */
+window._goStudent = async (studentId)=>{
+  _focusStudentId = studentId;
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  const navEl = document.querySelector('.ni[data-pg="students"]');
+  if(navEl) navEl.classList.add('active');
+  await showPage('students');
+};
+
+/* ── OMNI-SEARCH (Class Manager) ──────────────────────────────
+   Instant, client-side search across classes/students/teachers —
+   the data's already in memory from pgClasses(), so no round-trip. */
+let _omniCtx = {classes:[], staff:[], students:[]};
+const _omniHit = (hay,q)=> !!hay && hay.toLowerCase().includes(q);
+
+window._omniSearch = (raw)=>{
+  const q=(raw||'').trim().toLowerCase();
+  const dd=document.getElementById('omni-results');
+  if(!dd) return;
+  if(!q){ window._omniClose(); return; }
+
+  const {classes,staff,students}=_omniCtx;
+  const teachers=staff.filter(s=>s.role==='teacher');
+  const clsLabel=cl=>cl.name||cl.id.replace('class-','');
+  // Classes themselves are handled by the live table filter below (so the table
+  // "only shows the selection") — this dropdown is just for jumping to a student
+  // or teacher, which aren't rows in this table.
+
+  const studentHits=students.filter(s=>_omniHit(`${s.firstName||''} ${s.lastName||''}`,q) || _omniHit(s.roll,q))
+    .slice(0,6).map(s=>{
+      const cl=classes.find(c2=>c2.id===s.classId);
+      return {type:'student', id:s.id, title:`${s.firstName||''} ${s.lastName||''}`.trim(), sub:`${cl?clsLabel(cl):'No class'}${s.roll?' · Roll '+s.roll:''}`};
+    });
+
+  const teacherHits=teachers.filter(tt=>_omniHit(tt.name,q) || _omniHit(tt.email,q))
+    .slice(0,4).map(tt=>{
+      const theirClasses=classes.filter(cl=>(tt.classIds||[]).includes(cl.id)).map(clsLabel);
+      return {type:'teacher', id:tt.id, classId:(tt.classIds||[])[0]||'', title:tt.name, sub:theirClasses.length?`Teaches ${theirClasses.join(', ')}`:'No class assigned'};
+    });
+
+  const results=[...studentHits, ...teacherHits];
+  if(!results.length){ window._omniClose(); return; }
+  const meta={
+    student:{icon:IC.users, bg:'var(--green-light)', fg:'var(--green)',     label:'Student'},
+    teacher:{icon:IC.tag,   bg:'var(--amber-light)',  fg:'var(--amber)',     label:'Teacher'},
+  };
+  const onClick=r=> r.type==='student' ? `window._omniPick();window._goStudent('${r.id}')`
+                   : `window._omniPick();window._goClass('${r.classId}')`;
+  dd.innerHTML=results.map(r=>{
+    const m=meta[r.type];
+    return `<div class="notif-item" onclick="${onClick(r)}">
+      <div style="width:28px;height:28px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:${m.bg};color:${m.fg};">${ico(m.icon,13)}</div>
+      <div><div class="ni-title">${r.title} <span style="font-weight:600;color:var(--slate4);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;">${m.label}</span></div><div class="ni-sub">${r.sub}</div></div>
+    </div>`;
+  }).join('');
+  dd.classList.remove('hidden');
+};
+window._omniPick = ()=>{ const input=document.getElementById('omni-search'); if(input) input.value=''; window._omniClose(); };
+window._omniClose = ()=>{ const dd=document.getElementById('omni-results'); if(dd){ dd.classList.add('hidden'); dd.innerHTML=''; } };
+document.addEventListener('click', (e)=>{
+  const wrap=document.getElementById('omni-search-wrap');
+  if(wrap && !wrap.contains(e.target)) window._omniClose();
+});
+
+/* ── SCHOOL-WIDE ANNOUNCEMENT MARQUEE ─────────────────────────
+   Principal posts a short (≤100 char) note; every teacher sees it as a
+   scrolling banner just under the top bar until it's replaced or cleared. */
+const ANN_MAX=100;
+async function loadAnnouncement(){
+  const wrap=document.getElementById('marquee-wrap');
+  if(!wrap || !sess){ return; }
+  if(sess.role!=='teacher'){ wrap.classList.add('hidden'); wrap.innerHTML=''; return; }
+  try{
+    const snap=await getDocs(query(col(sess.code,'announcements'), orderBy('createdAt','desc'), limit(5)));
+    let latest=null; snap.forEach(d=>{ if(!latest){ const a={id:d.id,...d.data()}; if(a.active!==false) latest=a; } });
+    if(!latest){ wrap.classList.add('hidden'); wrap.innerHTML=''; return; }
+    const safeText=(latest.text||'').replace(/</g,'&lt;');
+    wrap.innerHTML=`<div class="marquee-track">📣 ${safeText}<span class="marquee-time">— ${latest.createdByName||'Principal'} · ${fmtWhen(latest.createdAt)}</span></div>`;
+    wrap.classList.remove('hidden');
+  }catch(e){ console.warn('announcement load failed:', e.message); }
+}
+
+window._postAnnouncement = async ()=>{
+  const input=document.getElementById('ann-text');
+  const text=(input.value||'').trim();
+  if(!text){ toast('Write something','Enter a short announcement first.','a'); return; }
+  if(text.length>ANN_MAX){ toast('Too long', `Keep it to ${ANN_MAX} characters or fewer.`, 'a'); return; }
+  try{
+    await addDoc(col(sess.code,'announcements'),{
+      text, createdBy:sess.staffId, createdByName:sess.name, createdAt:serverTimestamp(), active:true
+    });
+    toast('Announcement posted','Every teacher will see it on their dashboard.','g');
+    if(curPage==='dashboard') await showPage('dashboard');
+  }catch(e){ toast('Post failed', e.message, 'r'); }
+};
+window._clearAnnouncement = async (id)=>{
+  try{
+    await updateDoc(ref(sess.code,'announcements',id),{active:false});
+    toast('Removed','Teachers will no longer see that announcement.','g');
+    if(curPage==='dashboard') await showPage('dashboard');
+  }catch(e){ toast('Could not remove', e.message, 'r'); }
+};
+window._annCount = (el)=>{
+  const c=document.getElementById('ann-count'); if(!c) return;
+  const n=(el.value||'').length;
+  c.textContent=`${n}/${ANN_MAX}`;
+  c.style.color = n>ANN_MAX ? 'var(--red)' : 'var(--slate4)';
+};
+
+/* ── Generic universal search-as-you-filter, reused on Tag Manager,
+   Care Queue and Messages: hides whatever child rows/cards of
+   `containerId` don't match, across every field already on screen. */
+window._liveFilter = (inputEl, containerId)=>{
+  const q=(inputEl.value||'').trim().toLowerCase();
+  const container=document.getElementById(containerId);
+  if(!container) return;
+  let visible=0;
+  Array.from(container.children).forEach(row=>{
+    const match = !q || row.textContent.toLowerCase().includes(q);
+    row.style.display = match ? '' : 'none';
+    if(match) visible++;
+  });
+  const empty=document.getElementById(containerId+'-empty');
+  if(empty) empty.classList.toggle('hidden', !q || visible>0);
+};
+
+/* ── PAGE ROUTER ───────────────────────────────────────────── */
 async function showPage(pg){
   curPage=pg;
   const el=document.getElementById('pc');
-  el.innerHTML='<div class="loader"><div class="spinner"></div>Loadingâ€¦</div>';
+  el.innerHTML='<div class="loader"><div class="spinner"></div>Loading…</div>';
   try{
     if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : await pgTeacherDash();
     else if (pg==='tags')      el.innerHTML = await pgTags();
@@ -1017,43 +1767,51 @@ async function showPage(pg){
     else if (pg==='classes')   el.innerHTML = await pgClasses();
     else if (pg==='messages')  el.innerHTML = await pgMessages();
     else if (pg==='class')     el.innerHTML = await pgTeacher();
-    else el.innerHTML='<div class="loader">ðŸš§ Coming soon.</div>';
+    else el.innerHTML='<div class="loader">🚧 Coming soon.</div>';
     if(pg==='tags') await loadRawScans();
     if(pg==='class') await loadClassScans();
+    if(pg==='classes' && _focusClassId){
+      const row=document.getElementById(`cls-row-${_focusClassId}`);
+      if(row) row.scrollIntoView({behavior:'smooth',block:'center'});
+      _focusClassId=null;
+    }
+    if(pg==='students' && _focusStudentId){
+      const row=document.getElementById(`stu-row-${_focusStudentId}`);
+      if(row) row.scrollIntoView({behavior:'smooth',block:'center'});
+      _focusStudentId=null;
+    }
   }catch(err){
-    el.innerHTML=`<div class="loader" style="flex-direction:column;gap:8px;color:#b91c1c;">
-      <span style="font-size:20px;">âš ï¸</span>
+    el.innerHTML=`<div class="loader" style="flex-direction:column;gap:8px;color:#8f3320;">
+      <span style="font-size:20px;">⚠️</span>
       <strong>${err.message}</strong>
-      <span style="font-size:12px;color:var(--slate5);">Check Firestore rules â†’ allow read, write: if true;</span>
+      <span style="font-size:12px;color:var(--slate5);">Check Firestore rules → allow read, write: if true;</span>
     </div>`;
     console.error(err);
   }
 }
 
-/* â”€â”€ PRINCIPAL DASHBOARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── PRINCIPAL DASHBOARD ───────────────────────────────────── */
 async function pgPrincipal(){
   const t=today(), c=sess.code, gate=(schoolMeta.gateLabel)||'Main Gate';
-  const [clsSnap,studSnap,staffSnap,careSnap,evtSnap,devSnap] = await Promise.all([
+  const [clsSnap,studSnap,staffSnap,annSnap] = await Promise.all([
     getDocs(col(c,'classes')).catch(()=>({forEach:()=>{}})),
     getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
     getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
-    getDocs(query(col(c,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{},size:0})),
-    getDocs(query(col(c,'events'),orderBy('scannedAt','desc'),limit(8))).catch(()=>({forEach:()=>{},docs:[]})),
-    getDocs(col(c,'devices')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'announcements'),orderBy('createdAt','desc'),limit(5))).catch(()=>({forEach:()=>{}})),
   ]);
   const classes=[]; clsSnap.forEach(d=>classes.push({id:d.id,...d.data()}));
   const students=[]; studSnap.forEach(d=>students.push({id:d.id,...d.data()}));
   const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
-  const teacherFor=cid=>{ const tt=staff.find(s=>s.role==='teacher'&&(s.classIds||[]).includes(cid)); return tt?tt.name:'â€”'; };
+  const announcements=[]; annSnap.forEach(d=>announcements.push({id:d.id,...d.data()}));
+  const teacherRecFor=cid=>staff.find(s=>s.role==='teacher'&&(s.classIds||[]).includes(cid));
 
-  // Pull today's records per class in parallel
+  // Pull today's records per class in parallel (for the header's "message absentees" action)
   const recSnaps=await Promise.all(classes.map(cl=>
     getDocs(subCol(c,'attendanceDays',`${t}_${cl.id}`,'records')).catch(()=>({forEach:()=>{}}))
   ));
   const statusByStudent={};
   recSnaps.forEach(sn=>sn.forEach(d=>{ const r=d.data(); if(!r.studentId) return; const st=r.status||'absent'; const cur=statusByStudent[r.studentId]; if(cur===undefined || (_rank[st]||0)>=(_rank[cur]||0)) statusByStudent[r.studentId]=st; }));
 
-  // Build per-class stats + school totals; "absent" = not scanned in at the entry point today
   const stats=classes.map(cl=>{
     const roster=students.filter(s=>s.classId===cl.id);
     let present=0,late=0; const absentees=[];
@@ -1062,42 +1820,51 @@ async function pgPrincipal(){
       if(st==='present') present++; else if(st==='late') late++;
       else absentees.push({id:s.id,name:`${s.firstName} ${s.lastName}`,classId:cl.id,className:cl.name||cl.id.replace('class-','')});
     });
-    return {classId:cl.id,name:cl.name||cl.id.replace('class-',''),teacher:teacherFor(cl.id),total:roster.length,present,late,absent:absentees.length,absentees};
+    return {classId:cl.id,name:cl.name||cl.id.replace('class-',''),roster,total:roster.length,present,late,absent:absentees.length,absentees};
   });
   const T={enrolled:students.length,present:0,late:0,absent:0};
   stats.forEach(s=>{T.present+=s.present;T.late+=s.late;T.absent+=s.absent;});
   const allAbsentees=stats.flatMap(s=>s.absentees);
   window._absentees=allAbsentees; // used by "Message all"
   const rate=T.enrolled?Math.round(((T.present+T.late)/T.enrolled)*100):0;
-  const care=careSnap.size||0;
-  const evts=[]; evtSnap.forEach(d=>evts.push({...d.data()}));
-  const devs=[]; devSnap.forEach(d=>devs.push({id:d.id,...d.data()}));
 
-  const classRows=stats.map(s=>{
-    const r=s.total?Math.round(((s.present+s.late)/s.total)*100):0;
-    return `<tr>
-      <td><span class="sn">${s.name}</span></td>
-      <td style="font-size:12px;color:var(--slate5);">${s.teacher}</td>
-      <td><span class="badge bg">${s.present}</span></td>
-      <td><span class="badge ba">${s.late}</span></td>
-      <td><span class="badge ${s.absent?'br':'bx'}">${s.absent}</span></td>
-      <td style="font-weight:800;color:${r>=90?'var(--green)':r>=75?'var(--amber)':'var(--red)'};">${r}%</td>
-    </tr>`;
-  }).join('');
+  // Trailing-30-day health per class, computed in parallel
+  const health=await Promise.all(classes.map(async cl=>{
+    const roster=students.filter(s=>s.classId===cl.id);
+    const tt=teacherRecFor(cl.id);
+    const h = roster.length ? await classHealthStats(c,cl.id,roster,30) : {pct:null,status:'nodata'};
+    return {classId:cl.id, name:cl.name||cl.id.replace('class-',''), teacherId:tt?tt.id:'', teacherName:tt?tt.name:'', pct:h.pct, status:h.status, total:roster.length};
+  }));
+  const ranked=[...health].sort((a,b)=>(b.pct??-1)-(a.pct??-1));
+  const top10=ranked.filter(h=>h.pct!=null).slice(0,10);
+  const bottom10=[...ranked].reverse().slice(0,10);
+  const watchSet=new Set(sess.watchClassIds||[]);
+  const watchlist=health.filter(h=>watchSet.has(h.classId)).sort((a,b)=>(a.pct??-1)-(b.pct??-1));
 
-  const absRows=allAbsentees.length?allAbsentees.map(a=>`<div class="fi" id="abs-${a.id}">
-    <div class="fl"><div class="fd bad">${ico(IC.alert,15)}</div>
-      <div><div class="fn">${a.name}</div><div class="fs">Class ${a.className} Â· no entry at ${gate}</div></div></div>
-    <div style="display:flex;gap:6px;flex-shrink:0;">
-      <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._markPresent('${a.id}')" title="Present but no card scanned">Mark present</button>
-      <button class="qa-btn" onclick="window._composeFor('${a.id}','${a.name.replace(/'/g,'')}','${a.className}')">Message parent</button>
-    </div>
-  </div>`).join(''):'<div class="loader" style="padding:18px;font-size:12px;">âœ… Everyone is accounted for today.</div>';
+  const healthTile=h=>{
+    const watched=watchSet.has(h.classId);
+    return `<div class="kc" style="flex-direction:column;align-items:stretch;gap:8px;cursor:pointer;" onclick="window._openStatsForClass('${h.classId}')" title="Open ${h.name} stats">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+        <div><div class="sn" style="font-size:14px;">${h.name}</div><div style="font-size:11px;color:var(--slate5);margin-top:2px;">${h.teacherName||'Unassigned'}</div></div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <button class="watch-btn ${watched?'on':''}" onclick="event.stopPropagation();window._toggleWatch('${h.classId}')" title="${watched?'Remove from watchlist':'Add to watchlist'}">${watched?'★':'☆'}</button>
+          <span class="badge ${healthBadgeClass(h.status)}" style="white-space:nowrap;">${h.pct!=null?h.pct+'%':'—'}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--slate5);">${ico(IC.users,12)}${h.total} student${h.total!==1?'s':''}</span>
+        <span style="font-size:11px;font-weight:700;color:var(--blue);">View stats →</span>
+      </div>
+    </div>`;
+  };
 
   return `
   <div class="ph">
-    <div><h1>Executive Overview</h1><p class="sub">${schoolMeta.name||c} Â· ${t} Â· entry point <span>${gate}</span></p></div>
-    <button class="btn btn-o" onclick="window._composeAll()">${ico(IC.bell,15)} Message all absentees (${allAbsentees.length})</button>
+    <div><h1>Executive Overview</h1><p class="sub">${schoolMeta.name||c} · ${t} · entry point <span>${gate}</span></p></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-g" onclick="window._openStats()">${ico(IC.chart,15)} Stats</button>
+      <button class="btn btn-o" onclick="window._composeAll()">${ico(IC.bell,15)} Message all absentees (${allAbsentees.length})</button>
+    </div>
   </div>
   <div class="hero">
     <div>
@@ -1107,50 +1874,46 @@ async function pgPrincipal(){
     </div>
     <div class="hstat"><b>${rate}%</b><span>attendance today</span></div>
   </div>
-  <div class="kgrid">
-    ${kpi('Enrolled',T.enrolled||'â€”',null,IC.users,'bl')}
-    ${kpi('Present',T.present||'0',null,IC.check,'vl')}
-    ${kpi('Late',T.late||'0',null,IC.alert,'am')}
-    ${kpi('Not at gate',T.absent||'0',T.absent?`-${T.absent}`:null,IC.chart,'rd')}
-    ${kpi('Attendance',rate+'%',null,IC.heart,'or')}
+  <div class="ct" style="background:var(--blue-light);margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+    <span>My Watchlist <span style="font-size:11px;font-weight:500;color:var(--slate5);">${watchlist.length} pinned</span></span>
+    <span style="display:flex;align-items:center;gap:8px;">
+      <select id="watch-add-select" style="padding:7px 10px;border:2px solid var(--slate2);border-radius:var(--r-sm);background:var(--white-warm);color:var(--slate7);font-size:12px;font-weight:600;outline:none;max-width:220px;">
+        <option value="">+ Add a class…</option>
+        ${health.map(h=>`<option value="${h.classId}">${h.name}${watchSet.has(h.classId)?' (pinned)':''}</option>`).join('')}
+      </select>
+      <button class="btn btn-p btn-sm" onclick="window._addToWatchlist()">Add</button>
+    </span>
   </div>
-  <div class="tc" style="align-items:start;">
-    <div class="card">
-      <div class="ct">Attendance by Class</div>
-      ${classes.length?`<table class="rt">
-        <thead><tr><th>Class</th><th>Teacher</th><th>Present</th><th>Late</th><th>Absent</th><th>Rate</th></tr></thead>
-        <tbody>${classRows}</tbody></table>`:'<div class="loader" style="padding:20px;font-size:12px;">No classes yet â€” add classes in Class Manager.</div>'}
+  ${watchlist.length?`<div class="kgrid">${watchlist.map(healthTile).join('')}</div>`:'<div class="loader" style="padding:18px;font-size:12px;">No classes pinned yet — pick one from the dropdown above, or click the ☆ on any class card, to keep an eye on it here.</div>'}
+  <div class="ct" style="background:var(--green-light);margin:22px 0 14px;">Top 10 · Best Attendance <span style="font-size:11px;font-weight:500;color:var(--slate5);">Trailing 30 days</span></div>
+  ${top10.length?`<div class="kgrid">${top10.map(healthTile).join('')}</div>`:'<div class="loader" style="padding:18px;font-size:12px;">No attendance data yet.</div>'}
+  <div class="ct" style="background:var(--red-light);margin:22px 0 14px;">Bottom 10 · Needs Attention <span style="font-size:11px;font-weight:500;color:var(--slate5);">Trailing 30 days</span></div>
+  ${bottom10.length?`<div class="kgrid">${bottom10.map(healthTile).join('')}</div>`:'<div class="loader" style="padding:18px;font-size:12px;">No classes yet — add classes in Class Manager.</div>'}
+  <div class="card" style="margin-top:22px;">
+    <div class="ct">${ico(IC.bell,15)} School-wide Announcement <span style="font-size:11px;font-weight:500;color:var(--slate4);">Scrolls on every teacher's dashboard</span></div>
+    <p style="font-size:12px;color:var(--slate5);margin-bottom:12px;">Keep it short — up to ${ANN_MAX} characters — so it stays crisp as a scrolling banner.</p>
+    <div class="fg" style="margin-bottom:8px;">
+      <input id="ann-text" type="text" maxlength="${ANN_MAX}" placeholder="e.g. PTM rescheduled to Friday 4pm, all classes."
+        style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;"
+        oninput="window._annCount(this)"/>
     </div>
-    <div class="cpbg">
-      <div class="cpt">${ico(IC.alert,15)} Not scanned in at ${gate} (${allAbsentees.length})</div>
-      ${absRows}
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <span id="ann-count" style="font-size:11px;color:var(--slate4);font-variant-numeric:tabular-nums;">0/${ANN_MAX}</span>
+      <button class="btn btn-p" onclick="window._postAnnouncement()">Post to School</button>
     </div>
-  </div>
-  <div class="tc" style="margin-top:18px;">
-    <div class="card">
-      <div class="ct">Live Campus Activity
-        <span class="badge bg" style="font-size:11px;"><span style="width:6px;height:6px;background:var(--green-mid);border-radius:50%;display:inline-block;margin-right:5px;animation:pulse 1.5s infinite;"></span>Live</span>
-      </div>
-      <div id="live-feed">
-        ${evts.length?evts.map(e=>feedHTML({_name:e._studentName||'Unknown',ok:e.confidence==='high'&&e.direction==='entry',gate:e.gateLabel||'Gate',ts:e.scannedAt?.toDate?e.scannedAt.toDate():new Date()})).join('')
-        :'<div class="loader" style="padding:20px;font-size:12px;">No events yet â€” waiting for tag scansâ€¦</div>'}
-      </div>
-    </div>
-    <div class="dp">
-      <div class="ct" style="color:#fff;border-color:rgba(255,255,255,.1);">Device Health</div>
-      ${devs.length?devs.map(d=>`
-        <div class="di ${d.status==='online'?'ok':'err'}">
-          <div><div class="dn" style="color:${d.status==='online'?'#fff':'#fca5a5'}">${d.name}</div>
-          <div class="ds ${d.status==='online'?'on':'off'}">${d.status==='online'?`Online Â· ${d.readQualityPercent}% read rate`:'Offline'}</div></div>
-          <div class="dl ${d.status==='online'?'g':'r'}"></div>
-        </div>`).join('')
-      :'<p style="color:#94a3b8;font-size:12px;text-align:center;padding:12px;">No devices found</p>'}
-      <button class="btn btn-w" style="margin-top:12px;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);">Run Diagnostics</button>
-    </div>
+    ${announcements.length?`<div style="margin-top:16px;border-top:1px solid var(--slate1);padding-top:12px;">
+      ${announcements.map(a=>`<div class="fi" style="align-items:flex-start;">
+        <div class="fl" style="align-items:flex-start;">
+          <div class="fd ${a.active===false?'bad':'ok'}">${ico(IC.bell,15)}</div>
+          <div><div class="fn">${(a.text||'').replace(/</g,'&lt;')}</div><div class="fs">${a.createdByName||'Principal'} · ${fmtWhen(a.createdAt)}${a.active===false?' · Removed':''}</div></div>
+        </div>
+        ${a.active===false?'':`<button class="qa-btn" onclick="window._clearAnnouncement('${a.id}')">Clear</button>`}
+      </div>`).join('')}
+    </div>`:''}
   </div>`;
 }
 
-/* â”€â”€ TEACHER DASHBOARD â€” weekly summary (Mon-start, auto-rolls) â”€â”€ */
+/* ── TEACHER DASHBOARD — weekly summary (Mon-start, auto-rolls) ── */
 const shortDate = iso => { try{ return new Date(iso+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }catch{ return iso; } };
 
 async function pgTeacherDash(){
@@ -1176,10 +1939,10 @@ async function pgTeacherDash(){
 
   const dayCards=weekDates.map((d,i)=>{
     const st=dayStats[i]; const isToday=d===t;
-    const val = isFuture[i] ? 'â€”' : `${st.attended}/${st.total}`;
-    const sub = isFuture[i] ? 'Upcoming' : (hasData[i] ? `${st.present} present Â· ${st.late} late` : 'No data yet');
+    const val = isFuture[i] ? '—' : `${st.attended}/${st.total}`;
+    const sub = isFuture[i] ? 'Upcoming' : (hasData[i] ? `${st.present} present · ${st.late} late` : 'No data yet');
     const pct = (!isFuture[i]&&st.total)?Math.round(st.attended/st.total*100):0;
-    return `<div class="kc" style="flex-direction:column;align-items:stretch;gap:6px;${isToday?'border-color:var(--coral);box-shadow:0 8px 20px rgba(255,95,110,.14);':''}">
+    return `<div class="kc" style="flex-direction:column;align-items:stretch;gap:6px;${isToday?'border-color:var(--coral);box-shadow:0 8px 20px -4px rgba(224,98,58,.22);':''}">
       <div class="kl" style="display:flex;justify-content:space-between;">${dayNames[i]}<span style="color:var(--slate4);font-weight:700;">${shortDate(d)}</span></div>
       <div class="kv" style="font-size:26px;">${val}</div>
       <div style="font-size:11px;font-weight:700;color:${isFuture[i]?'var(--slate4)':pct>=90?'var(--green)':pct>=75?'var(--amber)':'var(--red)'};">${sub}</div>
@@ -1199,11 +1962,11 @@ async function pgTeacherDash(){
     return `<tr><td><div style="display:flex;align-items:center;gap:9px;">${avatar(s,30)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${s.roll||''}</div></div></div></td>${cells}<td style="text-align:center;font-weight:700;color:var(--slate7);">${attended}/${recorded||0}</td></tr>`;
   }).join('');
 
-  const weekLabel=`${shortDate(weekDates[0])} â€“ ${shortDate(weekDates[4])}`;
+  const weekLabel=`${shortDate(weekDates[0])} – ${shortDate(weekDates[4])}`;
 
   return `
   <div class="ph">
-    <div><h1>Dashboard</h1><p class="sub">Weekly summary Â· Class <span>${clsLabel}</span></p></div>
+    <div><h1>Dashboard</h1><p class="sub">Weekly summary · Class <span>${clsLabel}</span></p></div>
     <span class="badge bb" style="font-size:12px;padding:7px 12px;">Week of ${weekLabel}</span>
   </div>
   <div class="hero">
@@ -1229,7 +1992,7 @@ async function pgTeacherDash(){
   </div>`;
 }
 
-/* â”€â”€ MY CLASS (editable Entry/Exit roster + history + live scans) â”€â”€ */
+/* ── MY CLASS (editable Entry/Exit roster + history + live scans) ── */
 const recRef = (c,dayId,id)=>doc(db,'schools',c,'attendanceDays',dayId,'records',id);
 let curClass='', curDayId='', curStudents=[], curRecMap={};
 
@@ -1240,16 +2003,20 @@ async function pgTeacher(){
   const dayId=`${t}_${cls}`;
   curClass=cls; curDayId=dayId;
 
-  const [studSnap,recSnap,careSnap]=await Promise.all([
+  const [studSnap,recSnap,careSnap,revSnap]=await Promise.all([
     getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
     getDocs(subCol(c,'attendanceDays',dayId,'records')).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'careAlerts'),where('classId','==',cls),where('status','==','open'))).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'classReviews'),orderBy('createdAt','desc'),limit(60))).catch(()=>({forEach:()=>{}})),
   ]);
   curStudents=[]; studSnap.forEach(d=>{ const s={id:d.id,...d.data()}; if(s.classId===cls) curStudents.push(s); });
   curRecMap={}; recSnap.forEach(d=>mergeStatus(curRecMap,{id:d.id,...d.data()}));
   const alerts=[]; careSnap.forEach(d=>alerts.push({id:d.id,...d.data()}));
+  // classReviews has no per-class composite index in this pilot build, so fetch broadly and filter client-side
+  const classReviews=[]; revSnap.forEach(d=>{ const r={id:d.id,...d.data()}; if(r.classId===cls) classReviews.push(r); });
+  const pendingReviews=classReviews.filter(r=>r.status==='pending');
 
-  // â”€â”€ Attendance history (last 14 recorded days) for verification + status dots â”€â”€
+  // ── Attendance history (last 14 recorded days) for verification + status dots ──
   const HIST_DAYS=14;
   const histDates=[...Array(HIST_DAYS)].map((_,i)=>dOff(-i));
   const histSnaps=await Promise.all(histDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${cls}`,'records')).catch(()=>({forEach:()=>{}}))));
@@ -1303,7 +2070,7 @@ async function pgTeacher(){
 
   return `
   <div class="ph">
-    <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> Â· Class <span>${clsLabel}</span> Â· ${t}</p></div>
+    <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> · Class <span>${clsLabel}</span> · ${t}</p></div>
     <span class="badge bb" style="font-size:12px;padding:7px 12px;">Class ${clsLabel}</span>
   </div>
   <div class="hero">
@@ -1316,7 +2083,7 @@ async function pgTeacher(){
   </div>
   <div class="tc">
     <div class="card">
-      <div class="ct">Attendance â€” ${clsLabel}
+      <div class="ct">Attendance — ${clsLabel}
         <span style="display:flex;align-items:center;gap:12px;font-size:11px;font-weight:600;color:var(--slate4);">
           <span style="display:flex;align-items:center;gap:5px;"><span class="sdot g"></span>all days</span>
           <span style="display:flex;align-items:center;gap:5px;"><span class="sdot r"></span>missed a day</span>
@@ -1334,11 +2101,24 @@ async function pgTeacher(){
           <div class="cch"><span class="ccn">${a.studentName}</span><span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span></div>
           <p class="ccd">${careLabel(a.ruleCode)}</p>
           <button class="btn btn-o btn-w btn-sm" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Parent Note</button>
-        </div>`).join('') || '<p style="color:#9a3412;font-size:12px;opacity:.7;">No open alerts.</p>'}
+        </div>`).join('') || '<p style="color:#8a4420;font-size:12px;opacity:.7;">No open alerts.</p>'}
+      </div>
+      <div class="card" style="margin-top:14px;">
+        <div class="ct">${ico(IC.heart)} Principal Reviews
+          ${pendingReviews.length?`<span class="badge br">${pendingReviews.length} new</span>`:''}
+        </div>
+        ${classReviews.length?classReviews.map(r=>`
+          <div class="cc" style="${r.status==='pending'?'border-left:3px solid var(--red);':r.needsPrincipalAck?'border-left:3px solid var(--amber);':'border-left:3px solid var(--green-mid);'}">
+            <div class="cch"><span class="ccn">${healthLabel(r.healthStatus)}${r.healthPct!=null?` · ${r.healthPct}%`:''}</span>
+              <span class="badge ${r.status==='pending'?'br':r.needsPrincipalAck?'ba':'bg'}">${r.status==='pending'?'Needs your response':r.needsPrincipalAck?'Awaiting principal':'Acknowledged'}</span>
+            </div>
+            <p class="ccd">${(r.comments&&r.comments[0]&&r.comments[0].text)||''}</p>
+            <button class="btn ${r.status==='pending'?'btn-o':'btn-g'} btn-w btn-sm" onclick="window._openReviewThread('${r.id}')">${r.status==='pending'?'Discuss & Respond':'View thread'}</button>
+          </div>`).join('') : '<p style="color:var(--slate5);font-size:12px;opacity:.8;">No reviews from your principal yet.</p>'}
       </div>
       <div class="card" style="margin-top:14px;">
         <div class="ct">${ico(IC.tag)} Recent Gate Scans</div>
-        <p style="font-size:11px;color:var(--slate5);margin-top:-8px;margin-bottom:10px;">Unknown tag scanned? Assign it to a student below â€” saves instantly.</p>
+        <p style="font-size:11px;color:var(--slate5);margin-top:-8px;margin-bottom:10px;">Unknown tag scanned? Assign it to a student below — saves instantly.</p>
         <div id="class-scans"><div class="loader" style="padding:16px;"><div class="spinner"></div></div></div>
       </div>
     </div>
@@ -1368,11 +2148,11 @@ window._saveEntry = async (sid) => {
       status, entryTime, arrivalTime:entryTime, exitAt, markedManually:true, updatedAt:serverTimestamp()
     },{merge:true});
     curRecMap[sid]={...(curRecMap[sid]||{}),status,entryTime,exitAt};
-    toast(`${s.firstName} ${s.lastName} saved`, `${status} Â· in ${entryTime||'â€”'} Â· out ${exitAt||'â€”'}`, 'g');
+    toast(`${s.firstName} ${s.lastName} saved`, `${status} · in ${entryTime||'—'} · out ${exitAt||'—'}`, 'g');
   }catch(e){ toast('Save failed', e.message, 'r'); }
 };
 
-/* Recent scans for the teacher's class â€” assign unknown tags inline */
+/* Recent scans for the teacher's class — assign unknown tags inline */
 async function loadClassScans(){
   const el=document.getElementById('class-scans'); if(!el) return;
   try{
@@ -1385,9 +2165,9 @@ async function loadClassScans(){
       return `<div class="rsi" style="flex-direction:column;align-items:stretch;gap:8px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
           <div>
-            <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'âœ“ '+m.studentName:'âš  Unassigned tag'}</div>
-            <div class="epc-code">${r.epc||'â€”'}</div>
-            <div class="scan-meta">Reader: Antenna ${r.antenna||'?'} Â· ${r.timestamp||'â€”'}</div>
+            <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'✓ '+m.studentName:'⚠ Unassigned tag'}</div>
+            <div class="epc-code">${r.epc||'—'}</div>
+            <div class="scan-meta">Reader: Antenna ${r.antenna||'?'} · ${r.timestamp||'—'}</div>
           </div>
         </div>
         ${known?'':`<div style="display:flex;gap:6px;">
@@ -1396,7 +2176,7 @@ async function loadClassScans(){
         </div>`}
       </div>`;
     }).join('');
-  }catch(e){ el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">âš  ${e.message}</p>`; }
+  }catch(e){ el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">⚠ ${e.message}</p>`; }
 }
 
 /* Tag a scanned EPC to a chosen student and persist the mapping */
@@ -1408,53 +2188,110 @@ window._assignScan = async (epc, selId) => {
   try{
     await setDoc(doc(db,'tagMappings',sid),{studentId:sid,studentName,epc,schoolCode:sess.code,classId:s.classId,assignedAt:serverTimestamp()});
     epcMap[epc]={studentId:sid,studentName,schoolCode:sess.code};
-    toast(`${studentName} tagged`, `EPC ${epc.substring(0,14)}â€¦ mapped`, 'g');
+    toast(`${studentName} tagged`, `EPC ${epc.substring(0,14)}… mapped`, 'g');
     await loadClassScans();
   }catch(e){ toast('Assign failed', e.message, 'r'); }
 };
 
-/* â”€â”€ CLASS MANAGER (principal: add class + tag a teacher) â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CLASS MANAGER (principal: add class + tag a teacher) ─────── */
 async function pgClasses(){
   const c=sess.code;
-  const [clsSnap,staffSnap]=await Promise.all([
+  const [clsSnap,staffSnap,studSnap,revSnap]=await Promise.all([
     getDocs(col(c,'classes')).catch(()=>({forEach:()=>{}})),
     getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'classReviews'),orderBy('createdAt','desc'),limit(60))).catch(()=>({forEach:()=>{}})),
   ]);
   const classes=[]; clsSnap.forEach(d=>classes.push({id:d.id,...d.data()}));
   const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const students=[]; studSnap.forEach(d=>students.push({id:d.id,...d.data()}));
+  const reviews=[]; revSnap.forEach(d=>reviews.push({id:d.id,...d.data()}));
   const teachers=staff.filter(s=>s.role==='teacher');
   const teacherFor=cid=>teachers.find(tt=>(tt.classIds||[]).includes(cid));
   window._setupTeachers=teachers; // used by save handler
 
+  // Trailing-30-day health per class, computed in parallel
+  const healthByClass={};
+  await Promise.all(classes.map(async cl=>{
+    const roster=students.filter(s=>s.classId===cl.id);
+    healthByClass[cl.id] = roster.length ? await classHealthStats(c,cl.id,roster,30) : {pct:null,status:'nodata'};
+  }));
+  const latestReviewByClass={};
+  reviews.forEach(r=>{ if(!latestReviewByClass[r.classId]) latestReviewByClass[r.classId]=r; });
+  const watchSet=new Set(sess.watchClassIds||[]);
+
   const tOpts=teachers.map(tt=>`<option value="${tt.id}">${tt.name} (${tt.email})</option>`).join('');
   const rows=classes.map(cl=>{
     const tt=teacherFor(cl.id);
-    return `<tr>
+    const h=healthByClass[cl.id]||{pct:null,status:'nodata'};
+    const nameEsc=(cl.name||cl.id.replace('class-','')).replace(/'/g,'');
+    const teacherNameEsc=tt?tt.name.replace(/'/g,''):'';
+    const lastRev=latestReviewByClass[cl.id];
+    const watched=watchSet.has(cl.id);
+    return `<tr id="cls-row-${cl.id}" class="${cl.id===_focusClassId?'rt-hl':''}">
+      <td><button class="watch-btn ${watched?'on':''}" onclick="window._toggleWatch('${cl.id}')" title="${watched?'Remove from watchlist':'Add to watchlist'}">${watched?'★':'☆'}</button></td>
       <td><span class="sn">${cl.name||cl.id.replace('class-','')}</span></td>
       <td><span class="badge bb">${cl.id}</span></td>
       <td>${tt?`<span class="badge bg">${tt.name}</span>`:'<span class="badge bx">Unassigned</span>'}</td>
-      <td style="font-size:12px;color:var(--slate5);">${cl.studentCount??'â€”'}</td>
+      <td style="font-size:12px;color:var(--slate5);">${cl.studentCount??'—'}</td>
+      <td><span class="badge ${healthBadgeClass(h.status)}" title="${h.pct!=null?`${h.pct}% attendance, trailing 30 days`:'No attendance recorded in the last 30 days'}">${healthLabel(h.status)}${h.pct!=null?` · ${h.pct}%`:''}</span></td>
+      <td>
+        <button class="qa-btn" ${tt?'':'disabled style="opacity:.5;cursor:not-allowed;"'} onclick="window._openReviewCompose('${cl.id}','${nameEsc}','${tt?tt.id:''}','${teacherNameEsc}',${h.pct},'${h.status}')" title="${tt?'Send a review note to the class teacher':'Assign a teacher first'}">Submit Review</button>
+        ${lastRev?`<button class="qa-btn" style="margin-top:5px;" onclick="window._openReviewThread('${lastRev.id}')">Last: ${lastRev.status==='pending'?'Awaiting ack':lastRev.needsPrincipalAck?'New reply':'Acknowledged'}</button>`:''}
+      </td>
     </tr>`;
   }).join('');
 
+  const revRows=reviews.map(r=>{
+    const st = r.needsPrincipalAck ? '<span class="badge ba">Reply needs your ack</span>'
+             : r.status==='pending' ? `<span class="badge ${daysSince(r.createdAt)>=2?'br':'bx'}">${daysSince(r.createdAt)>=2?'Overdue · ':''}Awaiting teacher</span>`
+             : '<span class="badge bg">Acknowledged</span>';
+    return `<tr>
+      <td><span class="sn">${r.className}</span></td>
+      <td style="font-size:12px;color:var(--slate5);">${r.teacherName}</td>
+      <td><span class="badge ${healthBadgeClass(r.healthStatus)}">${healthLabel(r.healthStatus)}</span></td>
+      <td>${st}</td>
+      <td style="font-size:11px;color:var(--slate4);white-space:nowrap;">${fmtWhen(r.createdAt)}</td>
+      <td><button class="qa-btn" onclick="window._openReviewThread('${r.id}')">Open</button></td>
+    </tr>`;
+  }).join('');
+
+  _omniCtx = {classes, staff, students};
+
   return `
-  <div class="ph"><div><h1>Class Manager</h1><p class="sub">${classes.length} classes Â· ${teachers.length} teachers</p></div></div>
+  <div class="ph"><div><h1>Class Manager</h1><p class="sub">${classes.length} classes · ${teachers.length} teachers · health is trailing 30-day attendance</p></div></div>
+  <div class="omni-wrap" id="omni-search-wrap" style="margin-bottom:18px;">
+    <div class="omni-bar">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2.2"/><path stroke-linecap="round" stroke-width="2.2" d="M21 21l-4-4"/></svg>
+      <input id="omni-search" type="text" placeholder="Search classes, students or teachers…" autocomplete="off" oninput="window._omniSearch(this.value);window._liveFilter(this,'cls-tbody');" onkeydown="if(event.key==='Escape'){this.value='';window._omniClose();window._liveFilter(this,'cls-tbody');}"/>
+    </div>
+    <div id="omni-results" class="omni-dd hidden"></div>
+  </div>
   <div class="tc" style="align-items:start;">
     <div class="card">
       <div class="ct">Classes</div>
-      ${classes.length?`<table class="rt">
-        <thead><tr><th>Class</th><th>ID</th><th>Class Teacher</th><th>Students</th></tr></thead>
-        <tbody>${rows}</tbody></table>`:'<div class="loader" style="padding:20px;font-size:12px;">No classes yet â€” add one on the right.</div>'}
+      ${classes.length?`<div style="overflow-x:auto;"><table class="rt">
+        <thead><tr><th title="Watchlist">★</th><th>Class</th><th>ID</th><th>Class Teacher</th><th>Students</th><th>Class Health (30d)</th><th>Principal Review</th></tr></thead>
+        <tbody id="cls-tbody">${rows}</tbody></table></div>
+      <p id="cls-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`:'<div class="loader" style="padding:20px;font-size:12px;">No classes yet — add one on the right.</div>'}
     </div>
     <div class="card">
       <div class="ct">Add a Class</div>
       <div class="fg"><label>Class Name</label><input id="nc-name" placeholder="e.g. 9-A"/></div>
       <div class="fg"><label>Tag a Teacher (optional)</label>
-        <select id="nc-teacher"><option value="">â€” None for now â€”</option>${tOpts}</select>
+        <select id="nc-teacher"><option value="">— None for now —</option>${tOpts}</select>
       </div>
       <button class="btn btn-p btn-w" onclick="window._addClassRecord()">Add Class</button>
       <p style="font-size:11px;color:var(--slate5);margin-top:10px;">The tagged teacher will see only this class when they sign in.</p>
     </div>
+  </div>
+  <div class="card" style="margin-top:18px;">
+    <div class="ct">Class Health Reviews
+      <span style="font-size:11px;font-weight:500;color:var(--slate4);">${reviews.length} thread${reviews.length!==1?'s':''} · archived with date &amp; time</span>
+    </div>
+    ${reviews.length?`<div style="overflow-x:auto;"><table class="rt">
+      <thead><tr><th>Class</th><th>Teacher</th><th>Health at time of review</th><th>Status</th><th>Sent</th><th></th></tr></thead>
+      <tbody>${revRows}</tbody></table></div>`:'<div class="loader" style="padding:18px;font-size:12px;">No reviews sent yet. Use "Submit Review" on any class above to start a discussion with its teacher.</div>'}
   </div>`;
 }
 
@@ -1478,33 +2315,40 @@ window._addClassRecord = async () => {
   }catch(e){ toast('Add failed', e.message, 'r'); }
 };
 
-/* â”€â”€ MESSAGES / DELIVERY LOG (principal) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── MESSAGES / DELIVERY LOG (principal) ────────────────────── */
 async function pgMessages(){
   let msgs=[];
   try{ const snap=await getDocs(query(col(sess.code,'messages'),orderBy('sentAt','desc'),limit(60))); snap.forEach(d=>msgs.push({id:d.id,...d.data()})); }
   catch(e){ /* ordering may fail if no sentAt; fall back */ try{ const s2=await getDocs(col(sess.code,'messages')); s2.forEach(d=>msgs.push({id:d.id,...d.data()})); }catch{} }
   const tplLabel={wellbeing:'Wellbeing',absence:'Absence',late:'Late',appreciation:'Appreciation',custom:'Custom'};
-  const when=m=>{ try{ return m.sentAt?.toDate ? m.sentAt.toDate().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : (m.date||'â€”'); }catch{ return m.date||'â€”'; } };
+  const when=m=>{ try{ return m.sentAt?.toDate ? m.sentAt.toDate().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : (m.date||'—'); }catch{ return m.date||'—'; } };
   const rows=msgs.map(m=>`<tr>
-    <td><span class="sn">${m.studentName||'â€”'}</span></td>
-    <td><span class="badge bb">${(m.classId||'').replace('class-','')||'â€”'}</span></td>
-    <td><span class="badge bx">${tplLabel[m.template]||m.template||'â€”'}</span></td>
+    <td><span class="sn">${m.studentName||'—'}</span></td>
+    <td><span class="badge bb">${(m.classId||'').replace('class-','')||'—'}</span></td>
+    <td><span class="badge bx">${tplLabel[m.template]||m.template||'—'}</span></td>
     <td style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--slate5);">${m.channel||'email'}</td>
     <td><span class="badge bg">${m.status||'sent'}</span></td>
-    <td style="font-size:12px;color:var(--slate5);">${m.sentBy||'â€”'}</td>
+    <td style="font-size:12px;color:var(--slate5);">${m.sentBy||'—'}</td>
     <td style="font-size:12px;color:var(--slate5);white-space:nowrap;">${when(m)}</td>
   </tr>`).join('');
   return `
-  <div class="ph"><div><h1>Parent Messages</h1><p class="sub">${msgs.length} message${msgs.length!==1?'s':''} logged Â· delivery record</p></div></div>
+  <div class="ph"><div><h1>Parent Messages</h1><p class="sub">${msgs.length} message${msgs.length!==1?'s':''} logged · delivery record</p></div></div>
+  <div class="omni-wrap" id="msgs-search-wrap" style="margin-bottom:16px;">
+    <div class="omni-bar">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2.2"/><path stroke-linecap="round" stroke-width="2.2" d="M21 21l-4-4"/></svg>
+      <input type="text" placeholder="Search student, class, template, channel or status…" autocomplete="off" oninput="window._liveFilter(this,'msgs-tbody')" onkeydown="if(event.key==='Escape'){this.value='';window._liveFilter(this,'msgs-tbody');}"/>
+    </div>
+  </div>
   <div class="card">
     <div class="ct">Delivery Log</div>
     ${msgs.length?`<div style="overflow-x:auto;"><table class="rt">
       <thead><tr><th>Student</th><th>Class</th><th>Template</th><th>Channel</th><th>Status</th><th>Sent By</th><th>When</th></tr></thead>
-      <tbody>${rows}</tbody></table></div>`:'<div class="loader" style="padding:22px;font-size:12px;">No messages sent yet. Use the dashboard or a class page to message parents.</div>'}
+      <tbody id="msgs-tbody">${rows}</tbody></table></div>
+      <p id="msgs-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`:'<div class="loader" style="padding:22px;font-size:12px;">No messages sent yet. Use the dashboard or a class page to message parents.</div>'}
   </div>`;
 }
 
-/* â”€â”€ TAG MANAGER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── TAG MANAGER ───────────────────────────────────────────── */
 async function pgTags(){
   const [studSnap,mapSnap]=await Promise.all([
     getDocs(col(sess.code,'students')).catch(()=>({forEach:()=>{}})),
@@ -1515,25 +2359,32 @@ async function pgTags(){
 
   return `
   <div class="ph"><div><h1>Tag Manager</h1><p class="sub">Map EPC codes from your <strong>Tags</strong> collection to students.</p></div></div>
+  <div class="omni-wrap" id="tags-search-wrap" style="margin-bottom:16px;">
+    <div class="omni-bar">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2.2"/><path stroke-linecap="round" stroke-width="2.2" d="M21 21l-4-4"/></svg>
+      <input type="text" placeholder="Search students, class or EPC code…" autocomplete="off" oninput="window._liveFilter(this,'tags-tbody')" onkeydown="if(event.key==='Escape'){this.value='';window._liveFilter(this,'tags-tbody');}"/>
+    </div>
+  </div>
   <div style="background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:var(--r-md);padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--blue);font-weight:600;display:flex;gap:10px;align-items:center;">
     ${ico(IC.bell,16)}
     <span>Once an EPC is mapped, every new scan from that tag fires a <strong>browser notification</strong> with the student's name.</span>
   </div>
   <div class="tc" style="align-items:start;">
     <div class="card">
-      <div class="ct">Student â†’ EPC Assignment</div>
+      <div class="ct">Student → EPC Assignment</div>
       ${studs.length?`<table class="rt">
         <thead><tr><th>Student</th><th>Class</th><th>EPC Code</th><th>Status</th><th>Save</th></tr></thead>
-        <tbody>${studs.map(s=>{
+        <tbody id="tags-tbody">${studs.map(s=>{
           const ex=byStud[s.id]; const epcVal=ex?ex.epc:''; const iid=`epc_${s.id}`;
           return `<tr>
             <td><div class="sn">${s.firstName} ${s.lastName}</div><div style="font-size:10px;color:var(--slate4)">${s.roll}</div></td>
             <td><span class="badge bb">${(s.classId||'').replace('class-','')}</span></td>
-            <td><input id="${iid}" class="epc-in ${epcVal?'ok':''}" value="${epcVal}" placeholder="Paste EPCâ€¦"/></td>
-            <td>${epcVal?'<span class="badge bg">âœ“ Mapped</span>':'<span class="badge bx">Unmapped</span>'}</td>
+            <td><input id="${iid}" class="epc-in ${epcVal?'ok':''}" value="${epcVal}" placeholder="Paste EPC…"/></td>
+            <td>${epcVal?'<span class="badge bg">✓ Mapped</span>':'<span class="badge bx">Unmapped</span>'}</td>
             <td><button class="btn btn-p btn-sm" onclick="window._saveTag('${s.id}','${s.firstName} ${s.lastName}','${iid}')">Save</button></td>
           </tr>`;}).join('')}</tbody>
-      </table>`:'<div class="loader" style="padding:20px;font-size:12px;">No students found â€” seed DEMO-01 first.</div>'}
+      </table>
+      <p id="tags-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`:'<div class="loader" style="padding:20px;font-size:12px;">No students found — seed DEMO-01 first.</div>'}
     </div>
     <div>
       <div class="card">
@@ -1541,8 +2392,8 @@ async function pgTags(){
         <div id="raw-scans"><div class="loader" style="padding:16px;"><div class="spinner"></div></div></div>
       </div>
       <div class="card" style="margin-top:14px;background:var(--slate8);color:#fff;">
-        <div class="ct" style="color:#fff;border-color:rgba(255,255,255,.1);">${ico(IC.bell)} Notifications</div>
-        <div style="font-size:13px;color:#94a3b8;margin-bottom:12px;">Status: <span style="color:#4ade80;">${'Notification' in window ? Notification.permission : 'unsupported'}</span></div>
+        <div class="ct" style="color:#fff;background:rgba(255,255,255,.08);">${ico(IC.bell)} Notifications</div>
+        <div style="font-size:13px;color:#c2b3a3;margin-bottom:12px;">Status: <span style="color:#8fbf9a;">${'Notification' in window ? Notification.permission : 'unsupported'}</span></div>
         <button class="btn btn-w" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);" onclick="window._askNotif()">
           ${ico(IC.bell)} Enable Browser Notifications
         </button>
@@ -1559,7 +2410,7 @@ window._saveTag = async (studentId,studentName,inputId)=>{
     await setDoc(doc(db,'tagMappings',studentId),{studentId,studentName,epc,schoolCode:sess.code,assignedAt:serverTimestamp()});
     epcMap[epc]={studentId,studentName,schoolCode:sess.code};
     if(input){input.classList.add('ok');}
-    toast(`${studentName} mapped`,`EPC: ${epc.substring(0,14)}â€¦`,'g');
+    toast(`${studentName} mapped`,`EPC: ${epc.substring(0,14)}…`,'g');
   }catch(e){toast('Save failed',e.message,'r');}
 };
 
@@ -1573,13 +2424,13 @@ async function loadRawScans(){
       const m=epcMap[r.epc]; const known=!!m;
       return `<div class="rsi">
         <div>
-          <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'âœ“ '+m.studentName:'âš  Unknown'}</div>
-          <div class="epc-code">${r.epc||'â€”'}</div>
-          <div class="scan-meta">Antenna ${r.antenna||'?'} Â· ${r.timestamp||'â€”'}</div>
+          <div style="font-size:12px;font-weight:700;color:${known?'var(--green)':'var(--red)'};">${known?'✓ '+m.studentName:'⚠ Unknown'}</div>
+          <div class="epc-code">${r.epc||'—'}</div>
+          <div class="scan-meta">Antenna ${r.antenna||'?'} · ${r.timestamp||'—'}</div>
         </div>
-        ${!known?`<button class="qa-btn" onclick="window._quickAssign('${r.epc}')">Assign â†’</button>`:''}
+        ${!known?`<button class="qa-btn" onclick="window._quickAssign('${r.epc}')">Assign →</button>`:''}
       </div>`;}).join('');
-  }catch(e){el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">âš  ${e.message}</p>`;}
+  }catch(e){el.innerHTML=`<p style="color:var(--red);font-size:12px;padding:12px;">⚠ ${e.message}</p>`;}
 }
 
 window._quickAssign = epc =>{
@@ -1589,7 +2440,7 @@ window._quickAssign = epc =>{
   toast('EPC pasted','Click Save next to the student to confirm.','a');
 };
 
-/* â”€â”€ CARE PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── CARE PAGE ─────────────────────────────────────────────── */
 async function pgCare(){
   const snap=await getDocs(query(col(sess.code,'careAlerts'),where('status','==','open'))).catch(()=>({forEach:()=>{}}));
   let alerts=[]; snap.forEach(d=>alerts.push({id:d.id,...d.data()}));
@@ -1600,8 +2451,14 @@ async function pgCare(){
   }
   const scope = sess.role==='teacher' ? `Class ${((sess.classIds||[])[0]||'').replace('class-','')}` : 'All classes';
   return `
-  <div class="ph"><div><h1>Care Queue</h1><p class="sub">${scope} Â· ${alerts.length} open alert${alerts.length!==1?'s':''}</p></div></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
+  <div class="ph"><div><h1>Care Queue</h1><p class="sub">${scope} · ${alerts.length} open alert${alerts.length!==1?'s':''}</p></div></div>
+  <div class="omni-wrap" id="care-search-wrap" style="margin-bottom:16px;">
+    <div class="omni-bar">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2.2"/><path stroke-linecap="round" stroke-width="2.2" d="M21 21l-4-4"/></svg>
+      <input type="text" placeholder="Search students, class or alert type…" autocomplete="off" oninput="window._liveFilter(this,'care-grid')" onkeydown="if(event.key==='Escape'){this.value='';window._liveFilter(this,'care-grid');}"/>
+    </div>
+  </div>
+  <div id="care-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;">
     ${alerts.length?alerts.map(a=>`<div class="card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;">
         <div><div style="font-size:15px;font-weight:800;">${a.studentName}</div>
@@ -1610,11 +2467,12 @@ async function pgCare(){
       </div>
       <p style="font-size:13px;color:var(--slate5);margin-bottom:14px;">${careLabel(a.ruleCode)}</p>
       <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
-    </div>`).join(''):'<div class="loader">âœ… No open care alerts.</div>'}
-  </div>`;
+    </div>`).join(''):'<div class="loader">✅ No open care alerts.</div>'}
+  </div>
+  <p id="care-grid-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`;
 }
 
-/* â”€â”€ STUDENTS PAGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── STUDENTS PAGE ─────────────────────────────────────────── */
 async function pgStudents(){
   const snap=await getDocs(col(sess.code,'students')).catch(()=>({forEach:()=>{}}));
   const studs=[]; snap.forEach(d=>studs.push({id:d.id,...d.data()}));
@@ -1622,13 +2480,19 @@ async function pgStudents(){
   <div class="ph"><div><h1>Student Directory</h1><p class="sub">${studs.length} enrolled</p></div>
     <button class="btn btn-p" onclick="window._openAddStudent()">+ Add Student</button>
   </div>
+  <div class="omni-wrap" id="stu-search-wrap" style="margin-bottom:18px;">
+    <div class="omni-bar">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2.2"/><path stroke-linecap="round" stroke-width="2.2" d="M21 21l-4-4"/></svg>
+      <input type="text" placeholder="Search students, class, roll or phone…" autocomplete="off" oninput="window._liveFilter(this,'stu-tbody')" onkeydown="if(event.key==='Escape'){this.value='';window._liveFilter(this,'stu-tbody');}"/>
+    </div>
+  </div>
   <div class="card"><div class="ct">All Students</div>
     <table class="rt"><thead><tr><th>Name</th><th>Guardian Phone</th><th>Roll</th><th>Class</th><th>RFID</th><th>Actions</th></tr></thead>
-    <tbody>${studs.map(s=>{
+    <tbody id="stu-tbody">${studs.map(s=>{
       const tagged=Object.values(epcMap).some(m=>m.studentId===s.id);
       const nm=(s.firstName+' '+s.lastName).replace(/'/g,'');
-      return `<tr><td><div style="display:flex;align-items:center;gap:10px;">${avatarBtn(s,34)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${(s.classId||'').replace('class-','Class ')}</div></div></div></td>
-        <td style="font-size:12px;color:var(--slate7);font-weight:600;">${s.parentPhone||'â€”'}</td>
+      return `<tr id="stu-row-${s.id}" class="${s.id===_focusStudentId?'rt-hl':''}"><td><div style="display:flex;align-items:center;gap:10px;">${avatarBtn(s,34)}<div><span class="sn">${s.firstName} ${s.lastName}</span><div style="font-size:10px;color:var(--slate4)">${(s.classId||'').replace('class-','Class ')}</div></div></div></td>
+        <td style="font-size:12px;color:var(--slate7);font-weight:600;">${s.parentPhone||'—'}</td>
         <td style="font-size:12px;color:var(--slate5);">${s.roll}</td>
         <td><span class="badge bb">${(s.classId||'').replace('class-','')}</span></td>
         <td>${tagged?'<span class="badge bg">Mapped</span>':'<span class="badge br">Unmapped</span>'}</td>
@@ -1637,10 +2501,11 @@ async function pgStudents(){
           <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${(s.classId||'').replace('class-','')}')" title="Message parent">Message</button>
         </div></td></tr>`;}).join('')}
     </tbody></table>
+    <p id="stu-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>
   </div>`;
 }
 
-/* â”€â”€ ADD STUDENT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── ADD STUDENT MODAL ─────────────────────────────────────── */
 window._openAddStudent = async () => {
   const form = document.getElementById('add-student-form');
   if(form) form.reset();
@@ -1672,7 +2537,7 @@ window._saveStudent = async () => {
 
   const btn = document.getElementById('save-student-btn');
   const orig = btn ? btn.textContent : '';
-  if(btn){ btn.textContent='Savingâ€¦'; btn.disabled=true; }
+  if(btn){ btn.textContent='Saving…'; btn.disabled=true; }
 
   try{
     const id = 'stu-' + Date.now();
@@ -1680,7 +2545,7 @@ window._saveStudent = async () => {
       id, firstName, lastName, roll, classId, parentPhone, parentEmail,
       campusId:'campus-001', isActive:true, photoUrl:'', createdAt:serverTimestamp()
     });
-    toast(`${firstName} ${lastName} added`, `Roll ${roll} Â· ${classId.replace('class-','Class ')}`, 'g');
+    toast(`${firstName} ${lastName} added`, `Roll ${roll} · ${classId.replace('class-','Class ')}`, 'g');
     window._closeModal();
     if(curPage==='students') await showPage('students');
   }catch(e){
@@ -1690,7 +2555,7 @@ window._saveStudent = async () => {
   }
 };
 
-/* â”€â”€ EDIT STUDENT (details, class, guardian phone) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── EDIT STUDENT (details, class, guardian phone) ──────────── */
 window._openEditStudent = async (sid)=>{
   try{
     const snap=await getDoc(ref(sess.code,'students',sid));
@@ -1721,7 +2586,7 @@ window._saveEditStudent = async ()=>{
   const parentPhone=document.getElementById('e-phone').value.trim();
   const parentEmail=document.getElementById('e-email').value.trim();
   if(!firstName||!lastName||!roll){ toast('Missing details','First name, last name and roll are required.','a'); return; }
-  const btn=document.getElementById('edit-save-btn'); btn.textContent='Savingâ€¦'; btn.disabled=true;
+  const btn=document.getElementById('edit-save-btn'); btn.textContent='Saving…'; btn.disabled=true;
   try{
     await setDoc(ref(sess.code,'students',sid),{firstName,lastName,roll,classId,guardianName,parentPhone,parentEmail,updatedAt:serverTimestamp()},{merge:true});
     if(studentIndex[sid]) studentIndex[sid]={firstName,lastName,classId};
@@ -1732,14 +2597,14 @@ window._saveEditStudent = async ()=>{
   finally{ btn.textContent='Save Changes'; btn.disabled=false; }
 };
 
-/* â”€â”€ STUDENT ATTENDANCE HISTORY MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── STUDENT ATTENDANCE HISTORY MODAL ──────────────────────── */
 window._closeHist = ()=> document.getElementById('hist-modal').classList.add('hidden');
 window._showHistory = (sid)=>{
   const h=(window._histIndex||{})[sid]; const dates=window._histDates||[];
   if(!h){ toast('No history','No attendance history available yet.','a'); return; }
   document.getElementById('hist-title').textContent=h.name;
   const present=dates.filter(d=>{const st=h.days[d].status;return st==='present'||st==='late';}).length;
-  document.getElementById('hist-sub').innerHTML=`Roll ${h.roll||'â€”'} Â· attended <strong>${present}/${dates.length}</strong> recorded day(s)`;
+  document.getElementById('hist-sub').innerHTML=`Roll ${h.roll||'—'} · attended <strong>${present}/${dates.length}</strong> recorded day(s)`;
   const body=document.getElementById('hist-body');
   if(!dates.length){ body.innerHTML='<div class="loader" style="padding:18px;font-size:12px;">No recorded days yet.</div>'; }
   else body.innerHTML=`<table class="rt"><thead><tr><th></th><th>Date</th><th>Status</th><th>Entry</th><th>Exit</th></tr></thead><tbody>${
@@ -1748,14 +2613,14 @@ window._showHistory = (sid)=>{
         <td><span class="sdot ${ok?'g':'r'}"></span></td>
         <td style="font-weight:700;">${d}</td>
         <td>${rec.status==='present'?'<span class="badge bg">Present</span>':rec.status==='late'?'<span class="badge ba">Late</span>':'<span class="badge br">Absent</span>'}</td>
-        <td style="font-size:12px;color:var(--slate5);">${rec.entryTime||'â€”'}</td>
-        <td style="font-size:12px;color:var(--slate5);">${rec.exitAt||'â€”'}</td>
+        <td style="font-size:12px;color:var(--slate5);">${rec.entryTime||'—'}</td>
+        <td style="font-size:12px;color:var(--slate5);">${rec.exitAt||'—'}</td>
       </tr>`; }).join('')
   }</tbody></table>`;
   document.getElementById('hist-modal').classList.remove('hidden');
 };
 
-/* â”€â”€ PARENT MESSAGE COMPOSER (simulated / logged) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── PARENT MESSAGE COMPOSER (simulated / logged) ──────────── */
 let composeTargets = [];   // [{id,name,className}]
 const MSG_TEMPLATES = {
   wellbeing: (n,s)=>`Dear Parent,\n\nWe noticed ${n} was not scanned in at ${s} today. We simply want to check that all is well at home. Please reply or call the school office at your convenience.\n\nWarm regards,\n${s} Office`,
@@ -1789,7 +2654,7 @@ window._composeAppreciation = (id,name,className)=>
 window._celebrateAll = ()=>{
   const t=(window._perfect||[]).map(a=>({id:a.id,name:a.name,className:a.className}));
   if(!t.length){ toast('No perfect attendance yet','No students have full attendance this week.','a'); return; }
-  composeWith(t, `To: ${t.length} parents â€” full attendance this week`, 'appreciation');
+  composeWith(t, `To: ${t.length} parents — full attendance this week`, 'appreciation');
 };
 window._applyTpl = ()=>{
   const tpl=document.getElementById('msg-tpl').value;
@@ -1803,7 +2668,7 @@ window._sendMessages = async ()=>{
   const tpl=document.getElementById('msg-tpl').value;
   if(!body){ toast('Empty message','Write a message or pick a template.','a'); return; }
   if(!composeTargets.length){ toast('No recipients','No parents selected.','a'); return; }
-  const btn=document.getElementById('msg-send-btn'); btn.textContent='Sendingâ€¦'; btn.disabled=true;
+  const btn=document.getElementById('msg-send-btn'); btn.textContent='Sending…'; btn.disabled=true;
   try{
     for(const tgt of composeTargets){
       const personalised = composeTargets.length===1 ? body : body.replace(/your child/g, tgt.name);
@@ -1819,8 +2684,8 @@ window._sendMessages = async ()=>{
   finally{ btn.textContent='Log & Send'; btn.disabled=false; }
 };
 
-/* â”€â”€ RENDER HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-/* â”€â”€ STUDENT PHOTO / AVATAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── RENDER HELPERS ────────────────────────────────────────── */
+/* ── STUDENT PHOTO / AVATAR ───────────────────────────────── */
 function initials(s){ return ((s.firstName||'?').charAt(0)+(s.lastName||'').charAt(0)).toUpperCase(); }
 function avatar(s,size){ size=size||34;
   if(s.photoUrl) return `<img src="${s.photoUrl}" alt="" style="width:${size}px;height:${size}px;border-radius:10px;object-fit:cover;flex-shrink:0;border:1px solid var(--slate2);"/>`;
@@ -1868,14 +2733,14 @@ function feedHTML(e){
   const t=e.ts instanceof Date?e.ts:new Date();
   const time=t.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   return `<div class="fi"><div class="fl"><div class="fd ${e.ok?'ok':'bad'}">${ico(e.ok?IC.check:IC.alert,15)}</div>
-    <div><div class="fn">${e._name||'Unknown'}</div><div class="fs">${e.ok?'Entry':'Scan'} Â· ${e.gate||'Gate'}</div></div></div>
+    <div><div class="fn">${e._name||'Unknown'}</div><div class="fs">${e.ok?'Entry':'Scan'} · ${e.gate||'Gate'}</div></div></div>
     <span class="ft">${time}</span></div>`;
 }
 function careLabel(code){
-  return {'3_consecutive_absences':'Absent for 3 consecutive days.','late_pattern_monthly':'Late 4+ times this month.'}[code]||code||'â€”';
+  return {'3_consecutive_absences':'Absent for 3 consecutive days.','late_pattern_monthly':'Late 4+ times this month.'}[code]||code||'—';
 }
 
-/* â”€â”€ SEED â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── SEED ──────────────────────────────────────────────────── */
 // Idempotent: guarantees the 3 demo staff exist even if the school was seeded earlier
 async function ensureDemoStaff(code){
   const ts=serverTimestamp();
@@ -1917,18 +2782,18 @@ async function seedSchool(code){
   for(const r of[
     {studentId:'stu-001',firstName:'Alice',  lastName:'Johnson',status:'present',arrivalTime:'08:15 AM'},
     {studentId:'stu-002',firstName:'Bob',    lastName:'Smith',  status:'late',   arrivalTime:'08:45 AM'},
-    {studentId:'stu-003',firstName:'Charlie',lastName:'Davis',  status:'absent', arrivalTime:'â€”'},
+    {studentId:'stu-003',firstName:'Charlie',lastName:'Davis',  status:'absent', arrivalTime:'—'},
     {studentId:'stu-004',firstName:'Diana',  lastName:'Ross',   status:'present',arrivalTime:'08:12 AM'},
     {studentId:'stu-005',firstName:'Ethan',  lastName:'Hunt',   status:'present',arrivalTime:'08:18 AM'},
     {studentId:'stu-006',firstName:'Fiona',  lastName:'Green',  status:'present',arrivalTime:'08:10 AM'},
   ]) await addDoc(subCol(code,'attendanceDays',dayId,'records'),{...r,markedManually:false});
   await addDoc(col(code,'careAlerts'),{studentId:'stu-003',studentName:'Charlie Davis',classId:'class-10A',ruleCode:'3_consecutive_absences',priority:'high',status:'open',createdAt:ts});
   await addDoc(col(code,'careAlerts'),{studentId:'stu-002',studentName:'Bob Smith',classId:'class-10A',ruleCode:'late_pattern_monthly',priority:'medium',status:'open',createdAt:ts});
-  console.log('âœ… School seeded:',code);
+  console.log('✅ School seeded:',code);
   toast('School data seeded!','Dashboard is now populated with demo data.','g');
 }
 
-/* â”€â”€ AUTO RESTORE SESSION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── AUTO RESTORE SESSION ─────────────────────────────────── */
 (async()=>{
   try{
     const s=JSON.parse(localStorage.getItem('np'));
