@@ -303,6 +303,12 @@
     .spinner{width:18px;height:18px;border:3px solid var(--slate2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
     .loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:44px;color:var(--slate4);font-size:13px;font-weight:600;}
     select.cs{padding:8px 12px;border:2px solid var(--blue-mid);border-radius:var(--r-md);background:var(--white-warm);color:var(--blue-dark);font-size:13px;font-weight:700;outline:none;cursor:pointer;}
+    @media print{
+      .sb, .tb, #emg-banner-wrap, #marquee-wrap, .no-print{display:none !important;}
+      .ma{margin:0 !important;}
+      .pc{padding:0 !important;}
+      body{background:#fff !important;}
+    }
   </style>
 </head>
 <body>
@@ -807,12 +813,16 @@ let curPage = 'dashboard';
 let _focusClassId = null; // set by _goClass() to highlight/scroll to a class on the Classes page
 let _focusStudentId = null; // set by omni-search to highlight/scroll to a student on the Students page
 let _curLoginDocId = null; // this session's staffLogins doc, so sign-out can stamp logoutAt
-let _teacherClasses = [];      // [{id,name}] every class this teacher can see (homeroom + subject), cached at login
+let _teacherClasses = [];      // [{id,name}] every class this teacher can see (homeroom + subject + today's substitute cover), cached at login
 let _teacherActiveClass = null; // which one Dashboard / My Class is currently showing
+let _todaySchedule = [];       // this teacher's own timetable slots for today's weekday
+let _todayCoverage = [];       // substitutions where she's covering someone else's class today
 function activeTeacherClass(){
-  const ids=sess.classIds||[];
-  if(_teacherActiveClass && ids.includes(_teacherActiveClass)) return _teacherActiveClass;
-  return ids[0]||'class-10A';
+  // _teacherClasses (not sess.classIds) is the source of truth here — it also
+  // covers a class she's substitute-teaching today, which never touches
+  // classIds since that's a one-day cover, not a standing access grant.
+  if(_teacherActiveClass && _teacherClasses.some(cl=>cl.id===_teacherActiveClass)) return _teacherActiveClass;
+  return (_teacherClasses[0] && _teacherClasses[0].id) || (sess.classIds||[])[0] || 'class-10A';
 }
 // Navigation between classes now happens via one sidebar tab per class
 // (see buildNav()), so there's no separate in-page switcher any more.
@@ -826,6 +836,22 @@ const ref = (c,n,i) => doc(db,'schools',c,n,i);
 const subCol = (c,n,i,s) => collection(db,'schools',c,n,i,s);
 const today = () => new Date().toISOString().split('T')[0];
 const dOff  = d => { const x=new Date(); x.setDate(x.getDate()+d); return x.toISOString().split('T')[0]; };
+
+/* ── Timetable ─────────────────────────────────────────────── */
+const TT_DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+const TT_SUBJECTS = ['English','Mathematics','Science','Social Studies','Hindi','Computer Science','Physical Education'];
+const TT_PERIODS = [
+  {period:1,start:'8:00am', end:'8:40am'},
+  {period:2,start:'8:40am', end:'9:20am'},
+  {period:3,start:'9:20am', end:'10:00am'},
+  {period:4,start:'10:20am',end:'11:00am'}, // after a short break
+  {period:5,start:'11:00am',end:'11:40am'},
+  {period:6,start:'11:40am',end:'12:20pm'},
+  {period:7,start:'1:10pm', end:'1:50pm'},  // after lunch
+];
+// dateStr's weekday as 'Mon'..'Sun' — parsed at local midnight so it doesn't
+// shift a day depending on the browser's timezone offset from UTC.
+function dayNameFor(dateStr){ return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(dateStr+'T00:00:00').getDay()]; }
 // When multiple records exist for one student, prefer present > late > absent (avoids stale-absent overriding a fresh scan)
 const _rank = {present:3, late:2, absent:1};
 function mergeStatus(map, r){ const sid=r.studentId; if(!sid) return; const cur=map[sid]; if(!cur || (_rank[r.status]||0) >= (_rank[cur.status]||0)) map[sid]=r; }
@@ -841,6 +867,7 @@ const IC = {
   bell: 'M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9',
   out:  'M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1',
   doc:  'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+  calendar: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
 };
 
 /* ── Toast ─────────────────────────────────────────────────── */
@@ -1789,6 +1816,24 @@ async function enterApp(){
           cl.pendingCount=s.size;
         }catch(e){ cl.pendingCount=0; }
       }));
+      // Today's own bell schedule (for the "Today's Schedule" dashboard card),
+      // plus any class she's covering as a substitute today — added as a
+      // temporary sidebar tab on top of her regular classes. This is purely a
+      // for-today addition: it never touches classIds/subjectRequests, so it
+      // disappears again once the substitution's date has passed.
+      const day=dayNameFor(today());
+      const [ttSnap, coverSnap]=await Promise.all([
+        getDocs(query(col(sess.code,'timetable'),where('teacherId','==',sess.staffId),where('day','==',day))).catch(()=>({forEach:()=>{}})),
+        getDocs(query(col(sess.code,'substitutions'),where('substituteTeacherId','==',sess.staffId),where('date','==',today()),where('status','==','active'))).catch(()=>({forEach:()=>{}})),
+      ]);
+      _todaySchedule=[]; ttSnap.forEach(d=>_todaySchedule.push({id:d.id,...d.data()}));
+      _todaySchedule.sort((a,b)=>a.period-b.period);
+      _todayCoverage=[]; coverSnap.forEach(d=>_todayCoverage.push({id:d.id,...d.data()}));
+      _todayCoverage.forEach(cov=>{
+        if(!_teacherClasses.some(cl=>cl.id===cov.classId)){
+          _teacherClasses.push({id:cov.classId, name:(cov.className||cov.classId).replace('class-',''), isClassTeacher:false, isSubstitute:true, pendingCount:0});
+        }
+      });
     }catch(e){ console.warn('teacher classes load failed:', e.message); }
   }
   buildNav(); // after _teacherClasses is populated, since teacher nav is one tab per class
@@ -1820,7 +1865,7 @@ function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_opera
 
 /* ── NAV ───────────────────────────────────────────────────── */
 const navItems = {
-  principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'classes',l:'Classes',i:IC.doc},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart},{id:'messages',l:'Messages',i:IC.bell}],
+  principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'classes',l:'Classes',i:IC.doc},{id:'timetable',l:'Timetable',i:IC.calendar},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart},{id:'messages',l:'Messages',i:IC.bell}],
   teacher:      [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'class',l:'My Class',i:IC.users},{id:'care',l:'Care Queue',i:IC.heart}],
   gate_operator:[{id:'dashboard',l:'Gate Monitor',i:IC.chart},{id:'tags',l:'Tag Manager',i:IC.tag}],
   parent:       [{id:'dashboard',l:'My Child',i:IC.heart}],
@@ -1831,7 +1876,7 @@ function buildNav(){
   if(sess.role==='teacher' && _teacherClasses.length){
     // One sidebar tab per class she can see — homeroom first, subject classes
     // after — instead of a single generic "My Class" entry.
-    const classTabs=_teacherClasses.map(cl=>({id:`cls:${cl.id}`, l: cl.isClassTeacher?`${cl.name} · Class Teacher`:cl.name, i:IC.users, badge:cl.pendingCount||0}));
+    const classTabs=_teacherClasses.map(cl=>({id:`cls:${cl.id}`, l: cl.isClassTeacher?`${cl.name} · Class Teacher`:cl.isSubstitute?`${cl.name} · Covering Today`:cl.name, i:IC.users, badge:cl.pendingCount||0}));
     items=[{id:'dashboard',l:'Dashboard',i:IC.chart}, ...classTabs, {id:'care',l:'Care Queue',i:IC.heart}];
   }
   const activeMatch = items.some(it=>it.id===curPage);
@@ -1844,6 +1889,13 @@ window._nav = async (el,pg)=>{
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
   await showPage(pg);
+};
+// For buttons that jump to a class tab from somewhere other than the sidebar
+// itself (e.g. the "You're covering..." dashboard card) — no DOM element to
+// mark active by hand, so just re-render the whole nav after navigating.
+window._goToClass = async (classId)=>{
+  await showPage(`cls:${classId}`);
+  buildNav();
 };
 
 /* Principal's personal watchlist — pin any class so it always surfaces on her dashboard,
@@ -2340,10 +2392,12 @@ async function showPage(pg){
     else if (pg==='care')      el.innerHTML = await pgCare();
     else if (pg==='students')  el.innerHTML = await pgStudents();
     else if (pg==='classes')   el.innerHTML = await pgClasses();
+    else if (pg==='timetable') el.innerHTML = await pgTimetable();
     else if (pg==='messages')  el.innerHTML = await pgMessages();
     else if (pg==='class' || pg.startsWith('cls:')) el.innerHTML = await pgTeacher();
     else el.innerHTML='<div class="loader">🚧 Coming soon.</div>';
     if(pg==='tags') await loadRawScans();
+    if(pg==='timetable') window._renderTeacherTimetable();
     if(pg==='class' || pg.startsWith('cls:')) await loadClassScans();
     if(pg==='classes' && _focusClassId){
       const row=document.getElementById(`cls-row-${_focusClassId}`);
@@ -2638,12 +2692,16 @@ async function pgTeacherDash(){
   const results=await Promise.all([
     getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'subjectRequests'),where('teacherId','==',sess.staffId))).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'staffMessages'),where('teacherId','==',sess.staffId))).catch(()=>({forEach:()=>{}})),
     ...weekDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${cls}`,'records')).catch(()=>({forEach:()=>{}})))
   ]);
-  const studSnap=results[0]; const myReqSnap=results[1]; const weekSnaps=results.slice(2);
+  const studSnap=results[0]; const myReqSnap=results[1]; const myMsgSnap=results[2]; const weekSnaps=results.slice(3);
   const students=[]; studSnap.forEach(dd=>{ const s={id:dd.id,...dd.data()}; if(s.classId===cls) students.push(s); });
   const myRequests=[]; myReqSnap.forEach(d=>myRequests.push({id:d.id,...d.data()}));
   myRequests.sort((a,b)=>{ const asOf=x=>{ try{ return x.createdAt?.toDate?x.createdAt.toDate().getTime():0; }catch{ return 0; } }; return asOf(b)-asOf(a); });
+  const asOf=x=>{ try{ return x.sentAt?.toDate?x.sentAt.toDate().getTime():0; }catch{ return 0; } };
+  const myMessages=[]; myMsgSnap.forEach(d=>myMessages.push({id:d.id,...d.data()}));
+  myMessages.sort((a,b)=>asOf(b)-asOf(a));
   const byDate=weekDates.map((d,i)=>{ const m={}; weekSnaps[i].forEach(dc=>mergeStatus(m,dc.data())); return m; });
   const isFuture=weekDates.map(d=>d>t);
   const hasData=weekDates.map((d,i)=>Object.keys(byDate[i]).length>0);
@@ -2680,6 +2738,33 @@ async function pgTeacherDash(){
   const reqBadge={pending:'ba',approved:'bg',rejected:'br'};
   const reqLabel={pending:'Pending approval',approved:'Approved',rejected:'Not approved'};
 
+  // "Covering Today" — surfaced above everything else since it's time-sensitive
+  // and easy to miss otherwise: she may not even normally open this class.
+  const coverageHTML = !_todayCoverage.length ? '' : `<div class="card" style="margin-bottom:18px;border-top:3px solid var(--amber);background:var(--amber-light);">
+    <div class="ct">${ico(IC.alert,15)} You're Covering ${_todayCoverage.length} Class${_todayCoverage.length>1?'es':''} Today</div>
+    ${_todayCoverage.map(cov=>`<div class="fi">
+      <div class="fl"><div class="fd bad">${ico(IC.users,14)}</div><div><div class="fn">${(cov.className||'').replace('class-','')} · Period ${cov.period} · ${cov.subject}</div><div class="fs">${cov.start}–${cov.end} · covering for ${cov.originalTeacherName}</div></div></div>
+      <button class="btn btn-p btn-sm" onclick="window._goToClass('${cov.classId}')">Go to class</button>
+    </div>`).join('')}
+  </div>`;
+
+  const todayScheduleRows = _todaySchedule.map(sl=>`<div class="fi">
+    <div class="fl"><div class="fd ok">${ico(IC.calendar,14)}</div><div><div class="fn">P${sl.period} · ${(sl.className||'').replace('class-','')} · ${sl.subject}</div><div class="fs">${sl.start}–${sl.end}</div></div></div>
+  </div>`).join('');
+  const todayScheduleHTML = `<div class="card" style="margin-bottom:18px;">
+    <div class="ct">${ico(IC.calendar,15)} Today's Schedule</div>
+    ${_todaySchedule.length?todayScheduleRows:'<p style="font-size:12px;color:var(--slate5);padding:8px 0;">No periods scheduled for you today.</p>'}
+  </div>`;
+
+  const principalMsgRows = myMessages.slice(0,8).map(m=>`<div class="fi">
+    <div class="fl"><div class="fd ${m.isSubstitutionNotice?'bad':'ok'}">${ico(IC.bell,14)}</div><div><div class="fn">${(m.message||'').replace(/</g,'&lt;')}</div><div class="fs">${m.sentByName||'Principal'} · ${m.channel==='sms'?'Mobile':'Email'}</div></div></div>
+    <span class="ft">${fmtWhen(m.sentAt)}</span>
+  </div>`).join('');
+  const principalMsgHTML = !myMessages.length ? '' : `<div class="card" style="margin-bottom:18px;">
+    <div class="ct">${ico(IC.bell,15)} Messages from Principal <span style="font-size:11px;font-weight:500;color:var(--slate4);">${myMessages.length}</span></div>
+    ${principalMsgRows}
+  </div>`;
+
   return `
   <div class="ph">
     <div><h1>Dashboard</h1><p class="sub">Weekly summary · Class <span>${clsLabel}</span></p></div>
@@ -2688,6 +2773,9 @@ async function pgTeacherDash(){
       <button class="btn btn-g btn-sm" onclick="window._openSubjectRequest()">${ico(IC.doc,13)} Request Another Class</button>
     </div>
   </div>
+  ${coverageHTML}
+  ${todayScheduleHTML}
+  ${principalMsgHTML}
   ${myRequests.length?`<div class="card" style="margin-bottom:18px;">
     <div class="ct">My Class Requests</div>
     ${myRequests.map(r=>`<div class="fi">
@@ -3186,6 +3274,170 @@ async function pgMessages(){
       <p id="msgs-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`:'<div class="loader" style="padding:22px;font-size:12px;">No messages sent yet. Use the dashboard or a class page to message parents.</div>'}
   </div>`;
 }
+
+/* ── TIMETABLE (principal) ────────────────────────────────────
+   Weekly bell schedule per class (seeded once — see ensureTimetable — and
+   never auto-regenerated, so a substitution or manual edit here always
+   sticks). Answers "who teaches what, when" and lets the principal cover an
+   absent teacher's periods, notifying both the substitute and the absent
+   teacher through the existing staff-messages log. */
+let _ttCtx = { teachers:[], classes:[], slots:[], subsToday:[], subByOrigSlot:{}, day:'Mon', date:'' };
+
+async function pgTimetable(){
+  const c=sess.code, t=today(), day=dayNameFor(t);
+  const [staffSnap, ttSnap, subSnap] = await Promise.all([
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(col(c,'timetable')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'substitutions'),where('date','==',t),where('status','==','active'))).catch(()=>({forEach:()=>{}})),
+  ]);
+  const teachers=[]; staffSnap.forEach(d=>{ const s={id:d.id,...d.data()}; if(s.role==='teacher') teachers.push(s); });
+  teachers.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  const slots=[]; ttSnap.forEach(d=>slots.push({id:d.id,...d.data()}));
+  const subsToday=[]; subSnap.forEach(d=>subsToday.push({id:d.id,...d.data()}));
+  const subByOrigSlot={}; subsToday.forEach(s=>{ subByOrigSlot[`${s.classId}_${s.day}_${s.period}`]=s; });
+  _ttCtx = { teachers, slots, subsToday, subByOrigSlot, day, date:t };
+
+  const teacherOptions = teachers.map(tt=>`<option value="${tt.id}">${tt.name}</option>`).join('');
+
+  const todayGridRows = teachers.map(tt=>{
+    const cells = TT_PERIODS.map(({period})=>{
+      const slot = slots.find(s=>s.teacherId===tt.id && s.day===day && s.period===period);
+      if(!slot) return `<td style="text-align:center;color:var(--slate3);">—</td>`;
+      const sub = subByOrigSlot[`${slot.classId}_${day}_${period}`];
+      const clsLabel=(slot.className||slot.classId).replace('class-','');
+      if(sub) return `<td style="text-align:center;"><span class="badge br" style="font-size:9.5px;" title="Covered by ${sub.substituteTeacherName}">${clsLabel} ⇄</span></td>`;
+      return `<td style="text-align:center;"><span class="badge bb" style="font-size:9.5px;" title="${slot.subject}">${clsLabel}</span></td>`;
+    }).join('');
+    return `<tr><td style="font-weight:700;white-space:nowrap;font-size:12.5px;">${tt.name}</td>${cells}</tr>`;
+  }).join('');
+
+  const subRows = subsToday.map(s=>`<div class="fi">
+    <div class="fl"><div class="fd bad">${ico(IC.alert,14)}</div><div><div class="fn">${(s.className||'').replace('class-','')} · P${s.period} · ${s.subject}</div><div class="fs">${s.originalTeacherName} → <strong>${s.substituteTeacherName}</strong></div></div></div>
+    <button class="qa-btn" onclick="window._cancelSubstitution('${s.id}')">Cancel</button>
+  </div>`).join('');
+
+  return `
+  <div class="ph no-print"><div><h1>Timetable</h1><p class="sub">Weekly class schedule — who teaches what, when</p></div>
+    <button class="btn btn-g btn-w" onclick="window.print()">🖨️ Print</button>
+  </div>
+
+  <div class="card no-print">
+    <div class="ct" style="display:flex;align-items:center;gap:10px;">Teacher's Weekly Schedule
+      <select id="tt-teacher-select" class="cs" onchange="window._renderTeacherTimetable()" style="margin-left:auto;">${teacherOptions}</select>
+    </div>
+    <div id="tt-teacher-grid" style="overflow-x:auto;"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="ct">Today's Schedule — All Teachers <span class="badge ba">${day}, ${new Date(t+'T00:00:00').toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span></div>
+    ${teachers.length?`<div style="overflow-x:auto;"><table class="rt">
+      <thead><tr><th>Teacher</th>${TT_PERIODS.map(p=>`<th style="text-align:center;">P${p.period}</th>`).join('')}</tr></thead>
+      <tbody>${todayGridRows}</tbody></table></div>
+      <p style="font-size:10.5px;color:var(--slate4);margin-top:10px;">⇄ marks a period covered by a substitute today.</p>`:'<div class="loader" style="padding:20px;font-size:12px;">No teachers yet.</div>'}
+  </div>
+
+  <div class="card no-print" style="margin-top:16px;border-top:3px solid var(--amber);">
+    <div class="ct">${ico(IC.alert,15)} Assign a Substitute Teacher</div>
+    <div class="fg"><label>Teacher who is absent</label><select id="sub-teacher-select">${teacherOptions}</select></div>
+    <div class="fg"><label>Date</label><input type="date" id="sub-date-input" value="${t}"/></div>
+    <button type="button" class="btn btn-p btn-w" onclick="window._loadAbsentTeacherPeriods()">Find their periods</button>
+    <div id="sub-periods-list" style="margin-top:12px;"></div>
+  </div>
+
+  <div class="card no-print" style="margin-top:16px;">
+    <div class="ct">${ico(IC.users,15)} Today's Substitutions <span style="font-size:11px;font-weight:500;color:var(--slate4);">${subsToday.length}</span></div>
+    ${subsToday.length?subRows:'<p style="font-size:12px;color:var(--slate5);padding:8px 0;">No substitutions arranged for today.</p>'}
+  </div>`;
+}
+
+window._renderTeacherTimetable = ()=>{
+  const sel=document.getElementById('tt-teacher-select');
+  const grid=document.getElementById('tt-teacher-grid');
+  if(!sel || !grid) return;
+  const teacherId=sel.value;
+  const rows=TT_PERIODS.map(({period,start})=>{
+    const cells=TT_DAYS.map(day=>{
+      const slot=_ttCtx.slots.find(s=>s.teacherId===teacherId && s.day===day && s.period===period);
+      if(!slot) return `<td style="text-align:center;color:var(--slate3);">—</td>`;
+      const clsLabel=(slot.className||slot.classId).replace('class-','');
+      const sub=_ttCtx.subByOrigSlot[`${slot.classId}_${day}_${period}`];
+      if(sub && day===_ttCtx.day) return `<td style="text-align:center;"><span class="badge br" style="font-size:10px;">${clsLabel} — covered by ${sub.substituteTeacherName}</span></td>`;
+      return `<td style="text-align:center;"><div style="font-size:11.5px;font-weight:700;color:var(--slate8);">${clsLabel}</div><div style="font-size:10px;color:var(--slate5);">${slot.subject}</div></td>`;
+    }).join('');
+    return `<tr><td style="font-weight:700;white-space:nowrap;font-size:11.5px;color:var(--slate5);">P${period}<br><span style="font-weight:500;font-size:9.5px;">${start}</span></td>${cells}</tr>`;
+  }).join('');
+  grid.innerHTML = `<table class="rt"><thead><tr><th>Period</th>${TT_DAYS.map(d=>`<th style="text-align:center;">${d}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
+};
+
+window._loadAbsentTeacherPeriods = ()=>{
+  const teacherId=document.getElementById('sub-teacher-select').value;
+  const date=document.getElementById('sub-date-input').value || today();
+  const day=dayNameFor(date);
+  const teacher=_ttCtx.teachers.find(t=>t.id===teacherId);
+  const mySlots=_ttCtx.slots.filter(s=>s.teacherId===teacherId && s.day===day).sort((a,b)=>a.period-b.period);
+  const list=document.getElementById('sub-periods-list');
+  if(!mySlots.length){ list.innerHTML=`<p style="font-size:12px;color:var(--slate5);">${teacher?teacher.name:'This teacher'} has no periods on ${day}.</p>`; return; }
+  // Anyone already teaching elsewhere at this exact day+period is flagged
+  // "busy" in the substitute picker, rather than let the principal double-book them.
+  const busyAt = period => new Set(_ttCtx.slots.filter(s=>s.day===day && s.period===period).map(s=>s.teacherId));
+  list.innerHTML = mySlots.map(slot=>{
+    const already=_ttCtx.subsToday.find(s=>s.classId===slot.classId && s.day===day && s.period===slot.period && s.date===date);
+    const clsLabel=(slot.className||slot.classId).replace('class-','');
+    if(already) return `<div class="fi">
+      <div class="fl"><div class="fd ok">${ico(IC.check,14)}</div><div><div class="fn">${clsLabel} · P${slot.period} (${slot.start}–${slot.end}) · ${slot.subject}</div><div class="fs">Covered by ${already.substituteTeacherName}</div></div></div>
+    </div>`;
+    const busy=busyAt(slot.period);
+    const options=_ttCtx.teachers.filter(tt=>tt.id!==teacherId)
+      .map(tt=>`<option value="${tt.id}" ${busy.has(tt.id)?'disabled':''}>${tt.name}${busy.has(tt.id)?' (busy)':''}</option>`).join('');
+    return `<div class="fi" style="align-items:center;">
+      <div class="fl"><div class="fd bad">${ico(IC.alert,14)}</div><div><div class="fn">${clsLabel} · P${slot.period} (${slot.start}–${slot.end})</div><div class="fs">${slot.subject}</div></div></div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <select id="sub-pick-${slot.id}" style="font-size:12px;padding:5px 8px;border-radius:8px;border:1px solid var(--slate2);">${options}</select>
+        <button class="qa-btn" onclick="window._assignSubstitute('${slot.id}','${date}')">Assign</button>
+      </div>
+    </div>`;
+  }).join('');
+};
+
+window._assignSubstitute = async (slotId, date)=>{
+  const slot=_ttCtx.slots.find(s=>s.id===slotId);
+  const pick=document.getElementById(`sub-pick-${slotId}`);
+  const substituteId=pick && pick.value;
+  if(!slot || !substituteId){ toast('Pick a substitute','Choose who will cover this period.','a'); return; }
+  const substitute=_ttCtx.teachers.find(t=>t.id===substituteId);
+  const original=_ttCtx.teachers.find(t=>t.id===slot.teacherId);
+  const clsLabel=(slot.className||slot.classId).replace('class-','');
+  try{
+    await addDoc(col(sess.code,'substitutions'),{
+      date, day:slot.day, classId:slot.classId, className:slot.className, period:slot.period,
+      start:slot.start, end:slot.end, subject:slot.subject,
+      originalTeacherId:slot.teacherId, originalTeacherName:original?original.name:'',
+      substituteTeacherId:substituteId, substituteTeacherName:substitute?substitute.name:'',
+      status:'active', createdBy:sess.staffId, createdByName:sess.name, createdAt:serverTimestamp(),
+    });
+    const when = date===today() ? 'today' : `on ${date}`;
+    await addDoc(col(sess.code,'staffMessages'),{
+      teacherId:substituteId, teacherName:substitute?substitute.name:'', channel:'email',
+      message:`You're covering ${slot.subject} for ${clsLabel}, Period ${slot.period} (${slot.start}–${slot.end}) ${when} — ${original?original.name:'the usual teacher'} is absent.`,
+      sentBy:sess.staffId, sentByName:sess.name, sentAt:serverTimestamp(), status:'sent', isSubstitutionNotice:true,
+    });
+    await addDoc(col(sess.code,'staffMessages'),{
+      teacherId:slot.teacherId, teacherName:original?original.name:'', channel:'email',
+      message:`${substitute?substitute.name:'A colleague'} will cover your ${slot.subject} class for ${clsLabel}, Period ${slot.period} ${when}.`,
+      sentBy:sess.staffId, sentByName:sess.name, sentAt:serverTimestamp(), status:'sent', isSubstitutionNotice:true,
+    });
+    toast('Substitute assigned', `${substitute?substitute.name:''} will cover ${clsLabel} P${slot.period} ${when}.`, 'g');
+    if(curPage==='timetable') await showPage('timetable');
+  }catch(e){ toast('Could not assign substitute', e.message, 'r'); }
+};
+
+window._cancelSubstitution = async (subId)=>{
+  try{
+    await updateDoc(ref(sess.code,'substitutions',subId),{status:'cancelled'});
+    toast('Substitution cancelled','','g');
+    if(curPage==='timetable') await showPage('timetable');
+  }catch(e){ toast('Could not cancel', e.message, 'r'); }
+};
 
 /* ── TAG MANAGER ───────────────────────────────────────────── */
 async function pgTags(){
@@ -3775,6 +4027,40 @@ async function ensureDemoSubjectLinks(code, roster){
   }));
 }
 
+// Deterministic Mon-Fri, 7-period-a-day timetable for every class: the class's
+// own homeroom teacher covers most periods, and two periods round-robin to
+// other teachers across the school (so every teacher ends up visiting a
+// couple of other classes too — real substance for the principal's
+// timetable view, not just 25 identical single-teacher grids).
+// First-run only — checked via a single existing-doc probe — so re-seeding on
+// every DEMO-01 login never overwrites a substitution or a manual edit a
+// principal has since made to a specific slot.
+async function ensureTimetable(code, roster){
+  const probe=await getDocs(query(col(code,'timetable'),limit(1))).catch(()=>({empty:true}));
+  if(!probe.empty) return;
+  const teachers=roster.teachers, n=teachers.length;
+  const slots=[];
+  roster.classes.forEach((cl,clsIdx)=>{
+    const homeroom=teachers.find(t=>t.id===cl.classTeacherId) || teachers[clsIdx%n];
+    const visitorA=teachers[(clsIdx+1)%n];
+    const visitorB=teachers[(clsIdx+2)%n];
+    TT_DAYS.forEach((day,dayIdx)=>{
+      TT_PERIODS.forEach(({period,start,end})=>{
+        // Periods 4 and 7 go to the two visiting teachers; everything else
+        // is the homeroom teacher (mirrors how smaller-grade Indian classes
+        // are commonly run, and keeps the demo internally consistent).
+        const teacher = period===4 ? visitorA : period===7 ? visitorB : homeroom;
+        const subject = TT_SUBJECTS[(period-1+dayIdx)%TT_SUBJECTS.length];
+        slots.push({
+          id:`${cl.id}_${day}_${period}`, classId:cl.id, className:cl.name, day, period, start, end,
+          subject, teacherId:teacher.id, teacherName:teacher.name,
+        });
+      });
+    });
+  });
+  await writeAllChunked(slots, s=>{ const {id,...rest}=s; return setDoc(ref(code,'timetable',id), rest); });
+}
+
 // Idempotent-ish: seeds today + the previous 4 calendar days of attendance across
 // every class, with each class's attendance quality driven by TIER_RATE so the
 // health/stats features have real variation to show. Skips a class+day it has
@@ -3825,6 +4111,7 @@ async function seedSchool(code){
   await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',address:'1 School Road',city:'Bangalore',isActive:true},{merge:true});
   await resetLegacyDemoData(code);
   const roster=await ensureIndianRoster(code);
+  await ensureTimetable(code, roster);
   if(isFirstRun){
     await setDoc(ref(code,'devices','device-001'),{name:'Main Gate A Reader',gateLabel:'Main Gate A',campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
     await setDoc(ref(code,'devices','device-002'),{name:'North Gate B Reader',gateLabel:'North Gate B',campusId:'campus-001',status:'online',readQualityPercent:97,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
