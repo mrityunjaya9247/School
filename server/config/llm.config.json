@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "baseUrl": "http://localhost:11434/v1",
+  "model": "qwen3:4b",
+  "timeoutMs": 12000,
+  "params": { "temperature": 0.3, "top_p": 0.9, "max_tokens": 400 },
+  "qwen3": { "disableThinking": true },
+  "promptFile": "prompts/rewrite.prompt.txt"
+}

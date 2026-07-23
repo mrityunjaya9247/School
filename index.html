@@ -95,6 +95,9 @@
     .fg input,.fg select{width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;transition:border-color .2s;}
     .fg input:focus,.fg select:focus{border-color:var(--blue);background:var(--white-warm);}
     .l-hint{margin-top:14px;padding:10px 13px;background:var(--blue-light);border-radius:var(--r-sm);font-size:12px;color:var(--blue-dark);border:1px solid var(--blue-mid);}
+    .role-seg{display:flex;background:var(--slate0);border:1px solid var(--slate2);border-radius:999px;padding:4px;margin-bottom:20px;gap:2px;}
+    .role-seg button{flex:1;border:none;background:transparent;padding:9px 10px;border-radius:999px;font-size:12.5px;font-weight:700;color:var(--slate5);cursor:pointer;transition:background .15s,color .15s;font-family:inherit;}
+    .role-seg button.on{background:var(--white-warm);color:var(--blue-dark);box-shadow:var(--sh-sm);}
 
     /* ── APP SHELL (framed, floating on canvas) ── */
     #page-app{display:flex;min-height:calc(100vh - 32px);margin:16px;background:var(--white-warm);border-radius:30px;overflow:hidden;box-shadow:0 30px 70px -14px rgba(120,80,50,.30),0 10px 26px -8px rgba(120,80,50,.16);}
@@ -107,6 +110,7 @@
     .ni:hover{background:rgba(255,255,255,.06);color:#fff;}
     .ni.active{background:var(--grad);color:#fff;font-weight:700;box-shadow:0 10px 22px -6px rgba(200,85,47,.55);}
     .ni svg{width:17px;height:17px;flex-shrink:0;}
+    .nav-badge{background:var(--red);color:#fff;font-size:10.5px;font-weight:800;min-width:18px;height:18px;line-height:18px;text-align:center;border-radius:999px;padding:0 5px;flex-shrink:0;}
     .sb-foot{padding:14px;border-top:1px solid rgba(255,255,255,.08);}
     .ub{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r-md);background:rgba(255,255,255,.055);margin-bottom:8px;}
     .ua{width:34px;height:34px;border-radius:11px;background:var(--grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;}
@@ -127,6 +131,19 @@
       .marquee-track{animation:none;padding-left:20px;white-space:normal;}
       .marquee-wrap{white-space:normal;}
     }
+
+    /* ── EMERGENCY BANNER (static, not scrolling — needs to be seen instantly) ── */
+    .emg-banner{background:linear-gradient(120deg,#b5432e,#8f3320);color:#fff;padding:12px 26px;display:flex;align-items:center;gap:12px;position:sticky;top:64px;z-index:9;box-shadow:0 4px 14px -4px rgba(143,51,32,.5);animation:emgPulse 2.2s ease-in-out infinite;}
+    .emg-banner svg{width:20px;height:20px;flex-shrink:0;}
+    .emg-banner .emg-body{flex:1;min-width:0;}
+    .emg-banner .emg-title{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.85;}
+    .emg-banner .emg-msg{font-size:13.5px;font-weight:700;line-height:1.4;}
+    .emg-banner .emg-meta{font-size:11px;opacity:.8;font-weight:600;margin-top:2px;}
+    .emg-banner .emg-close{background:rgba(255,255,255,.16);border:none;color:#fff;width:26px;height:26px;border-radius:8px;flex-shrink:0;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+    .emg-banner .emg-close:hover{background:rgba(255,255,255,.28);}
+    @keyframes emgPulse{0%,100%{box-shadow:0 4px 14px -4px rgba(143,51,32,.5);}50%{box-shadow:0 4px 22px -2px rgba(181,67,46,.75);}}
+    @media (prefers-reduced-motion:reduce){ .emg-banner{animation:none;} }
+
     .tb-l{display:flex;align-items:center;gap:10px;}
     .tp{font-size:11px;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.6px;}
     .ts{display:flex;align-items:center;gap:7px;background:var(--green-light);padding:4px 12px;border-radius:999px;}
@@ -312,7 +329,12 @@
   <div class="lr">
     <div class="lbox">
       <h2>Welcome to AARNA</h2>
-      <p class="sub">Sign in to your school workspace.</p>
+      <p class="sub" id="login-sub">Sign in to your school workspace.</p>
+
+      <div class="role-seg" id="login-role-seg">
+        <button type="button" class="on" data-role="staff" onclick="window._setLoginRole('staff')">School Staff</button>
+        <button type="button" data-role="parent" onclick="window._setLoginRole('parent')">Parent / Guardian</button>
+      </div>
 
       <form id="login-form">
         <div class="fg">
@@ -320,20 +342,20 @@
           <input id="f-code" type="text" placeholder="e.g. DEMO-01" required />
         </div>
         <div class="fg">
-          <label>Work Email</label>
+          <label id="f-email-label">Work Email</label>
           <input id="f-email" type="email" list="email-list" placeholder="Select or type your email" autocomplete="off" required />
           <datalist id="email-list"></datalist>
         </div>
         <button type="submit" class="btn btn-p btn-lg btn-w" id="login-btn">Enter Dashboard</button>
       </form>
 
-      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--slate5);">
+      <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--slate5);" id="create-workspace-link">
         Setting up your school for the first time?
         <button type="button" onclick="window._openSetup()" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;padding:0;">Create a workspace &rarr;</button>
       </div>
 
-      <div class="l-hint" style="margin-top:14px;">
-        <strong>Quick demo:</strong> code <strong>DEMO-01</strong>, email <strong>principal@demo-01</strong> (or teacher.a@demo-01 / teacher.b@demo-01).
+      <div class="l-hint" style="margin-top:14px;" id="login-hint">
+        <strong>Quick demo:</strong> code <strong>DEMO-01</strong>, email <strong>principal@demo-01</strong> (or a class teacher, e.g. teacher.g6a@demo-01).
       </div>
     </div>
   </div>
@@ -415,8 +437,8 @@
     <header class="tb">
       <div class="tb-l">
         <span class="tp" id="tp-role">—</span>
-        <div class="ts"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connecting…</span></div>
-        <button onclick="window._refreshFeed()" title="Refresh feed" style="background:var(--slate1);border:1px solid var(--slate2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--slate5);cursor:pointer;display:flex;align-items:center;gap:5px;">
+        <div class="ts" id="tb-live-status"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connecting…</span></div>
+        <button id="tb-refresh-btn" onclick="window._refreshFeed()" title="Refresh feed" style="background:var(--slate1);border:1px solid var(--slate2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--slate5);cursor:pointer;display:flex;align-items:center;gap:5px;">
           <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           Refresh
         </button>
@@ -443,6 +465,7 @@
         </button>
       </div>
     </header>
+    <div id="emg-banner-wrap" class="hidden"></div>
     <div id="marquee-wrap" class="marquee-wrap hidden"></div>
     <div class="pc" id="pc">
       <div class="loader"><div class="spinner"></div>Loading…</div>
@@ -557,14 +580,35 @@
         <option value="absence">Absence confirmation</option>
         <option value="late">Late arrival note</option>
         <option value="appreciation">Appreciation / well done</option>
+        <option value="homework">Homework</option>
+        <option value="emergency">🚨 Emergency</option>
         <option value="custom">Custom message&hellip;</option>
       </select>
     </div>
     <div class="fg"><label>Channel</label>
-      <select id="msg-channel"><option value="email">Email</option><option value="sms">SMS</option></select>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;padding:6px 2px 2px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--slate7);cursor:pointer;"><input type="checkbox" id="msg-ch-portal" checked style="width:15px;height:15px;"/> Parent Portal</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--slate7);cursor:pointer;"><input type="checkbox" id="msg-ch-email" checked style="width:15px;height:15px;"/> Email</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--slate7);cursor:pointer;"><input type="checkbox" id="msg-ch-message" style="width:15px;height:15px;"/> Message</label>
+      </div>
+      <p style="font-size:10.5px;color:var(--slate4);margin-top:5px;">Mix and match — e.g. Parent Portal + Email, or Message only.</p>
     </div>
     <div class="fg" style="margin-bottom:8px;"><label>Message</label>
       <textarea id="msg-body" rows="6" style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;"></textarea>
+      <div id="ai-rewrite-bar" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:9px;">
+        <button type="button" id="ai-rewrite-btn" class="qa-btn" onclick="window._improveWithAI()">✨ Improve with AI</button>
+        <div id="ai-lang-toggle" style="display:flex;gap:4px;"></div>
+        <div id="ai-tone-toggle" style="display:flex;gap:4px;"></div>
+      </div>
+      <div id="ai-rewrite-notice" class="hidden" style="margin-top:8px;font-size:12px;color:var(--slate5);background:var(--slate0);border-radius:8px;padding:8px 11px;"></div>
+      <div id="ai-rewrite-preview" class="hidden" style="margin-top:8px;background:var(--slate0);border:1px solid var(--slate2);border-radius:var(--r-md);padding:11px 14px;">
+        <div style="font-size:10.5px;font-weight:700;color:var(--slate5);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;">AI Suggestion</div>
+        <p id="ai-rewrite-suggestion" style="font-size:13.5px;color:var(--slate8);white-space:pre-line;line-height:1.5;margin-bottom:10px;"></p>
+        <div style="display:flex;gap:8px;">
+          <button type="button" class="btn btn-p btn-sm" onclick="window._useAiSuggestion()">Use this</button>
+          <button type="button" class="btn btn-g btn-sm" onclick="window._dismissAiSuggestion()">Keep mine</button>
+        </div>
+      </div>
     </div>
     <p style="font-size:11px;color:var(--slate5);margin-bottom:14px;">Nothing is sent to a real inbox in this pilot build &mdash; messages are logged with a delivery status you can review.</p>
     <div style="display:flex;gap:10px;">
@@ -626,11 +670,114 @@
   </div>
 </div>
 
+<!-- TEACHER LOGIN ACTIVITY -->
+<div id="teacherlog-modal" class="hidden" style="position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeTeacherLog()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:0;width:min(900px,96vw);max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);overflow:hidden;">
+    <div style="padding:20px 26px;border-bottom:1px solid var(--slate1);display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-shrink:0;">
+      <div>
+        <h2 style="font-family:var(--font-display);font-size:19px;font-weight:700;color:var(--slate8);">Teacher Login Activity</h2>
+        <p style="font-size:12px;color:var(--slate5);margin-top:3px;">Who's signed in today, and messages sent to teachers</p>
+      </div>
+      <button onclick="window._closeTeacherLog()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <div id="teacherlog-body" style="padding:20px 26px;overflow-y:auto;flex:1;"></div>
+  </div>
+</div>
+
+<!-- MESSAGE A TEACHER -->
+<div id="staffmsg-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeStaffMsg()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:480px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div>
+        <h2 style="font-size:19px;font-weight:800;color:var(--slate8);">Message Teacher</h2>
+        <p style="font-size:13px;color:var(--slate5);margin-top:2px;" id="staffmsg-to">&mdash;</p>
+      </div>
+      <button onclick="window._closeStaffMsg()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <div class="fg"><label>Channel</label>
+      <select id="staffmsg-channel"><option value="email">Email</option><option value="sms">Mobile (SMS)</option></select>
+    </div>
+    <div class="fg" style="margin-bottom:8px;"><label>Message</label>
+      <textarea id="staffmsg-body" rows="5" style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;"></textarea>
+    </div>
+    <p style="font-size:11px;color:var(--slate5);margin-bottom:14px;">Nothing is sent to a real inbox in this pilot build — logged here with a delivery status for future reference.</p>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-g btn-w" onclick="window._closeStaffMsg()">Cancel</button>
+      <button type="button" class="btn btn-p btn-w" onclick="window._sendStaffMsg()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- EMERGENCY BROADCAST (principal) -->
+<div id="emergency-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeEmergency()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:520px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;border-top:4px solid #b5432e;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:34px;height:34px;border-radius:10px;background:#f6ddd4;color:#b5432e;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg style="width:17px;height:17px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v4m0 4h.01M5.1 19h13.8c1.5 0 2.5-1.7 1.7-3L13.7 4c-.8-1.3-2.7-1.3-3.5 0L3.3 16c-.8 1.3.2 3 1.7 3z"/></svg>
+        </div>
+        <h2 style="font-size:19px;font-weight:800;color:var(--slate8);">Emergency Broadcast</h2>
+      </div>
+      <button onclick="window._closeEmergency()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <p style="font-size:12px;color:var(--slate5);margin-bottom:16px;">This shows immediately as an urgent banner — use it only for genuine emergencies (lockdown, closure, safety incident).</p>
+    <div class="fg" style="margin-bottom:14px;">
+      <label>Message</label>
+      <textarea id="emg-text" rows="4" placeholder="e.g. School will close early today at 1pm due to a water supply issue. Please arrange pickup." style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--red-mid);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;"></textarea>
+    </div>
+    <div id="emg-choose">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button type="button" class="btn btn-o btn-w" onclick="window._emgAskConfirm('teachers')">Send to All Teachers</button>
+        <button type="button" class="btn btn-w" style="background:#b5432e;color:#fff;" onclick="window._emgAskConfirm('all')">Send to All Teachers &amp; Parents</button>
+      </div>
+    </div>
+    <div id="emg-confirm" class="hidden" style="background:#f6ddd4;border:1px solid #e8b3a2;border-radius:var(--r-md);padding:14px;margin-top:4px;">
+      <p style="font-size:13px;font-weight:700;color:#8f3320;margin-bottom:12px;" id="emg-confirm-text">Are you sure?</p>
+      <div style="display:flex;gap:10px;">
+        <button type="button" class="btn btn-g btn-w" onclick="window._emgCancelConfirm()">Cancel</button>
+        <button type="button" class="btn btn-w" style="background:#b5432e;color:#fff;" id="emg-send-btn" onclick="window._sendEmergency()">Yes, Send Now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANAGE CLASS TEACHERS (class teacher + subject teachers) -->
+<div id="class-teachers-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeClassTeachers()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:460px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;max-height:86vh;display:flex;flex-direction:column;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0;">
+      <h2 style="font-size:19px;font-weight:800;color:var(--slate8);" id="ctm-title">Teachers</h2>
+      <button onclick="window._closeClassTeachers()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <div id="ctm-body" style="overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- TEACHER: REQUEST TO TEACH ANOTHER CLASS (subject teacher self-service) -->
+<div id="subject-request-modal" class="hidden" style="position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;background:rgba(46,35,24,.55);backdrop-filter:blur(4px);" onclick="if(event.target===this)window._closeSubjectRequest()">
+  <div style="background:var(--white-warm);border-radius:24px;padding:30px;width:100%;max-width:440px;box-shadow:0 24px 64px -12px rgba(70,45,25,.4);margin:16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <h2 style="font-size:19px;font-weight:800;color:var(--slate8);">Request to Teach a Class</h2>
+      <button onclick="window._closeSubjectRequest()" style="width:32px;height:32px;border-radius:8px;background:var(--slate1);color:var(--slate5);font-size:18px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;flex-shrink:0;">&times;</button>
+    </div>
+    <p style="font-size:12px;color:var(--slate5);margin-bottom:16px;">Sent to that class's class teacher for approval — you'll see it here once they decide.</p>
+    <div class="fg"><label>Class</label>
+      <select id="sr-class"></select>
+    </div>
+    <div class="fg" style="margin-bottom:16px;"><label>Subject you teach there</label>
+      <input id="sr-subject" type="text" placeholder="e.g. Mathematics"/>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-g btn-w" onclick="window._closeSubjectRequest()">Cancel</button>
+      <button type="button" class="btn btn-p btn-w" onclick="window._submitSubjectRequest()">Send Request</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 /* ── Firebase (Firestore only — NO AUTH) ───────────────────── */
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc,
+import { getFirestore, collection, doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
          getDocs, query, orderBy, limit, where, arrayUnion,
          serverTimestamp, Timestamp, onSnapshot }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -645,6 +792,13 @@ const FB = {
 };
 const db = getFirestore(initializeApp(FB));
 
+// Points at the small local proxy in /server (see server/README.md) that talks
+// to Ollama on the school's behalf — the browser never calls the LLM directly.
+// The real model/prompt/timeout config lives server-side in server/config and
+// server/.env; this is just enough for the UI to know whether to show the
+// button and where to send the request.
+const AI_CONFIG = { enabled: true, apiBase: 'http://localhost:8787' };
+
 /* ── State ─────────────────────────────────────────────────── */
 let sess = null;
 let epcMap = {};      // epc → { studentId, studentName }
@@ -652,6 +806,16 @@ let unsub  = null;
 let curPage = 'dashboard';
 let _focusClassId = null; // set by _goClass() to highlight/scroll to a class on the Classes page
 let _focusStudentId = null; // set by omni-search to highlight/scroll to a student on the Students page
+let _curLoginDocId = null; // this session's staffLogins doc, so sign-out can stamp logoutAt
+let _teacherClasses = [];      // [{id,name}] every class this teacher can see (homeroom + subject), cached at login
+let _teacherActiveClass = null; // which one Dashboard / My Class is currently showing
+function activeTeacherClass(){
+  const ids=sess.classIds||[];
+  if(_teacherActiveClass && ids.includes(_teacherActiveClass)) return _teacherActiveClass;
+  return ids[0]||'class-10A';
+}
+// Navigation between classes now happens via one sidebar tab per class
+// (see buildNav()), so there's no separate in-page switcher any more.
 let schoolMeta = {};  // { name, gateLabel, ... } for the active school
 let studentIndex = {}; // studentId → { firstName, lastName, classId }
 
@@ -828,7 +992,7 @@ window._teacherReply = async (reviewId)=>{
     toast('Response sent','Your principal will be notified.','g');
     await window._openReviewThread(reviewId);
     await refreshAppNotifs();
-    if(curPage==='class') await showPage('class');
+    if(curPage==='class'||curPage.startsWith('cls:')) await showPage(curPage);
   }catch(e){ toast('Send failed', e.message, 'r'); }
 };
 
@@ -1202,7 +1366,7 @@ async function writePresent(sid, manual){
 // Re-render whichever attendance view is open (called sparingly / debounced)
 async function refreshAttendanceView(){
   if(curPage==='dashboard' && sess.role==='principal') await showPage('dashboard');
-  else if((curPage==='dashboard'||curPage==='class') && sess.role==='teacher') await showPage(curPage);
+  else if((curPage==='dashboard'||curPage==='class'||curPage.startsWith('cls:')) && sess.role==='teacher') await showPage(curPage);
 }
 async function accountForStudent(sid, manual){
   const ok=await writePresent(sid, manual);
@@ -1228,6 +1392,7 @@ function setStatus(txt, ok=true){
 }
 
 function startTagListener(){
+  if(!sess || sess.role==='parent') return; // whole-school scan feed — never for a parent session
   if(unsub){ unsub(); unsub=null; }
   listenerReady = false;
   setStatus('Connecting…');
@@ -1364,23 +1529,36 @@ window._refreshFeed = async () => {
 };
 
 /* ── LOGIN ─────────────────────────────────────────────────── */
+let _loginMode='staff'; // 'staff' | 'parent' — toggled by the role switch above the form
+window._setLoginRole = (mode)=>{
+  _loginMode=mode;
+  document.querySelectorAll('#login-role-seg button').forEach(b=>b.classList.toggle('on', b.dataset.role===mode));
+  const isParent = mode==='parent';
+  document.getElementById('login-sub').textContent = isParent ? "See your child's homework, attendance and messages." : 'Sign in to your school workspace.';
+  document.getElementById('f-email-label').textContent = isParent ? 'Parent / Guardian Email' : 'Work Email';
+  document.getElementById('f-email').placeholder = isParent ? 'The email your school has on file' : 'Select or type your email';
+  document.getElementById('create-workspace-link').classList.toggle('hidden', isParent);
+  document.getElementById('login-hint').innerHTML = isParent
+    ? '<strong>Quick demo:</strong> code <strong>DEMO-01</strong>, email <strong>parent.aarav.sharma0@demo-01</strong> (guardian of the first Grade 6-A student).'
+    : '<strong>Quick demo:</strong> code <strong>DEMO-01</strong>, email <strong>principal@demo-01</strong> (or a class teacher, e.g. teacher.g6a@demo-01).';
+  loadEmailOptions();
+};
 // Populate the email dropdown from the school's provisioned staff (so returning users pick, not type)
 async function loadEmailOptions(){
   const code=(document.getElementById('f-code').value||'').trim().toUpperCase();
   const dl=document.getElementById('email-list'); if(!dl) return;
-  if(!code){ dl.innerHTML=''; return; }
+  if(!code || _loginMode==='parent'){ dl.innerHTML=''; return; }
   try{
     const snap=await getDocs(col(code,'staff'));
     const opts=[];
     snap.forEach(d=>{ const s=d.data(); if(s.email) opts.push(`<option value="${s.email}">${s.name||''} — ${s.role||''}</option>`); });
     if(!opts.length && code==='DEMO-01') opts.push(
       '<option value="principal@demo-01">Principal</option>',
-      '<option value="teacher.a@demo-01">Teacher — Class 10A</option>',
-      '<option value="teacher.b@demo-01">Teacher — Class 10B</option>');
+      '<option value="teacher.g6a@demo-01">Class Teacher — 6-A</option>');
     dl.innerHTML=opts.join('');
   }catch(e){
     dl.innerHTML = code==='DEMO-01'
-      ? '<option value="principal@demo-01"></option><option value="teacher.a@demo-01"></option><option value="teacher.b@demo-01"></option>'
+      ? '<option value="principal@demo-01"></option><option value="teacher.g6a@demo-01"></option>'
       : '';
   }
 }
@@ -1396,8 +1574,25 @@ document.getElementById('login-form').addEventListener('submit', async e=>{
   try{
     // DEMO-01 auto-provisions itself so the demo works out of the box
     if(code==='DEMO-01'){
-      await seedSchool(code).catch(err=>console.warn('Seed skipped:',err.message));
       await ensureDemoStaff(code).catch(err=>console.warn('Staff ensure skipped:',err.message));
+      await seedSchool(code).catch(err=>console.warn('Seed skipped:',err.message));
+    }
+
+    if(_loginMode==='parent'){
+      // A parent/guardian email can be on file for more than one child (siblings) —
+      // sess.children holds all of them, with children[0] as the default selection.
+      const psnap = await getDocs(query(col(code,'students'), where('parentEmail','==',email)));
+      if(psnap.empty){
+        toast('No account found', `No student found with guardian email "${email}" at ${code}.`, 'r');
+        btn.textContent='Enter Dashboard'; btn.disabled=false;
+        return;
+      }
+      const children=[]; psnap.forEach(d=>children.push({id:d.id,...d.data()}));
+      const guardianName = children.find(c=>c.guardianName)?.guardianName || 'Parent';
+      sess = { code, role:'parent', staffId:null, name:guardianName, email, children, activeChildId:children[0].id };
+      localStorage.setItem('np',JSON.stringify(sess));
+      await enterApp();
+      return;
     }
 
     // Look up the provisioned staff record for this email at this school
@@ -1411,6 +1606,10 @@ document.getElementById('login-form').addEventListener('submit', async e=>{
     const st = d.data();
     sess = { code, staffId:d.id, name:st.name, email:st.email, role:st.role, classIds:st.classIds||[], watchClassIds:st.watchClassIds||[] };
     localStorage.setItem('np',JSON.stringify(sess));
+    try{
+      const lref=await addDoc(col(code,'staffLogins'),{staffId:d.id,staffName:st.name,role:st.role,loginAt:serverTimestamp(),logoutAt:null});
+      _curLoginDocId=lref.id;
+    }catch(e){ console.warn('login log failed:', e.message); }
     await enterApp();
   }catch(err){
     toast('Sign-in failed', err.message, 'r');
@@ -1420,6 +1619,10 @@ document.getElementById('login-form').addEventListener('submit', async e=>{
 });
 
 window._signOut = ()=>{
+  if(_curLoginDocId && sess){
+    updateDoc(ref(sess.code,'staffLogins',_curLoginDocId),{logoutAt:serverTimestamp()}).catch(()=>{});
+    _curLoginDocId=null;
+  }
   if(unsub){unsub();unsub=null;}
   sess=null; localStorage.removeItem('np');
   document.getElementById('page-app').classList.add('hidden');
@@ -1530,6 +1733,10 @@ window._createSchool = async () => {
     toast('Workspace created', `${name} is live. Signing you in as principal…`, 'g');
     sess={code,staffId:'staff-principal',name:prinName,email:prinEmail,role:'principal',classIds:[],watchClassIds:[]};
     localStorage.setItem('np',JSON.stringify(sess));
+    try{
+      const lref=await addDoc(col(code,'staffLogins'),{staffId:'staff-principal',staffName:prinName,role:'principal',loginAt:serverTimestamp(),logoutAt:null});
+      _curLoginDocId=lref.id;
+    }catch(e){ console.warn('login log failed:', e.message); }
     document.getElementById('page-setup').classList.add('hidden');
     await enterApp();
   }catch(err){
@@ -1549,33 +1756,88 @@ async function enterApp(){
   document.getElementById('u-role').textContent     = sess.role.replace('_',' ');
   document.getElementById('u-avatar').textContent   = sess.name.charAt(0).toUpperCase();
   try{ document.getElementById('date-pill-txt').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }catch{}
-  buildNav();
   checkNotif();
   try{ const sd=await getDoc(schoolDoc(sess.code)); schoolMeta = sd.exists()?sd.data():{}; }catch{ schoolMeta={}; }
+  if(sess.staffId){
+    // Session may have been restored from localStorage rather than a fresh
+    // login — re-pull classIds so a subject-class approval that happened
+    // since her last explicit sign-in shows up without forcing a re-login.
+    try{
+      const stSnap=await getDoc(ref(sess.code,'staff',sess.staffId));
+      if(stSnap.exists()){
+        const st=stSnap.data();
+        sess.classIds=st.classIds||[];
+        sess.watchClassIds=st.watchClassIds||sess.watchClassIds||[];
+        localStorage.setItem('np',JSON.stringify(sess));
+      }
+    }catch(e){ console.warn('session refresh failed:', e.message); }
+  }
+  _teacherActiveClass=null; _teacherClasses=[]; // reset in case a different teacher signed in earlier this tab
+  if(sess.role==='teacher'){
+    try{
+      const clsSnap=await getDocs(col(sess.code,'classes'));
+      const all=[]; clsSnap.forEach(d=>all.push({id:d.id,...d.data()}));
+      _teacherClasses = all.filter(cl=>(sess.classIds||[]).includes(cl.id))
+        .map(cl=>({id:cl.id, name:cl.name||cl.id.replace('class-',''), isClassTeacher:cl.classTeacherId===sess.staffId, pendingCount:0}))
+        .sort((a,b)=>(b.isClassTeacher?1:0)-(a.isClassTeacher?1:0)); // her homeroom class first
+      // Pending subject-teacher requests only matter for classes she is the class
+      // teacher of — that's who has to act on them — so this only ever runs for
+      // (at most) her one homeroom class, not every class she's a subject teacher in.
+      await Promise.all(_teacherClasses.filter(cl=>cl.isClassTeacher).map(async cl=>{
+        try{
+          const s=await getDocs(query(col(sess.code,'subjectRequests'),where('classId','==',cl.id),where('status','==','pending')));
+          cl.pendingCount=s.size;
+        }catch(e){ cl.pendingCount=0; }
+      }));
+    }catch(e){ console.warn('teacher classes load failed:', e.message); }
+  }
+  buildNav(); // after _teacherClasses is populated, since teacher nav is one tab per class
+  if(sess.role==='parent'){
+    // Parents get none of the live RFID feed / school-wide tag listener — that
+    // stream includes every student's scans, which isn't theirs to see. Hide the
+    // staff-only live-status controls in the top bar too.
+    const liveStatus=document.getElementById('tb-live-status'); if(liveStatus) liveStatus.classList.add('hidden');
+    const refreshBtn=document.getElementById('tb-refresh-btn'); if(refreshBtn) refreshBtn.classList.add('hidden');
+    const notifWrap=document.getElementById('notif-wrap'); if(notifWrap) notifWrap.classList.add('hidden');
+    await showPage('dashboard');
+    loadEmergencyBanner();
+    setInterval(loadEmergencyBanner, 30000);
+    return;
+  }
   await loadStudentIndex();
   await loadEpcCache();
   startTagListener();
   await showPage('dashboard');
   refreshAppNotifs();
   loadAnnouncement();
+  loadEmergencyBanner();
   setInterval(refreshAppNotifs, 45000);
   setInterval(loadAnnouncement, 45000);
+  setInterval(loadEmergencyBanner, 30000);
 }
 
-function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_operator'?'Gate Monitor':'Teacher Portal'; }
+function roleLabel(r){ return r==='principal'?'Principal Portal':r==='gate_operator'?'Gate Monitor':r==='parent'?'Parent Portal':'Teacher Portal'; }
 
 /* ── NAV ───────────────────────────────────────────────────── */
 const navItems = {
   principal:    [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'classes',l:'Classes',i:IC.doc},{id:'students',l:'Students',i:IC.users},{id:'tags',l:'Tag Manager',i:IC.tag},{id:'care',l:'Care Queue',i:IC.heart},{id:'messages',l:'Messages',i:IC.bell}],
   teacher:      [{id:'dashboard',l:'Dashboard',i:IC.chart},{id:'class',l:'My Class',i:IC.users},{id:'care',l:'Care Queue',i:IC.heart}],
   gate_operator:[{id:'dashboard',l:'Gate Monitor',i:IC.chart},{id:'tags',l:'Tag Manager',i:IC.tag}],
+  parent:       [{id:'dashboard',l:'My Child',i:IC.heart}],
 };
 
 function buildNav(){
-  const items = navItems[sess.role]||navItems.teacher;
+  let items = navItems[sess.role]||navItems.teacher;
+  if(sess.role==='teacher' && _teacherClasses.length){
+    // One sidebar tab per class she can see — homeroom first, subject classes
+    // after — instead of a single generic "My Class" entry.
+    const classTabs=_teacherClasses.map(cl=>({id:`cls:${cl.id}`, l: cl.isClassTeacher?`${cl.name} · Class Teacher`:cl.name, i:IC.users, badge:cl.pendingCount||0}));
+    items=[{id:'dashboard',l:'Dashboard',i:IC.chart}, ...classTabs, {id:'care',l:'Care Queue',i:IC.heart}];
+  }
+  const activeMatch = items.some(it=>it.id===curPage);
   document.getElementById('sb-nav').innerHTML = items.map((it,i)=>
-    `<div class="ni ${i===0?'active':''}" data-pg="${it.id}" onclick="window._nav(this,'${it.id}')">
-       ${ico(it.i,16)}<span>${it.l}</span>
+    `<div class="ni ${(activeMatch?it.id===curPage:i===0)?'active':''}" data-pg="${it.id}" onclick="window._nav(this,'${it.id}')">
+       ${ico(it.i,16)}<span style="flex:1;">${it.l}</span>${it.badge?`<span class="nav-badge">${it.badge}</span>`:''}
      </div>`).join('');
 }
 window._nav = async (el,pg)=>{
@@ -1737,6 +1999,318 @@ window._annCount = (el)=>{
   c.style.color = n>ANN_MAX ? 'var(--red)' : 'var(--slate4)';
 };
 
+/* ── EMERGENCY BROADCAST ────────────────────────────────────────
+   Principal-only: one urgent message, sent either to all teachers or to
+   all teachers + all parents. Unlike the announcement marquee this shows
+   as a static (non-scrolling) banner so it can't be missed mid-scroll,
+   and requires an explicit two-step confirm before it goes out. */
+let _emgPendingScope=null;
+window._openEmergency = ()=>{
+  document.getElementById('emg-text').value='';
+  document.getElementById('emg-choose').classList.remove('hidden');
+  document.getElementById('emg-confirm').classList.add('hidden');
+  document.getElementById('emergency-modal').classList.remove('hidden');
+};
+window._closeEmergency = ()=> document.getElementById('emergency-modal').classList.add('hidden');
+window._emgAskConfirm = (scope)=>{
+  const text=(document.getElementById('emg-text').value||'').trim();
+  if(!text){ toast('Write the alert','Enter what teachers/parents need to know first.','a'); return; }
+  _emgPendingScope=scope;
+  document.getElementById('emg-confirm-text').textContent = scope==='teachers'
+    ? 'Are you sure? This will immediately alert every teacher at the school.'
+    : 'Are you sure? This will immediately alert every teacher AND every parent at the school.';
+  document.getElementById('emg-choose').classList.add('hidden');
+  document.getElementById('emg-confirm').classList.remove('hidden');
+};
+window._emgCancelConfirm = ()=>{
+  _emgPendingScope=null;
+  document.getElementById('emg-choose').classList.remove('hidden');
+  document.getElementById('emg-confirm').classList.add('hidden');
+};
+window._sendEmergency = async ()=>{
+  const text=(document.getElementById('emg-text').value||'').trim();
+  if(!text || !_emgPendingScope) return;
+  const btn=document.getElementById('emg-send-btn'); const orig=btn.textContent;
+  btn.textContent='Sending…'; btn.disabled=true;
+  try{
+    await addDoc(col(sess.code,'emergencyBroadcasts'),{
+      scope:_emgPendingScope, message:text, sentBy:sess.staffId, sentByName:sess.name, sentAt:serverTimestamp()
+    });
+    toast('Emergency broadcast sent', _emgPendingScope==='teachers'?'Every teacher will see it now.':'Every teacher and parent will see it now.', 'g');
+    window._closeEmergency();
+    loadEmergencyBanner();
+  }catch(e){ toast('Send failed', e.message, 'r'); }
+  finally{ btn.textContent=orig; btn.disabled=false; }
+};
+
+// Shown to principal (preview), teachers (scope teachers/all) and parents (scope all only).
+async function loadEmergencyBanner(){
+  const wrap=document.getElementById('emg-banner-wrap');
+  if(!wrap || !sess) return;
+  if(sess.role!=='teacher' && sess.role!=='parent' && sess.role!=='principal'){ wrap.classList.add('hidden'); return; }
+  try{
+    const snap=await getDocs(query(col(sess.code,'emergencyBroadcasts'), orderBy('sentAt','desc'), limit(5)));
+    let latest=null;
+    snap.forEach(d=>{
+      if(latest) return;
+      const b={id:d.id,...d.data()};
+      const visible = sess.role==='parent' ? b.scope==='all' : true; // teachers/principal see either scope
+      if(visible) latest=b;
+    });
+    const dismissed=localStorage.getItem('emg-dismissed');
+    if(!latest || dismissed===latest.id){ wrap.classList.add('hidden'); wrap.innerHTML=''; return; }
+    wrap.innerHTML = `<div class="emg-banner">
+      ${ico(IC.alert,20)}
+      <div class="emg-body">
+        <div class="emg-title">Emergency Alert</div>
+        <div class="emg-msg">${(latest.message||'').replace(/</g,'&lt;')}</div>
+        <div class="emg-meta">${latest.sentByName||'Principal'} · ${fmtWhen(latest.sentAt)}</div>
+      </div>
+      <button class="emg-close" onclick="window._dismissEmergency('${latest.id}')" title="Dismiss">&times;</button>
+    </div>`;
+    wrap.classList.remove('hidden');
+  }catch(e){ console.warn('emergency banner load failed:', e.message); }
+}
+window._dismissEmergency = (id)=>{
+  localStorage.setItem('emg-dismissed', id);
+  const wrap=document.getElementById('emg-banner-wrap');
+  if(wrap){ wrap.classList.add('hidden'); wrap.innerHTML=''; }
+};
+
+/* ── CLASS TEACHER / SUBJECT TEACHERS ─────────────────────────
+   Every class has exactly one class (homeroom) teacher (cl.classTeacherId)
+   plus any number of subject teachers — any staff whose classIds includes
+   this class. Adding someone here just adds the classId to their own
+   classIds array, so they see it (and can post homework for it) next login. */
+let _classTeachersCtx=null; // {classId, className}
+window._openClassTeachers = async (classId, className)=>{
+  _classTeachersCtx={classId, className};
+  document.getElementById('ctm-title').textContent = `Teachers · ${className}`;
+  document.getElementById('class-teachers-modal').classList.remove('hidden');
+  await _renderClassTeachers();
+};
+window._closeClassTeachers = ()=> document.getElementById('class-teachers-modal').classList.add('hidden');
+
+async function _renderClassTeachers(){
+  const body=document.getElementById('ctm-body');
+  body.innerHTML='<div class="loader" style="padding:20px;"><div class="spinner"></div></div>';
+  const {classId}=_classTeachersCtx;
+  const c=sess.code;
+  const [clsSnap, staffSnap]=await Promise.all([
+    getDoc(ref(c,'classes',classId)).catch(()=>null),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+  ]);
+  const cl = (clsSnap && clsSnap.exists && clsSnap.exists()) ? clsSnap.data() : {};
+  const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const teachers=staff.filter(s=>s.role==='teacher');
+  const classTeacher=teachers.find(tt=>tt.id===cl.classTeacherId);
+  const subjectTeachers=teachers.filter(tt=>tt.id!==cl.classTeacherId && (tt.classIds||[]).includes(classId));
+  const available=teachers.filter(tt=>tt.id!==cl.classTeacherId && !(tt.classIds||[]).includes(classId));
+
+  body.innerHTML = `
+    <div class="fg"><label>Class Teacher</label>
+      <p style="font-size:13px;font-weight:700;color:var(--slate8);">${classTeacher?classTeacher.name:'Unassigned — tag one from Class Manager'}</p>
+    </div>
+    <div class="fg"><label>Subject Teachers (${subjectTeachers.length})</label>
+      ${subjectTeachers.length?subjectTeachers.map(tt=>`
+        <div class="fi">
+          <div class="fl"><div class="fd ok">${ico(IC.users,14)}</div><div><div class="fn">${tt.name}</div><div class="fs">${tt.email||''}</div></div></div>
+          <button class="qa-btn" onclick="window._removeSubjectTeacher('${tt.id}')">Remove</button>
+        </div>`).join(''):'<p style="font-size:12px;color:var(--slate5);">No subject teachers added yet.</p>'}
+    </div>
+    <div class="fg" style="margin-bottom:10px;"><label>Add a Subject Teacher</label>
+      <select id="ctm-add-select" ${available.length?'':'disabled'}>
+        ${available.length?available.map(tt=>`<option value="${tt.id}">${tt.name} (${tt.email})</option>`).join(''):'<option value="">No other teachers to add</option>'}
+      </select>
+    </div>
+    <button class="btn btn-p btn-w" onclick="window._addSubjectTeacher()" ${available.length?'':'disabled style="opacity:.5;cursor:not-allowed;"'}>Add to This Class</button>`;
+}
+window._addSubjectTeacher = async ()=>{
+  const sel=document.getElementById('ctm-add-select');
+  const teacherId=sel&&sel.value;
+  if(!teacherId){ toast('Pick a teacher','Choose a teacher to add first.','a'); return; }
+  try{
+    await updateDoc(ref(sess.code,'staff',teacherId),{classIds:arrayUnion(_classTeachersCtx.classId)});
+    toast('Subject teacher added', `They'll see ${_classTeachersCtx.className} next time they sign in.`, 'g');
+    await _renderClassTeachers();
+    if(curPage==='classes') await showPage('classes');
+  }catch(e){ toast('Add failed', e.message, 'r'); }
+};
+window._removeSubjectTeacher = async (teacherId)=>{
+  try{
+    const snap=await getDoc(ref(sess.code,'staff',teacherId));
+    const cur=snap.exists()?(snap.data().classIds||[]):[];
+    await updateDoc(ref(sess.code,'staff',teacherId),{classIds:cur.filter(id=>id!==_classTeachersCtx.classId)});
+    toast('Removed','They will no longer see this class after their next login.','g');
+    await _renderClassTeachers();
+    if(curPage==='classes') await showPage('classes');
+  }catch(e){ toast('Remove failed', e.message, 'r'); }
+};
+
+/* ── SUBJECT-TEACHER SELF-SERVICE REQUESTS ────────────────────
+   A teacher asks to be added to a class she teaches a subject in; the
+   request sits pending until that class's class teacher approves or
+   rejects it. Approval is what actually adds the class to her classIds —
+   she only gets access once someone who owns that class says yes. */
+window._openSubjectRequest = async ()=>{
+  try{
+    const clsSnap=await getDocs(col(sess.code,'classes'));
+    const all=[]; clsSnap.forEach(d=>all.push({id:d.id,...d.data()}));
+    const mine=new Set(sess.classIds||[]);
+    const options=all.filter(cl=>!mine.has(cl.id));
+    const sel=document.getElementById('sr-class');
+    sel.innerHTML = options.length
+      ? options.map(cl=>`<option value="${cl.id}">${cl.name||cl.id.replace('class-','')}</option>`).join('')
+      : '<option value="">You already have every class</option>';
+    document.getElementById('sr-subject').value='';
+    document.getElementById('subject-request-modal').classList.remove('hidden');
+  }catch(e){ toast('Could not load classes', e.message, 'r'); }
+};
+window._closeSubjectRequest = ()=> document.getElementById('subject-request-modal').classList.add('hidden');
+window._submitSubjectRequest = async ()=>{
+  const classId=document.getElementById('sr-class').value;
+  const subject=(document.getElementById('sr-subject').value||'').trim();
+  if(!classId){ toast('Pick a class','Choose which class you teach a subject in.','a'); return; }
+  try{
+    const clsSnap=await getDoc(ref(sess.code,'classes',classId));
+    const cl=clsSnap.exists()?clsSnap.data():{};
+    const className=cl.name||classId.replace('class-','');
+    let classTeacherName='';
+    if(cl.classTeacherId){ const ctSnap=await getDoc(ref(sess.code,'staff',cl.classTeacherId)); if(ctSnap.exists()) classTeacherName=ctSnap.data().name||''; }
+    await addDoc(col(sess.code,'subjectRequests'),{
+      teacherId:sess.staffId, teacherName:sess.name, teacherEmail:sess.email,
+      classId, className, classTeacherId:cl.classTeacherId||null, classTeacherName, subject,
+      status:'pending', createdAt:serverTimestamp(), decidedAt:null
+    });
+    toast('Request sent', classTeacherName?`${classTeacherName} will need to approve it.`:'The class teacher will need to approve it.', 'g');
+    window._closeSubjectRequest();
+    if(curPage==='dashboard') await showPage('dashboard');
+  }catch(e){ toast('Request failed', e.message, 'r'); }
+};
+window._decideSubjectRequest = async (reqId, approve)=>{
+  try{
+    const reqSnap=await getDoc(ref(sess.code,'subjectRequests',reqId));
+    if(!reqSnap.exists()) return;
+    const req=reqSnap.data();
+    if(approve){
+      const tSnap=await getDoc(ref(sess.code,'staff',req.teacherId));
+      const cur=tSnap.exists()?(tSnap.data().classIds||[]):[];
+      await updateDoc(ref(sess.code,'staff',req.teacherId),{classIds:Array.from(new Set([...cur, req.classId]))});
+    }
+    await updateDoc(ref(sess.code,'subjectRequests',reqId),{status:approve?'approved':'rejected', decidedAt:serverTimestamp(), decidedBy:sess.staffId});
+    toast(approve?'Approved':'Rejected', approve?`${req.teacherName} will see ${req.className} next time they sign in.`:`${req.teacherName} has been notified.`, 'g');
+    // Reflect the drop in this decision immediately in her own sidebar badge —
+    // don't make her reload to see the pending count go down.
+    const own=_teacherClasses.find(c=>c.id===req.classId);
+    if(own && own.pendingCount>0){ own.pendingCount--; buildNav(); }
+    if(curPage==='class'||curPage.startsWith('cls:')) await showPage(curPage);
+  }catch(e){ toast('Could not update request', e.message, 'r'); }
+};
+window._revokeApprovedSubject = async (teacherId, classId)=>{
+  try{
+    const snap=await getDoc(ref(sess.code,'staff',teacherId));
+    const cur=snap.exists()?(snap.data().classIds||[]):[];
+    await updateDoc(ref(sess.code,'staff',teacherId),{classIds:cur.filter(id=>id!==classId)});
+    toast('Access revoked','They will no longer see this class after their next login.','g');
+    if(curPage==='class'||curPage.startsWith('cls:')) await showPage(curPage);
+  }catch(e){ toast('Revoke failed', e.message, 'r'); }
+};
+
+/* ── TEACHER LOGIN ACTIVITY + STAFF MESSAGING ─────────────────
+   Principal-only modal: today's login/logout per teacher with a
+   green/amber/red status, plus a compose+archive for messaging staff. */
+const LATE_CUTOFF_HOUR=9; // login after 9:00am local time counts as "Late"
+
+window._openTeacherLog = async ()=>{
+  if(!sess || sess.role!=='principal') return;
+  const modal=document.getElementById('teacherlog-modal');
+  modal.classList.remove('hidden');
+  await _renderTeacherLog();
+};
+window._closeTeacherLog = ()=> document.getElementById('teacherlog-modal').classList.add('hidden');
+
+async function _renderTeacherLog(){
+  const body=document.getElementById('teacherlog-body');
+  body.innerHTML='<div class="loader"><div class="spinner"></div>Loading…</div>';
+  const c=sess.code, t=today();
+  const [staffSnap, loginSnap, msgSnap] = await Promise.all([
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'staffLogins'),orderBy('loginAt','desc'),limit(300))).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'staffMessages'),orderBy('sentAt','desc'),limit(30))).catch(()=>({forEach:()=>{}})),
+  ]);
+  const teachers=[]; staffSnap.forEach(d=>{ const s={id:d.id,...d.data()}; if(s.role==='teacher') teachers.push(s); });
+  const logins=[]; loginSnap.forEach(d=>logins.push({id:d.id,...d.data()}));
+  const msgs=[]; msgSnap.forEach(d=>msgs.push({id:d.id,...d.data()}));
+
+  const asDate=ts=>{ try{ return ts?.toDate?ts.toDate():new Date(ts); }catch{ return null; } };
+  const isToday=ts=>{ const d=asDate(ts); return !!d && d.toISOString().split('T')[0]===t; };
+  const fmtTime=ts=>{ const d=asDate(ts); return d?d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}):'—'; };
+
+  const rows=teachers.map(tt=>{
+    // `logins` is already sorted newest-first, so the first match per staffId is their latest.
+    const last=logins.find(l=>l.staffId===tt.id);
+    const nameEsc=(tt.name||'').replace(/'/g,'');
+    let statusCls='br', statusLabel='Absent today', loginTxt='—', logoutTxt='—';
+    if(last && isToday(last.loginAt)){
+      const d=asDate(last.loginAt);
+      loginTxt=fmtTime(last.loginAt);
+      logoutTxt = last.logoutAt ? fmtTime(last.logoutAt) : 'Still logged in';
+      if(d.getHours()<LATE_CUTOFF_HOUR){ statusCls='bg'; statusLabel='On time'; }
+      else{ statusCls='ba'; statusLabel='Late'; }
+    }
+    return `<tr>
+      <td><span class="sn">${tt.name}</span><div style="font-size:10px;color:var(--slate4);">${tt.email||''}</div></td>
+      <td style="font-size:12px;color:var(--slate7);font-weight:600;">${loginTxt}</td>
+      <td style="font-size:12px;color:var(--slate7);font-weight:600;">${logoutTxt}</td>
+      <td><span class="badge ${statusCls}">${statusLabel}</span></td>
+      <td><button class="qa-btn" onclick="window._openStaffMsg('${tt.id}','${nameEsc}')">Message</button></td>
+    </tr>`;
+  }).join('');
+
+  const msgRows=msgs.map(m=>`<div class="fi">
+    <div class="fl"><div class="fd ok">${ico(IC.bell,15)}</div>
+      <div><div class="fn">${m.teacherName}</div><div class="fs">${m.channel==='sms'?'Mobile':'Email'} · ${(m.message||'').replace(/</g,'&lt;').slice(0,70)}${(m.message||'').length>70?'…':''}</div></div>
+    </div>
+    <span class="ft">${fmtWhen(m.sentAt)}</span>
+  </div>`).join('');
+
+  body.innerHTML=`
+    <div class="card">
+      <div class="ct">Today's Login Activity <span style="font-size:11px;font-weight:500;color:var(--slate4);">${teachers.length} teacher${teachers.length!==1?'s':''} · cutoff ${LATE_CUTOFF_HOUR}:00am</span></div>
+      ${teachers.length?`<div style="overflow-x:auto;"><table class="rt">
+        <thead><tr><th>Teacher</th><th>Login</th><th>Logout</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>`:'<div class="loader" style="padding:18px;font-size:12px;">No teachers yet — add one in Class Manager.</div>'}
+    </div>
+    <div class="card" style="margin-top:16px;">
+      <div class="ct">${ico(IC.bell,15)} Recent Messages to Teachers</div>
+      ${msgs.length?msgRows:'<p style="font-size:12px;color:var(--slate5);padding:8px 0;">No messages sent yet.</p>'}
+    </div>`;
+}
+
+let _staffMsgTarget=null;
+window._openStaffMsg = (teacherId, teacherName)=>{
+  _staffMsgTarget={id:teacherId, name:teacherName};
+  document.getElementById('staffmsg-to').textContent=teacherName;
+  document.getElementById('staffmsg-body').value='';
+  document.getElementById('staffmsg-modal').classList.remove('hidden');
+};
+window._closeStaffMsg = ()=> document.getElementById('staffmsg-modal').classList.add('hidden');
+window._sendStaffMsg = async ()=>{
+  const text=(document.getElementById('staffmsg-body').value||'').trim();
+  const channel=document.getElementById('staffmsg-channel').value;
+  if(!_staffMsgTarget) return;
+  if(!text){ toast('Write a message','Enter something before sending.','a'); return; }
+  try{
+    await addDoc(col(sess.code,'staffMessages'),{
+      teacherId:_staffMsgTarget.id, teacherName:_staffMsgTarget.name, channel, message:text,
+      sentBy:sess.staffId, sentByName:sess.name, sentAt:serverTimestamp(), status:'sent'
+    });
+    toast('Message sent', `Logged for ${_staffMsgTarget.name} · ${channel==='sms'?'Mobile':'Email'}`, 'g');
+    window._closeStaffMsg();
+    if(!document.getElementById('teacherlog-modal').classList.contains('hidden')) await _renderTeacherLog();
+  }catch(e){ toast('Send failed', e.message, 'r'); }
+};
+
 /* ── Generic universal search-as-you-filter, reused on Tag Manager,
    Care Queue and Messages: hides whatever child rows/cards of
    `containerId` don't match, across every field already on screen. */
@@ -1760,16 +2334,17 @@ async function showPage(pg){
   const el=document.getElementById('pc');
   el.innerHTML='<div class="loader"><div class="spinner"></div>Loading…</div>';
   try{
-    if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : await pgTeacherDash();
+    if(pg.startsWith('cls:')) _teacherActiveClass = pg.slice(4); // sidebar tab for one specific class
+    if      (pg==='dashboard') el.innerHTML = sess.role==='principal' ? await pgPrincipal() : sess.role==='parent' ? await pgParentDash() : await pgTeacherDash();
     else if (pg==='tags')      el.innerHTML = await pgTags();
     else if (pg==='care')      el.innerHTML = await pgCare();
     else if (pg==='students')  el.innerHTML = await pgStudents();
     else if (pg==='classes')   el.innerHTML = await pgClasses();
     else if (pg==='messages')  el.innerHTML = await pgMessages();
-    else if (pg==='class')     el.innerHTML = await pgTeacher();
+    else if (pg==='class' || pg.startsWith('cls:')) el.innerHTML = await pgTeacher();
     else el.innerHTML='<div class="loader">🚧 Coming soon.</div>';
     if(pg==='tags') await loadRawScans();
-    if(pg==='class') await loadClassScans();
+    if(pg==='class' || pg.startsWith('cls:')) await loadClassScans();
     if(pg==='classes' && _focusClassId){
       const row=document.getElementById(`cls-row-${_focusClassId}`);
       if(row) row.scrollIntoView({behavior:'smooth',block:'center'});
@@ -1863,7 +2438,9 @@ async function pgPrincipal(){
     <div><h1>Executive Overview</h1><p class="sub">${schoolMeta.name||c} · ${t} · entry point <span>${gate}</span></p></div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;">
       <button class="btn btn-g" onclick="window._openStats()">${ico(IC.chart,15)} Stats</button>
+      <button class="btn btn-g" onclick="window._openTeacherLog()">${ico(IC.users,15)} Teacher Log</button>
       <button class="btn btn-o" onclick="window._composeAll()">${ico(IC.bell,15)} Message all absentees (${allAbsentees.length})</button>
+      <button class="btn btn-w" style="background:#b5432e;color:#fff;" onclick="window._openEmergency()">${ico(IC.alert,15)} Emergency Broadcast</button>
     </div>
   </div>
   <div class="hero">
@@ -1913,13 +2490,146 @@ async function pgPrincipal(){
   </div>`;
 }
 
+/* ── PARENT DASHBOARD — homework, attendance & messages for their own child(ren) ──
+   Scope is deliberately narrow: everything here is fetched by studentId, filtered
+   client-side to sess.children, and there is no path from this page to any other
+   student's data (no live tag feed, no roster, no other-family messages). */
+window._parentSwitchChild = async (childId)=>{
+  sess.activeChildId = childId;
+  localStorage.setItem('np', JSON.stringify(sess));
+  if(curPage==='dashboard') await showPage('dashboard');
+};
+
+async function pgParentDash(){
+  const c=sess.code, t=today();
+  const child = sess.children.find(ch=>ch.id===sess.activeChildId) || sess.children[0];
+  const clsId = child.classId||'';
+  const clsLabel = clsId.replace('class-','');
+  const childName = `${child.firstName||''} ${child.lastName||''}`.trim();
+
+  const [clsSnap, staffSnap, msgSnap, todaySnap] = await Promise.all([
+    getDoc(ref(c,'classes',clsId)).catch(()=>null),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'messages'), where('studentId','==',child.id))).catch(()=>({forEach:()=>{}})),
+    getDoc(recRef(c, `${t}_${clsId}`, child.id)).catch(()=>null),
+  ]);
+  const className = (clsSnap && clsSnap.exists && clsSnap.exists()) ? (clsSnap.data().name||clsLabel) : clsLabel;
+  const staff=[]; staffSnap.forEach(d=>staff.push({id:d.id,...d.data()}));
+  const teacher = staff.find(s=>s.role==='teacher' && (s.classIds||[]).includes(clsId));
+  // Only surface messages the sender actually chose "Parent Portal" for — email-only
+  // or message-only sends went out through those channels instead, not the app feed.
+  const msgs=[]; msgSnap.forEach(d=>{ const data=d.data(); if(isPortalVisible(data)) msgs.push({id:d.id,...data}); });
+  msgs.sort((a,b)=>{
+    const asOf=x=>{ try{ return x.sentAt?.toDate?x.sentAt.toDate().getTime():0; }catch{ return 0; } };
+    return asOf(b)-asOf(a);
+  });
+  const homework = msgs.filter(m=>m.template==='homework');
+  const todayRec = (todaySnap && todaySnap.exists && todaySnap.exists()) ? todaySnap.data() : null;
+
+  // Trailing 20 days (present/absent, plus a "how many in a row" streak) — cheap
+  // enough for one child, unlike the whole-school scans this same pattern does elsewhere.
+  const HIST=20;
+  const hDates=[...Array(HIST)].map((_,i)=>dOff(-i));
+  const hSnaps=await Promise.all(hDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${clsId}`,'records')).catch(()=>({forEach:()=>{}}))));
+  const dayMap={};
+  hDates.forEach((d,i)=>{
+    let rec=null; hSnaps[i].forEach(dd=>{ if(dd.id===child.id) rec=dd.data(); });
+    dayMap[d]={hasData:!hSnaps[i].empty, status:rec?rec.status:null};
+  });
+  const recordedDays=hDates.filter(d=>dayMap[d].hasData);
+  const presentDays=recordedDays.filter(d=>dayMap[d].status==='present'||dayMap[d].status==='late').length;
+  const monthPct=recordedDays.length?Math.round(presentDays/recordedDays.length*100):null;
+  let streak=0;
+  for(const d of hDates){ if(!dayMap[d].hasData) continue; if(dayMap[d].status==='present'||dayMap[d].status==='late') streak++; else break; }
+
+  const now=new Date(); const dsm=(now.getDay()+6)%7;
+  const weekDates=[...Array(5)].map((_,k)=>dOff(-dsm+k));
+  const dayShort=['Mon','Tue','Wed','Thu','Fri'];
+  const weekDots=weekDates.map((d,i)=>{
+    if(d>t) return {lbl:dayShort[i], cls:'x', title:'Upcoming'};
+    const info=dayMap[d];
+    if(!info || !info.hasData) return {lbl:dayShort[i], cls:'x', title:'No data'};
+    const ok=info.status==='present'||info.status==='late';
+    return {lbl:dayShort[i], cls:ok?'g':'r', title:`${dayShort[i]}: ${info.status||'absent'}`};
+  });
+
+  let today_badge;
+  if(todayRec && todayRec.status==='present') today_badge={cls:'bg',label:'Checked in today',detail:`Arrived ${todayRec.entryTime||todayRec.arrivalTime||'this morning'}`};
+  else if(todayRec && todayRec.status==='late') today_badge={cls:'ba',label:'Arrived a little late',detail:`Arrived ${todayRec.entryTime||todayRec.arrivalTime||'today'}`};
+  else if(todayRec && todayRec.status==='absent') today_badge={cls:'br',label:'Marked absent today',detail:'No gate entry recorded for today yet.'};
+  else today_badge={cls:'ba',label:'Not checked in yet',detail:'We\'ll update this the moment a gate scan comes in.'};
+
+  const tplMeta={
+    homework:{label:'Homework', cls:'bb'}, wellbeing:{label:'Wellbeing check', cls:'ba'},
+    absence:{label:'Absence', cls:'br'}, late:{label:'Late arrival', cls:'ba'},
+    appreciation:{label:'Appreciation', cls:'bg'}, emergency:{label:'🚨 Emergency', cls:'br'}, custom:{label:'Message', cls:'bx'},
+  };
+  const msgCard=m=>{
+    const meta=tplMeta[m.template]||tplMeta.custom;
+    const emg=m.template==='emergency';
+    return `<div class="fi" style="align-items:flex-start;height:auto;${emg?'background:#fbe9e5;border-color:#e8b3a2;':''}">
+      <div class="fl" style="align-items:flex-start;">
+        <div class="fd ${(m.template==='absence'||emg)?'bad':'ok'}">${ico(m.template==='homework'?IC.doc:IC.alert,15)}</div>
+        <div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span class="badge ${meta.cls}">${meta.label}</span><span class="fs">${channelsLabel(m)}${m.sentByTitle?` · ${m.sentBy||''} (${m.sentByTitle})`:''}</span></div>
+        <p style="font-size:13px;color:${emg?'#8f3320':'var(--slate7)'};font-weight:${emg?'700':'400'};margin-top:6px;white-space:pre-line;line-height:1.5;">${(m.body||'').replace(/</g,'&lt;')}</p></div>
+      </div>
+      <span class="ft" style="align-self:flex-start;">${fmtWhen(m.sentAt)}</span>
+    </div>`;
+  };
+
+  const switcher = sess.children.length>1 ? `
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      ${sess.children.map(ch=>`<button class="btn ${ch.id===child.id?'btn-p':'btn-g'} btn-sm" onclick="window._parentSwitchChild('${ch.id}')">${avatar(ch,20)} <span style="margin-left:6px;">${ch.firstName}</span></button>`).join('')}
+    </div>`:'';
+
+  return `
+  ${switcher}
+  <div class="hero">
+    <div style="display:flex;align-items:center;gap:16px;">
+      ${avatar(child,64)}
+      <div>
+        <div class="eyebrow">${t} &middot; Class ${className}${teacher?` &middot; ${teacher.name}`:''}</div>
+        <h2>Hi ${sess.name}! Here's ${child.firstName}'s day</h2>
+        <p>${today_badge.detail}</p>
+      </div>
+    </div>
+    <div class="hstat"><b>${monthPct!=null?monthPct+'%':'—'}</b><span>attendance so far</span></div>
+  </div>
+
+  <div class="kgrid" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr));">
+    <div class="kc"><div class="kl">Today</div><div class="kv" style="font-size:16px;"><span class="badge ${today_badge.cls}">${today_badge.label}</span></div></div>
+    <div class="kc"><div class="kl">Days present</div><div class="kv">${presentDays}<span style="font-size:14px;color:var(--slate4);">/${recordedDays.length||0}</span></div></div>
+    <div class="kc"><div class="kl">Current streak</div><div class="kv">${streak} ${streak>0?'🔥':''}</div></div>
+    <div class="kc"><div class="kl">Homework posted</div><div class="kv">${homework.length}</div></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">This Week
+      <span style="display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--slate4);"><span class="sdot g"></span>in &nbsp; <span class="sdot r"></span>missed &nbsp; <span class="sdot x"></span>upcoming</span>
+    </div>
+    <div style="display:flex;justify-content:space-around;padding:6px 0;">
+      ${weekDots.map(w=>`<div style="display:flex;flex-direction:column;align-items:center;gap:8px;" title="${w.title}"><span class="sdot ${w.cls}" style="width:16px;height:16px;"></span><span style="font-size:11px;font-weight:700;color:var(--slate5);">${w.lbl}</span></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="ct">${ico(IC.doc,15)} Homework <span style="font-size:11px;font-weight:500;color:var(--slate4);">${homework.length} posted</span></div>
+    ${homework.length?homework.map(msgCard).join(''):'<p style="font-size:12px;color:var(--slate5);padding:8px 0;">No homework posted yet — check back after school hours.</p>'}
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <div class="ct">${ico(IC.bell,15)} Messages from School <span style="font-size:11px;font-weight:500;color:var(--slate4);">${msgs.length} total</span></div>
+    ${msgs.length?msgs.map(msgCard).join(''):'<p style="font-size:12px;color:var(--slate5);padding:8px 0;">Nothing here yet — you\'ll see wellbeing checks, homework and notes from the school as they\'re sent.</p>'}
+  </div>`;
+}
+
 /* ── TEACHER DASHBOARD — weekly summary (Mon-start, auto-rolls) ── */
 const shortDate = iso => { try{ return new Date(iso+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); }catch{ return iso; } };
 
 async function pgTeacherDash(){
   const c=sess.code, t=today();
-  const cls=(sess.classIds&&sess.classIds[0])||'class-10A';
-  const clsLabel=cls.replace('class-','');
+  const cls=activeTeacherClass();
+  const clsLabel=(_teacherClasses.find(cl=>cl.id===cls)||{}).name || cls.replace('class-','');
   const now=new Date(); const dsm=(now.getDay()+6)%7;           // days since Monday
   const weekDates=[...Array(5)].map((_,k)=>dOff(-dsm+k));       // Mon..Fri of current week
   const dayNames=['Monday','Tuesday','Wednesday','Thursday','Friday'];
@@ -1927,10 +2637,13 @@ async function pgTeacherDash(){
 
   const results=await Promise.all([
     getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'subjectRequests'),where('teacherId','==',sess.staffId))).catch(()=>({forEach:()=>{}})),
     ...weekDates.map(d=>getDocs(subCol(c,'attendanceDays',`${d}_${cls}`,'records')).catch(()=>({forEach:()=>{}})))
   ]);
-  const studSnap=results[0]; const weekSnaps=results.slice(1);
+  const studSnap=results[0]; const myReqSnap=results[1]; const weekSnaps=results.slice(2);
   const students=[]; studSnap.forEach(dd=>{ const s={id:dd.id,...dd.data()}; if(s.classId===cls) students.push(s); });
+  const myRequests=[]; myReqSnap.forEach(d=>myRequests.push({id:d.id,...d.data()}));
+  myRequests.sort((a,b)=>{ const asOf=x=>{ try{ return x.createdAt?.toDate?x.createdAt.toDate().getTime():0; }catch{ return 0; } }; return asOf(b)-asOf(a); });
   const byDate=weekDates.map((d,i)=>{ const m={}; weekSnaps[i].forEach(dc=>mergeStatus(m,dc.data())); return m; });
   const isFuture=weekDates.map(d=>d>t);
   const hasData=weekDates.map((d,i)=>Object.keys(byDate[i]).length>0);
@@ -1964,11 +2677,25 @@ async function pgTeacherDash(){
 
   const weekLabel=`${shortDate(weekDates[0])} – ${shortDate(weekDates[4])}`;
 
+  const reqBadge={pending:'ba',approved:'bg',rejected:'br'};
+  const reqLabel={pending:'Pending approval',approved:'Approved',rejected:'Not approved'};
+
   return `
   <div class="ph">
     <div><h1>Dashboard</h1><p class="sub">Weekly summary · Class <span>${clsLabel}</span></p></div>
-    <span class="badge bb" style="font-size:12px;padding:7px 12px;">Week of ${weekLabel}</span>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <span class="badge bb" style="font-size:12px;padding:7px 12px;">Week of ${weekLabel}</span>
+      <button class="btn btn-g btn-sm" onclick="window._openSubjectRequest()">${ico(IC.doc,13)} Request Another Class</button>
+    </div>
   </div>
+  ${myRequests.length?`<div class="card" style="margin-bottom:18px;">
+    <div class="ct">My Class Requests</div>
+    ${myRequests.map(r=>`<div class="fi">
+      <div class="fl"><div class="fd ${r.status==='approved'?'ok':r.status==='rejected'?'bad':'ok'}">${ico(IC.doc,14)}</div>
+        <div><div class="fn">${r.className}${r.subject?` · ${r.subject}`:''}</div><div class="fs">${r.classTeacherName?`Needs ${r.classTeacherName}'s approval`:'Awaiting class teacher'} · ${fmtWhen(r.createdAt)}</div></div></div>
+      <span class="badge ${reqBadge[r.status]||'bx'}">${reqLabel[r.status]||r.status}</span>
+    </div>`).join('')}
+  </div>`:''}
   <div class="hero">
     <div>
       <div class="eyebrow">Class ${clsLabel} &middot; Mon&ndash;Fri</div>
@@ -1998,16 +2725,19 @@ let curClass='', curDayId='', curStudents=[], curRecMap={};
 
 async function pgTeacher(){
   const c=sess.code,t=today();
-  const cls=(sess.classIds&&sess.classIds[0])||'class-10A';
-  const clsLabel=cls.replace('class-','');
+  const cls=activeTeacherClass();
+  const clsLabel=(_teacherClasses.find(cl=>cl.id===cls)||{}).name || cls.replace('class-','');
   const dayId=`${t}_${cls}`;
   curClass=cls; curDayId=dayId;
 
-  const [studSnap,recSnap,careSnap,revSnap]=await Promise.all([
+  const [studSnap,recSnap,careSnap,revSnap,clsDocSnap,staffSnap,subjReqSnap]=await Promise.all([
     getDocs(col(c,'students')).catch(()=>({forEach:()=>{}})),
     getDocs(subCol(c,'attendanceDays',dayId,'records')).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'careAlerts'),where('classId','==',cls),where('status','==','open'))).catch(()=>({forEach:()=>{}})),
     getDocs(query(col(c,'classReviews'),orderBy('createdAt','desc'),limit(60))).catch(()=>({forEach:()=>{}})),
+    getDoc(ref(c,'classes',cls)).catch(()=>null),
+    getDocs(col(c,'staff')).catch(()=>({forEach:()=>{}})),
+    getDocs(query(col(c,'subjectRequests'),where('classId','==',cls))).catch(()=>({forEach:()=>{}})),
   ]);
   curStudents=[]; studSnap.forEach(d=>{ const s={id:d.id,...d.data()}; if(s.classId===cls) curStudents.push(s); });
   curRecMap={}; recSnap.forEach(d=>mergeStatus(curRecMap,{id:d.id,...d.data()}));
@@ -2015,6 +2745,47 @@ async function pgTeacher(){
   // classReviews has no per-class composite index in this pilot build, so fetch broadly and filter client-side
   const classReviews=[]; revSnap.forEach(d=>{ const r={id:d.id,...d.data()}; if(r.classId===cls) classReviews.push(r); });
   const pendingReviews=classReviews.filter(r=>r.status==='pending');
+
+  // Class-teacher-only tools: this class's pending subject-teacher requests, and
+  // who's currently a subject teacher here (so she can revoke if plans change).
+  const clsDoc=(clsDocSnap && clsDocSnap.exists && clsDocSnap.exists())?clsDocSnap.data():{};
+  const isClassTeacherHere = !!clsDoc.classTeacherId && clsDoc.classTeacherId===sess.staffId;
+  const allStaff=[]; staffSnap.forEach(d=>allStaff.push({id:d.id,...d.data()}));
+  const subjectTeachersHere = isClassTeacherHere ? allStaff.filter(s=>s.role==='teacher' && s.id!==sess.staffId && (s.classIds||[]).includes(cls)) : [];
+  const allSubjectRequests=[]; if(isClassTeacherHere) subjReqSnap.forEach(d=>allSubjectRequests.push({id:d.id,...d.data()}));
+  const pendingSubjectRequests=allSubjectRequests.filter(r=>r.status==='pending');
+  const decidedAtMs=r=>{ try{ return r.decidedAt?.toDate ? r.decidedAt.toDate().getTime() : 0; }catch{ return 0; } };
+  const decidedSubjectRequests=allSubjectRequests.filter(r=>r.status!=='pending').sort((a,b)=>decidedAtMs(b)-decidedAtMs(a)).slice(0,20);
+
+  const pendingReqRows=pendingSubjectRequests.map(r=>`<div class="fi">
+    <div class="fl"><div class="fd ok">${ico(IC.users,14)}</div><div><div class="fn">${r.teacherName}</div><div class="fs">${r.subject?r.subject+' · ':''}${fmtWhen(r.createdAt)}</div></div></div>
+    <div style="display:flex;gap:6px;flex-shrink:0;">
+      <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._decideSubjectRequest('${r.id}',true)">Approve</button>
+      <button class="qa-btn" onclick="window._decideSubjectRequest('${r.id}',false)">Reject</button>
+    </div>
+  </div>`).join('');
+  const decidedStatusMeta={approved:{label:'Approved',cls:'bg'}, rejected:{label:'Rejected',cls:'br'}};
+  const decidedReqRows=decidedSubjectRequests.map(r=>{
+    const meta=decidedStatusMeta[r.status]||{label:r.status,cls:'bx'};
+    return `<div class="fi">
+    <div class="fl"><div class="fd ok">${ico(IC.users,14)}</div><div><div class="fn">${r.teacherName}</div><div class="fs">${r.subject?r.subject+' · ':''}${fmtWhen(r.decidedAt)}</div></div></div>
+    <span class="badge ${meta.cls}">${meta.label}</span>
+  </div>`;
+  }).join('');
+  const subjectTeacherRows=subjectTeachersHere.map(tt=>`<div class="fi">
+    <div class="fl"><div class="fd ok">${ico(IC.users,14)}</div><div><div class="fn">${tt.name}</div><div class="fs">${tt.email||''}</div></div></div>
+    <button class="qa-btn" onclick="window._revokeApprovedSubject('${tt.id}','${cls}')">Revoke</button>
+  </div>`).join('');
+  const classTeacherToolsHTML = !isClassTeacherHere ? '' : `<div class="card" style="margin-bottom:18px;border-top:3px solid var(--blue);">
+    <div class="ct">${ico(IC.users,15)} Class Teacher Tools — ${clsLabel}
+      ${pendingSubjectRequests.length?`<span class="badge ba">${pendingSubjectRequests.length} pending</span>`:''}
+    </div>
+    <p style="font-size:11.5px;font-weight:700;color:var(--slate7);margin:0 0 8px;">Pending Action${pendingSubjectRequests.length?` (${pendingSubjectRequests.length})`:''}</p>
+    ${pendingSubjectRequests.length?pendingReqRows:'<p style="font-size:12px;color:var(--slate5);margin-bottom:14px;">No subject-teacher requests waiting on you.</p>'}
+    <p style="font-size:11.5px;font-weight:700;color:var(--slate7);margin:16px 0 8px;">Completed${decidedSubjectRequests.length?` (${decidedSubjectRequests.length})`:''}</p>
+    ${decidedSubjectRequests.length?decidedReqRows:'<p style="font-size:12px;color:var(--slate5);">No decisions made yet.</p>'}
+    ${subjectTeachersHere.length?`<p style="font-size:11.5px;font-weight:700;color:var(--slate7);margin:16px 0 8px;">Current subject teachers</p>${subjectTeacherRows}`:''}
+  </div>`;
 
   // ── Attendance history (last 14 recorded days) for verification + status dots ──
   const HIST_DAYS=14;
@@ -2030,18 +2801,41 @@ async function pgTeacher(){
   const perfect=[];
   const wkRows=curStudents.map(s=>{
     const a=attByStud[s.id]||0; const isPerfect=wkTotal>0 && a>=wkTotal;
-    if(isPerfect) perfect.push({id:s.id,name:`${s.firstName} ${s.lastName}`,className:clsLabel});
+    if(isPerfect) perfect.push({id:s.id,name:`${s.firstName} ${s.lastName}`,className:clsLabel,classId:cls});
     const pct=wkTotal?Math.round((a/wkTotal)*100):0;
     return `<tr>
       <td><span class="sn">${s.firstName} ${s.lastName}</span></td>
       <td style="font-weight:700;color:var(--slate7)">${a}/${wkTotal||0}</td>
       <td style="min-width:130px"><div style="height:7px;border-radius:4px;background:var(--slate1);overflow:hidden;"><div style="height:100%;width:${pct}%;background:${isPerfect?'var(--grad)':'var(--slate4)'}"></div></div></td>
       <td>${isPerfect?'<span class="badge bg">Full week</span>':`<span class="badge bx">${pct}%</span>`}</td>
-      <td>${isPerfect?`<button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._composeAppreciation('${s.id}','${(s.firstName+' '+s.lastName).replace(/'/g,'')}','${clsLabel}')">Send appreciation</button>`:''}</td>
+      <td>${isPerfect?`<button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._composeAppreciation('${s.id}','${(s.firstName+' '+s.lastName).replace(/'/g,'')}','${clsLabel}','${cls}')">Send appreciation</button>`:''}</td>
     </tr>`;
   }).join('');
   window._perfect=perfect;
   const inToday=curStudents.filter(s=>{const st=(curRecMap[s.id]||{}).status;return st==='present'||st==='late';}).length;
+
+  // Nobody scanned them in yet today — could be a genuine absence, or the RFID
+  // reader simply missed their tag. Surfaced at the top so it gets resolved
+  // before the day's attendance is treated as final, instead of silently
+  // defaulting to "absent" in the table below.
+  const notScannedIn=curStudents.filter(s=>!curRecMap[s.id]);
+  const unconfirmedRows=notScannedIn.map(s=>{
+    const nm=(s.firstName+' '+s.lastName).replace(/'/g,'');
+    return `<div class="fi">
+      <div class="fl"><div class="fd bad">${ico(IC.alert,15)}</div><div><div class="fn">${s.firstName} ${s.lastName}</div><div class="fs">${s.roll||''} · No RFID scan recorded today</div></div></div>
+      <div style="display:flex;gap:6px;flex-shrink:0;">
+        <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._markPresent('${s.id}')" title="Reader missed their tag — mark present">Mark Present</button>
+        <button class="qa-btn" onclick="window._confirmAbsent('${s.id}')" title="Confirm this student is genuinely absent">Confirm Absent</button>
+      </div>
+    </div>`;
+  }).join('');
+  const unconfirmedHTML = !notScannedIn.length ? '' : `<div class="cpbg" style="margin-bottom:18px;">
+    <div class="cpt">${ico(IC.alert,15)} Not Scanned In Yet (${notScannedIn.length})
+      ${notScannedIn.length>1?`<button class="qa-btn" style="margin-left:auto;" onclick="window._confirmAllAbsent()">Confirm all as absent</button>`:''}
+    </div>
+    <p style="font-size:11.5px;color:#8a4420;opacity:.8;margin:-8px 0 10px;">No RFID entry yet for these students. If the reader missed a tag, mark them present — otherwise confirm the absence.</p>
+    ${unconfirmedRows}
+  </div>`;
 
   const opt=(v,cur,lbl)=>`<option value="${v}" ${cur===v?'selected':''}>${lbl}</option>`;
   const rows = curStudents.map(s=>{
@@ -2062,7 +2856,8 @@ async function pgTeacher(){
       <td><div style="display:flex;gap:5px;flex-wrap:wrap;">
         <button class="qa-btn" onclick="window._showHistory('${s.id}')" title="Day-by-day history">History</button>
         <button class="qa-btn" style="background:var(--green-light);color:var(--green);border-color:var(--green-mid);" onclick="window._markPresent('${s.id}')" title="Mark present without a card">Present</button>
-        <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${clsLabel}')" title="Message parent">Message</button>
+        <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${clsLabel}','${cls}')" title="Message parent">Message</button>
+        <button class="qa-btn" style="background:#f6ddd4;color:#b5432e;border-color:#e8b3a2;" onclick="window._composeEmergency('${s.id}','${nm}','${clsLabel}','${cls}')" title="Send this parent an emergency alert">🚨 Emergency</button>
         <button class="qa-btn" onclick="window._openEditStudent('${s.id}')" title="Edit details, class &amp; phone">Edit</button>
       </div></td>
     </tr>`;
@@ -2071,7 +2866,10 @@ async function pgTeacher(){
   return `
   <div class="ph">
     <div><h1>Classroom Dashboard</h1><p class="sub">Welcome, <span>${sess.name}</span> · Class <span>${clsLabel}</span> · ${t}</p></div>
-    <span class="badge bb" style="font-size:12px;padding:7px 12px;">Class ${clsLabel}</span>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      <span class="badge bb" style="font-size:12px;padding:7px 12px;">Class ${clsLabel}</span>
+      <button class="btn btn-p" onclick="window._composeHomework()">${ico(IC.doc,15)} Post Homework</button>
+    </div>
   </div>
   <div class="hero">
     <div>
@@ -2081,6 +2879,8 @@ async function pgTeacher(){
     </div>
     <div class="hstat"><b>${inToday}/${curStudents.length}</b><span>in today</span></div>
   </div>
+  ${unconfirmedHTML}
+  ${classTeacherToolsHTML}
   <div class="tc">
     <div class="card">
       <div class="ct">Attendance — ${clsLabel}
@@ -2100,7 +2900,7 @@ async function pgTeacher(){
         ${alerts.map(a=>`<div class="cc">
           <div class="cch"><span class="ccn">${a.studentName}</span><span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span></div>
           <p class="ccd">${careLabel(a.ruleCode)}</p>
-          <button class="btn btn-o btn-w btn-sm" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Parent Note</button>
+          <button class="btn btn-o btn-w btn-sm" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}','${a.classId||''}')">Draft Parent Note</button>
         </div>`).join('') || '<p style="color:#8a4420;font-size:12px;opacity:.7;">No open alerts.</p>'}
       </div>
       <div class="card" style="margin-top:14px;">
@@ -2150,6 +2950,35 @@ window._saveEntry = async (sid) => {
     curRecMap[sid]={...(curRecMap[sid]||{}),status,entryTime,exitAt};
     toast(`${s.firstName} ${s.lastName} saved`, `${status} · in ${entryTime||'—'} · out ${exitAt||'—'}`, 'g');
   }catch(e){ toast('Save failed', e.message, 'r'); }
+};
+
+/* "Not scanned in yet" resolution — either the RFID reader missed the tag
+   (use _markPresent, already defined above) or the student is genuinely
+   absent and that needs to be an explicit, recorded decision rather than
+   an unconfirmed default. */
+window._confirmAbsent = async (sid)=>{
+  const s=curStudents.find(x=>x.id===sid); if(!s) return;
+  try{
+    await setDoc(recRef(sess.code,curDayId,sid),{
+      studentId:sid, firstName:s.firstName, lastName:s.lastName, classId:curClass,
+      status:'absent', entryTime:'', arrivalTime:'', exitAt:'', markedManually:true, source:'confirmed', updatedAt:serverTimestamp()
+    },{merge:true});
+    curRecMap[sid]={status:'absent',entryTime:'',exitAt:''};
+    toast(`${s.firstName} ${s.lastName} confirmed absent`, '', 'g');
+    if(curPage==='class'||curPage.startsWith('cls:')) await showPage(curPage);
+  }catch(e){ toast('Could not save', e.message, 'r'); }
+};
+window._confirmAllAbsent = async ()=>{
+  const unconfirmed=curStudents.filter(s=>!curRecMap[s.id]);
+  if(!unconfirmed.length){ toast('Nothing to confirm','Everyone already has a status today.','a'); return; }
+  try{
+    await Promise.all(unconfirmed.map(s=>setDoc(recRef(sess.code,curDayId,s.id),{
+      studentId:s.id, firstName:s.firstName, lastName:s.lastName, classId:curClass,
+      status:'absent', entryTime:'', arrivalTime:'', exitAt:'', markedManually:true, source:'confirmed', updatedAt:serverTimestamp()
+    },{merge:true})));
+    toast('Confirmed', `${unconfirmed.length} student${unconfirmed.length>1?'s':''} marked absent.`, 'g');
+    if(curPage==='class'||curPage.startsWith('cls:')) await showPage(curPage);
+  }catch(e){ toast('Could not save', e.message, 'r'); }
 };
 
 /* Recent scans for the teacher's class — assign unknown tags inline */
@@ -2207,7 +3036,10 @@ async function pgClasses(){
   const students=[]; studSnap.forEach(d=>students.push({id:d.id,...d.data()}));
   const reviews=[]; revSnap.forEach(d=>reviews.push({id:d.id,...d.data()}));
   const teachers=staff.filter(s=>s.role==='teacher');
-  const teacherFor=cid=>teachers.find(tt=>(tt.classIds||[]).includes(cid));
+  // A class's teacher is its explicit classTeacherId when set (new classes always set
+  // this); older classes fall back to "first teacher who has this class" for compatibility.
+  const teacherFor=cl=>teachers.find(tt=>tt.id===cl.classTeacherId) || teachers.find(tt=>(tt.classIds||[]).includes(cl.id));
+  const subjectTeachersFor=cl=>teachers.filter(tt=>tt.id!==cl.classTeacherId && (tt.classIds||[]).includes(cl.id) && tt!==teacherFor(cl));
   window._setupTeachers=teachers; // used by save handler
 
   // Trailing-30-day health per class, computed in parallel
@@ -2222,7 +3054,8 @@ async function pgClasses(){
 
   const tOpts=teachers.map(tt=>`<option value="${tt.id}">${tt.name} (${tt.email})</option>`).join('');
   const rows=classes.map(cl=>{
-    const tt=teacherFor(cl.id);
+    const tt=teacherFor(cl);
+    const subjTeachers=subjectTeachersFor(cl);
     const h=healthByClass[cl.id]||{pct:null,status:'nodata'};
     const nameEsc=(cl.name||cl.id.replace('class-','')).replace(/'/g,'');
     const teacherNameEsc=tt?tt.name.replace(/'/g,''):'';
@@ -2232,7 +3065,11 @@ async function pgClasses(){
       <td><button class="watch-btn ${watched?'on':''}" onclick="window._toggleWatch('${cl.id}')" title="${watched?'Remove from watchlist':'Add to watchlist'}">${watched?'★':'☆'}</button></td>
       <td><span class="sn">${cl.name||cl.id.replace('class-','')}</span></td>
       <td><span class="badge bb">${cl.id}</span></td>
-      <td>${tt?`<span class="badge bg">${tt.name}</span>`:'<span class="badge bx">Unassigned</span>'}</td>
+      <td>
+        ${tt?`<span class="badge bg">${tt.name}</span>`:'<span class="badge bx">Unassigned</span>'}
+        ${subjTeachers.length?`<div style="font-size:10px;color:var(--slate5);margin-top:3px;">+${subjTeachers.length} subject teacher${subjTeachers.length!==1?'s':''}</div>`:''}
+        <button class="qa-btn" style="margin-top:4px;" onclick="window._openClassTeachers('${cl.id}','${nameEsc}')">Manage</button>
+      </td>
       <td style="font-size:12px;color:var(--slate5);">${cl.studentCount??'—'}</td>
       <td><span class="badge ${healthBadgeClass(h.status)}" title="${h.pct!=null?`${h.pct}% attendance, trailing 30 days`:'No attendance recorded in the last 30 days'}">${healthLabel(h.status)}${h.pct!=null?` · ${h.pct}%`:''}</span></td>
       <td>
@@ -2304,7 +3141,7 @@ window._addClassRecord = async () => {
   try{
     const existing=await getDoc(ref(sess.code,'classes',cid));
     if(existing.exists()){ toast('Class exists', `${name} already exists.`, 'a'); return; }
-    await setDoc(ref(sess.code,'classes',cid),{name,campusId:'campus-001',academicYear:'2025-2026',studentCount:0,createdAt:serverTimestamp()});
+    await setDoc(ref(sess.code,'classes',cid),{name,campusId:'campus-001',academicYear:'2025-2026',studentCount:0,classTeacherId:teacherId||null,createdAt:serverTimestamp()});
     if(teacherId){
       const tt=(window._setupTeachers||[]).find(x=>x.id===teacherId);
       const classIds=Array.from(new Set([...((tt&&tt.classIds)||[]),cid]));
@@ -2320,15 +3157,17 @@ async function pgMessages(){
   let msgs=[];
   try{ const snap=await getDocs(query(col(sess.code,'messages'),orderBy('sentAt','desc'),limit(60))); snap.forEach(d=>msgs.push({id:d.id,...d.data()})); }
   catch(e){ /* ordering may fail if no sentAt; fall back */ try{ const s2=await getDocs(col(sess.code,'messages')); s2.forEach(d=>msgs.push({id:d.id,...d.data()})); }catch{} }
-  const tplLabel={wellbeing:'Wellbeing',absence:'Absence',late:'Late',appreciation:'Appreciation',custom:'Custom'};
+  const tplLabel={wellbeing:'Wellbeing',absence:'Absence',late:'Late',appreciation:'Appreciation',homework:'Homework',emergency:'🚨 Emergency',custom:'Custom'};
   const when=m=>{ try{ return m.sentAt?.toDate ? m.sentAt.toDate().toLocaleString('en-IN',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}) : (m.date||'—'); }catch{ return m.date||'—'; } };
-  const rows=msgs.map(m=>`<tr>
+  const chBadgeCls={portal:'bb',email:'bg',message:'ba'};
+  const chBadges=m=>messageChannels(m).map(c=>`<span class="badge ${chBadgeCls[c]||'bx'}" style="font-size:9.5px;padding:2px 6px;margin:1px 3px 1px 0;">${CHANNEL_NAMES[c]||c}</span>`).join('');
+  const rows=msgs.map(m=>`<tr ${m.template==='emergency'?'style="background:#fbe9e5;"':''}>
     <td><span class="sn">${m.studentName||'—'}</span></td>
     <td><span class="badge bb">${(m.classId||'').replace('class-','')||'—'}</span></td>
-    <td><span class="badge bx">${tplLabel[m.template]||m.template||'—'}</span></td>
-    <td style="text-transform:uppercase;font-size:11px;font-weight:700;color:var(--slate5);">${m.channel||'email'}</td>
+    <td><span class="badge ${m.template==='emergency'?'br':'bx'}">${tplLabel[m.template]||m.template||'—'}</span></td>
+    <td style="white-space:nowrap;">${chBadges(m)}</td>
     <td><span class="badge bg">${m.status||'sent'}</span></td>
-    <td style="font-size:12px;color:var(--slate5);">${m.sentBy||'—'}</td>
+    <td style="font-size:12px;color:var(--slate5);">${m.sentBy||'—'}${m.sentByTitle?`<div style="font-size:10px;color:var(--slate4);">${m.sentByTitle}</div>`:''}</td>
     <td style="font-size:12px;color:var(--slate5);white-space:nowrap;">${when(m)}</td>
   </tr>`).join('');
   return `
@@ -2466,7 +3305,7 @@ async function pgCare(){
         <span class="badge ${a.priority==='high'?'br':'ba'}">${a.priority}</span>
       </div>
       <p style="font-size:13px;color:var(--slate5);margin-bottom:14px;">${careLabel(a.ruleCode)}</p>
-      <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}')">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
+      <div style="display:flex;gap:7px;"><button class="btn btn-o btn-sm" style="flex:1;" onclick="window._composeFor('${a.studentId||''}','${(a.studentName||'').replace(/'/g,'')}','${(a.classId||'').replace('class-','')}','${a.classId||''}')">Draft Note</button><button class="btn btn-g btn-sm">Dismiss</button></div>
     </div>`).join(''):'<div class="loader">✅ No open care alerts.</div>'}
   </div>
   <p id="care-grid-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`;
@@ -2498,7 +3337,7 @@ async function pgStudents(){
         <td>${tagged?'<span class="badge bg">Mapped</span>':'<span class="badge br">Unmapped</span>'}</td>
         <td><div style="display:flex;gap:5px;">
           <button class="qa-btn" onclick="window._openEditStudent('${s.id}')" title="Edit details, class &amp; phone">Edit</button>
-          <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${(s.classId||'').replace('class-','')}')" title="Message parent">Message</button>
+          <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${(s.classId||'').replace('class-','')}','${s.classId||''}')" title="Message parent">Message</button>
         </div></td></tr>`;}).join('')}
     </tbody></table>
     <p id="stu-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>
@@ -2627,12 +3466,73 @@ const MSG_TEMPLATES = {
   absence:   (n,s)=>`Dear Parent,\n\nOur records show ${n} was marked absent today. Kindly let us know the reason for the absence so we can update our register.\n\nThank you,\n${s} Office`,
   late:      (n,s)=>`Dear Parent,\n\nThis is a gentle note that ${n} arrived late today. Please help us ensure timely arrival going forward.\n\nThank you,\n${s} Office`,
   appreciation:(n,s)=>`Dear Parent,\n\nWe're delighted to share that ${n} had full attendance this week at ${s}! Thank you for your support in building such a wonderful routine. Please join us in giving ${n} a well-deserved pat on the back.\n\nWith appreciation,\n${s} Office`,
+  homework:  (n,s,cls)=>`Dear Parent,\n\nHere is today's homework for ${n}${cls?` (Class ${cls})`:''}:\n\n[Type the homework details here]\n\nPlease make sure it's completed and brought to school tomorrow.\n\nThank you,\n${s} Office`,
+  emergency: (n,s,cls)=>`URGENT — ${n}${cls?` (Class ${cls})`:''}:\n\n[Describe what happened and what's needed right now]\n\nPlease contact the school office immediately.\n\n${s} Office`,
   custom:    ()=>''
 };
+
+const CHANNEL_NAMES = { portal:'Parent Portal', email:'Email', message:'Message' };
+// Older logged messages only ever stored a single 'email'/'sms' string — read
+// those back as an equivalent one-item channel list instead of migrating data.
+function messageChannels(m){ return m.channels || (m.channel==='sms' ? ['message'] : ['email']); }
+function channelsLabel(m){ return messageChannels(m).map(c=>CHANNEL_NAMES[c]||c).join(' + '); }
+// Messages logged before the channel picker existed had no concept of "Parent
+// Portal" — they always showed up in the app feed, so treat missing `channels`
+// as portal-visible rather than silently hiding a whole school's message history.
+function isPortalVisible(m){ return !m.channels || m.channels.includes('portal'); }
+
+/* ── AI REWRITE (drafts only — never sends; see server/README.md) ──────────
+   Calls the local proxy in /server, which in turn calls Ollama. On any
+   failure (server down, LLM unreachable, timeout) this degrades to a quiet
+   inline notice and leaves the teacher's own text exactly as they wrote it —
+   the send button below is never touched by this. */
+let _aiPrefs = { language:'English', tone:'friendly' };
+function renderAiToggles(){
+  document.getElementById('ai-lang-toggle').innerHTML = [['English','EN'],['Hindi','हिंदी']].map(([v,l])=>
+    `<button type="button" class="btn ${_aiPrefs.language===v?'btn-p':'btn-g'} btn-sm" onclick="window._setAiPref('language','${v}')">${l}</button>`).join('');
+  document.getElementById('ai-tone-toggle').innerHTML = [['friendly','Friendly'],['formal','Formal']].map(([v,l])=>
+    `<button type="button" class="btn ${_aiPrefs.tone===v?'btn-p':'btn-g'} btn-sm" onclick="window._setAiPref('tone','${v}')">${l}</button>`).join('');
+}
+window._setAiPref = (key,val)=>{ _aiPrefs[key]=val; renderAiToggles(); };
+window._improveWithAI = async ()=>{
+  const btn=document.getElementById('ai-rewrite-btn');
+  const notice=document.getElementById('ai-rewrite-notice');
+  const preview=document.getElementById('ai-rewrite-preview');
+  notice.classList.add('hidden'); preview.classList.add('hidden');
+  const text=document.getElementById('msg-body').value.trim();
+  if(!text){ toast('Nothing to improve','Write a few words first, then improve it.','a'); return; }
+  // The "Message" channel stands in for SMS/WhatsApp-style limits in this pilot
+  // build — keep the draft short enough to actually fit when that's checked.
+  const maxChars = document.getElementById('msg-ch-message')?.checked ? 300 : undefined;
+  const fail=()=>{ notice.textContent='AI is unavailable right now — you can send your message as usual.'; notice.classList.remove('hidden'); };
+  btn.textContent='Improving…'; btn.disabled=true;
+  try{
+    const res=await fetch(`${AI_CONFIG.apiBase}/api/ai/rewrite`,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({staffId:sess.staffId, role:sess.role, code:sess.code, text, language:_aiPrefs.language, tone:_aiPrefs.tone, maxChars})
+    });
+    if(!res.ok){ fail(); return; }
+    const data=await res.json();
+    if(!data.message){ fail(); return; }
+    document.getElementById('ai-rewrite-suggestion').textContent=data.message;
+    preview.classList.remove('hidden');
+  }catch(e){ fail(); }
+  finally{ btn.textContent='✨ Improve with AI'; btn.disabled=false; }
+};
+window._useAiSuggestion = ()=>{
+  document.getElementById('msg-body').value = document.getElementById('ai-rewrite-suggestion').textContent;
+  document.getElementById('ai-rewrite-preview').classList.add('hidden');
+};
+window._dismissAiSuggestion = ()=> document.getElementById('ai-rewrite-preview').classList.add('hidden');
 
 function openMsgModal(defaultTpl){
   document.getElementById('msg-tpl').value=defaultTpl||'wellbeing';
   window._applyTpl();
+  const aiBar=document.getElementById('ai-rewrite-bar');
+  aiBar.classList.toggle('hidden', !AI_CONFIG.enabled);
+  document.getElementById('ai-rewrite-notice').classList.add('hidden');
+  document.getElementById('ai-rewrite-preview').classList.add('hidden');
+  if(AI_CONFIG.enabled) renderAiToggles();
   document.getElementById('msg-modal').classList.remove('hidden');
 }
 function composeWith(targets,label,tpl){
@@ -2642,43 +3542,64 @@ function composeWith(targets,label,tpl){
 }
 window._closeMsg = ()=> document.getElementById('msg-modal').classList.add('hidden');
 
-window._composeFor = (id,name,className)=>
-  composeWith([{id,name,className}], `To: parent of ${name} (Class ${className})`);
+window._composeFor = (id,name,className,classId)=>
+  composeWith([{id,name,className,classId}], `To: parent of ${name} (Class ${className})`);
 window._composeAll = ()=>{
-  const t=(window._absentees||[]).map(a=>({id:a.id,name:a.name,className:a.className}));
+  const t=(window._absentees||[]).map(a=>({id:a.id,name:a.name,className:a.className,classId:a.classId}));
   if(!t.length){ toast('Nobody to message','Everyone is accounted for today.','a'); return; }
   composeWith(t, `To: ${t.length} parents of today's absentees`);
 };
-window._composeAppreciation = (id,name,className)=>
-  composeWith([{id,name,className}], `To: parent of ${name} (Class ${className})`, 'appreciation');
+window._composeAppreciation = (id,name,className,classId)=>
+  composeWith([{id,name,className,classId}], `To: parent of ${name} (Class ${className})`, 'appreciation');
 window._celebrateAll = ()=>{
-  const t=(window._perfect||[]).map(a=>({id:a.id,name:a.name,className:a.className}));
+  const t=(window._perfect||[]).map(a=>({id:a.id,name:a.name,className:a.className,classId:a.classId}));
   if(!t.length){ toast('No perfect attendance yet','No students have full attendance this week.','a'); return; }
   composeWith(t, `To: ${t.length} parents — full attendance this week`, 'appreciation');
 };
+/* Broadcast homework to every parent in the teacher's class — one message per
+   student, each personalised with that student's own name (see _sendMessages). */
+window._composeHomework = ()=>{
+  const clsLabel=(curClass||'').replace('class-','');
+  const t=curStudents.map(s=>({id:s.id,name:`${s.firstName} ${s.lastName}`,className:clsLabel,classId:curClass}));
+  if(!t.length){ toast('No students yet','This class has no students to send homework to.','a'); return; }
+  composeWith(t, `To: ${t.length} parents — Class ${clsLabel} homework`, 'homework');
+};
+/* A teacher's emergency is about ONE specific child — unlike the principal's
+   school-wide broadcast, this goes to a single parent via the normal message log. */
+window._composeEmergency = (id,name,className,classId)=>
+  composeWith([{id,name,className,classId}], `🚨 Emergency — parent of ${name} (Class ${className})`, 'emergency');
 window._applyTpl = ()=>{
   const tpl=document.getElementById('msg-tpl').value;
   const school=schoolMeta.name||sess.code;
   const name = composeTargets.length===1 ? composeTargets[0].name : 'your child';
-  document.getElementById('msg-body').value = (MSG_TEMPLATES[tpl]||MSG_TEMPLATES.custom)(name,school);
+  const cls = (composeTargets[0]&&composeTargets[0].className)||'';
+  document.getElementById('msg-body').value = (MSG_TEMPLATES[tpl]||MSG_TEMPLATES.custom)(name,school,cls);
 };
 window._sendMessages = async ()=>{
   const body=document.getElementById('msg-body').value.trim();
-  const channel=document.getElementById('msg-channel').value;
+  const channels=['portal','email','message'].filter(c=>document.getElementById(`msg-ch-${c}`).checked);
   const tpl=document.getElementById('msg-tpl').value;
   if(!body){ toast('Empty message','Write a message or pick a template.','a'); return; }
+  if(!channels.length){ toast('Pick a channel','Choose at least one way to reach the parent — Parent Portal, Email or Message.','a'); return; }
   if(!composeTargets.length){ toast('No recipients','No parents selected.','a'); return; }
   const btn=document.getElementById('msg-send-btn'); btn.textContent='Sending…'; btn.disabled=true;
   try{
     for(const tgt of composeTargets){
       const personalised = composeTargets.length===1 ? body : body.replace(/your child/g, tgt.name);
+      const classId = tgt.classId || ('class-'+(tgt.className||'').replace(/[^A-Za-z0-9]/g,''));
+      // A teacher's title is per-class: she may be the class (homeroom) teacher for
+      // one class and only a subject teacher for another — so this is a lookup
+      // against the specific class the message is about, not her role in general.
+      const sentByTitle = sess.role==='principal' ? 'Principal'
+        : sess.role!=='teacher' ? sess.role
+        : (_teacherClasses.find(c=>c.id===classId)?.isClassTeacher ? 'Class Teacher' : 'Subject Teacher');
       await addDoc(col(sess.code,'messages'),{
-        studentId:tgt.id, studentName:tgt.name, classId:'class-'+(tgt.className||'').replace(/[^A-Za-z0-9]/g,''),
-        channel, template:tpl, body:personalised, status:'sent',
-        sentBy:sess.name, sentByRole:sess.role, sentAt:serverTimestamp(), date:today()
+        studentId:tgt.id, studentName:tgt.name, classId,
+        channels, template:tpl, body:personalised, status:'sent',
+        sentBy:sess.name, sentByRole:sess.role, sentByTitle, sentAt:serverTimestamp(), date:today()
       });
     }
-    toast('Messages logged', `${composeTargets.length} parent message${composeTargets.length>1?'s':''} recorded as sent.`, 'g');
+    toast('Messages logged', `${composeTargets.length} parent message${composeTargets.length>1?'s':''} recorded as sent via ${channels.map(c=>CHANNEL_NAMES[c]).join(' + ')}.`, 'g');
     window._closeMsg();
   }catch(e){ toast('Send failed', e.message, 'r'); }
   finally{ btn.textContent='Log & Send'; btn.disabled=false; }
@@ -2745,52 +3666,186 @@ function careLabel(code){
 async function ensureDemoStaff(code){
   const ts=serverTimestamp();
   await setDoc(ref(code,'staff','staff-principal'),{name:'Dr. Priya Sharma',email:'principal@demo-01',role:'principal',classIds:[],createdAt:ts});
-  await setDoc(ref(code,'staff','staff-t1'),{name:'Ms. Anjali Rao',email:'teacher.a@demo-01',role:'teacher',classIds:['class-10A'],createdAt:ts});
-  await setDoc(ref(code,'staff','staff-t2'),{name:'Mr. Vikram Nair',email:'teacher.b@demo-01',role:'teacher',classIds:['class-10B'],createdAt:ts});
+}
+
+/* ── INDIAN ROSTER GENERATOR ───────────────────────────────────
+   Deterministic (no Math.random) so re-running is idempotent and the
+   "quick demo" hints on the login screen stay accurate. */
+const IN_MALE=['Aarav','Vivaan','Aditya','Vihaan','Arjun','Reyansh','Ayaan','Krishna','Ishaan','Shaurya',
+  'Atharv','Advik','Kabir','Rudra','Aryan','Dhruv','Karan','Rohan','Yash','Siddharth',
+  'Nikhil','Rahul','Varun','Vikram','Sameer','Arnav','Devansh','Harsh','Manav','Naveen',
+  'Om','Pranav','Raghav','Sahil','Tanish','Uday','Vedant','Yuvraj','Ayush','Chirag',
+  'Deepak','Gaurav','Harish','Jatin','Kunal','Lakshya','Mohit','Nitin','Parth','Rohit'];
+const IN_FEMALE=['Saanvi','Ananya','Aadhya','Diya','Myra','Aarohi','Anika','Ira','Kiara','Navya',
+  'Pari','Riya','Sara','Tara','Vanya','Zara','Priya','Neha','Pooja','Kavya',
+  'Nisha','Meera','Divya','Isha','Jiya','Kritika','Lavanya','Mahi','Nandini','Ojasvi',
+  'Pihu','Radhika','Sanya','Tanvi','Urvi','Vidhi','Yamini','Aditi','Bhavya','Charvi',
+  'Disha','Esha','Falguni','Gauri','Harini','Ishita','Janvi','Khushi','Lekha','Manya'];
+const IN_SURNAME=['Sharma','Verma','Gupta','Kumar','Singh','Reddy','Nair','Iyer','Menon','Rao',
+  'Patel','Shah','Mehta','Joshi','Desai','Kapoor','Malhotra','Chopra','Khan','Ahmed',
+  'Bhat','Pillai','Krishnan','Naidu','Chowdhury','Banerjee','Mukherjee','Das','Ghosh','Bose',
+  'Sinha','Tiwari','Mishra','Pandey','Yadav','Chauhan','Rathore','Bhatia','Arora','Kaur',
+  'Dutta','Roy','Sen','Iyengar','Rajan','Bajaj','Agarwal','Jain','Goel','Saxena',
+  'Trivedi','Dubey','Thakur','Kulkarni'];
+function indianName(idx){
+  const male = idx%2===0;
+  const pool = male?IN_MALE:IN_FEMALE;
+  const first = pool[Math.floor(idx/2)%pool.length];
+  const last = IN_SURNAME[idx%IN_SURNAME.length];
+  return {first,last,male};
+}
+
+const DEMO_GRADES=[6,7,8,9,10];
+const DEMO_SECTIONS=['A','B','C','D','E'];
+// One of good/medium/poor attendance per class (index 0-24), so Top 10 / Bottom 10
+// on the dashboard have something real to show rather than a flat, boring roster.
+const TIER_RATE=[92,88,72,68,48];
+
+function buildIndianRoster(){
+  const classes=[], teachers=[], students=[];
+  let studentGlobalIdx=0;
+  DEMO_GRADES.forEach((grade,gi)=>{
+    DEMO_SECTIONS.forEach((section,si)=>{
+      const classIdx=gi*DEMO_SECTIONS.length+si;
+      const sec=section.toLowerCase();
+      const classId=`class-g${grade}${sec}`;
+      const teacherId=`staff-t-g${grade}${sec}`;
+      const tn=indianName(1000+classIdx*7+3);
+      teachers.push({id:teacherId, name:`${tn.male?'Mr.':'Ms.'} ${tn.first} ${tn.last}`, email:`teacher.g${grade}${sec}@demo-01`, role:'teacher', classIds:[classId]});
+      const count=20+(classIdx%6); // 20..25 students
+      for(let n=0;n<count;n++){
+        const sn=indianName(studentGlobalIdx);
+        const sid=`stu-g${grade}${sec}-${String(n+1).padStart(2,'0')}`;
+        students.push({
+          id:sid, firstName:sn.first, lastName:sn.last, classId,
+          roll:`${grade}${section}-${String(n+1).padStart(2,'0')}`,
+          guardianName:`${sn.male?'Mr.':'Mrs.'} ${sn.last}`,
+          parentEmail:`parent.${sn.first.toLowerCase()}.${sn.last.toLowerCase()}${studentGlobalIdx}@demo-01`,
+          parentPhone:`+91 9${String(700000000+studentGlobalIdx).padStart(9,'0')}`,
+        });
+        studentGlobalIdx++;
+      }
+      classes.push({id:classId, name:`${grade}-${section}`, grade:String(grade), section, campusId:'campus-001', academicYear:'2025-2026', studentCount:count, classTeacherId:teacherId});
+    });
+  });
+  return {classes, teachers, students};
+}
+
+async function writeAllChunked(items, writeFn, chunkSize=300){
+  for(let i=0;i<items.length;i+=chunkSize){
+    await Promise.all(items.slice(i,i+chunkSize).map(writeFn));
+  }
+}
+
+// The old 6-student / 2-class Western-named demo, deleted so it doesn't linger
+// alongside the new roster. Deleting docs that no longer exist is a harmless no-op.
+async function resetLegacyDemoData(code){
+  const legacy=[
+    ()=>deleteDoc(ref(code,'classes','class-10A')), ()=>deleteDoc(ref(code,'classes','class-10B')),
+    ()=>deleteDoc(ref(code,'staff','staff-t1')),    ()=>deleteDoc(ref(code,'staff','staff-t2')),
+    ...['stu-001','stu-002','stu-003','stu-004','stu-005','stu-006'].map(id=>()=>deleteDoc(ref(code,'students',id))),
+  ];
+  await Promise.all(legacy.map(fn=>fn().catch(()=>{})));
+}
+
+// Idempotent: (re)ensures the full Indian roster exists — classes, class teachers,
+// and every student with a guardian email — without touching anything a principal/
+// teacher may have since edited (merge:true throughout).
+async function ensureIndianRoster(code){
+  const roster=buildIndianRoster();
+  await writeAllChunked(roster.classes, cl=>setDoc(ref(code,'classes',cl.id), cl, {merge:true}));
+  // classIds is unioned in, not overwritten — this seeding step reruns on every
+  // DEMO-01 login (by anyone), so a plain-array write here would silently wipe
+  // out any subject-class approval a teacher had already been granted.
+  await writeAllChunked(roster.teachers, tt=>setDoc(ref(code,'staff',tt.id), {...tt, classIds:arrayUnion(tt.classIds[0]), createdAt:serverTimestamp()}, {merge:true}));
+  await writeAllChunked(roster.students, s=>setDoc(ref(code,'students',s.id), {...s, campusId:'campus-001', isActive:true, photoUrl:'', createdAt:serverTimestamp()}, {merge:true}));
+  await ensureDemoSubjectLinks(code, roster);
+  return roster;
+}
+// Round-robins 3 teachers onto an extra class each (subject-teacher, not homeroom) so
+// the multi-class switcher and class-teacher approval tools have something to show
+// straight out of the box, without needing to manually set that up first.
+async function ensureDemoSubjectLinks(code, roster){
+  if(roster.classes.length<3) return;
+  const links=[[0,1],[1,2],[2,0]];
+  await Promise.all(links.map(([fromIdx,toIdx])=>{
+    const teacher=roster.teachers[fromIdx];
+    const extraClassId=roster.classes[toIdx].id;
+    return setDoc(ref(code,'staff',teacher.id), {classIds:arrayUnion(teacher.classIds[0], extraClassId)}, {merge:true});
+  }));
+}
+
+// Idempotent-ish: seeds today + the previous 4 calendar days of attendance across
+// every class, with each class's attendance quality driven by TIER_RATE so the
+// health/stats features have real variation to show. Skips a class+day it has
+// already written (checked via the summary doc) so re-logins don't keep re-rolling
+// history that a teacher may have since hand-edited.
+async function ensureAttendanceHistory(code, roster){
+  const days=[0,1,2,3,4].map(i=>dOff(-i));
+  const byClass={}; roster.students.forEach(s=>{ (byClass[s.classId]=byClass[s.classId]||[]).push(s); });
+  const classIndexOf={}; roster.classes.forEach((cl,i)=>classIndexOf[cl.id]=i);
+
+  for(let dayIdx=0; dayIdx<days.length; dayIdx++){
+    const day=days[dayIdx];
+    // Check all 25 classes' existing-day docs in parallel rather than one at a
+    // time — this loop runs on every DEMO-01 login, so it needs to stay quick.
+    const existsFlags=await Promise.all(roster.classes.map(cl=>
+      getDoc(ref(code,'attendanceDays',`${day}_${cl.id}`)).then(d=>d.exists()).catch(()=>false)));
+    const pending=[];
+    roster.classes.forEach((cl,clIdx)=>{
+      if(existsFlags[clIdx]) return;
+      const dayId=`${day}_${cl.id}`;
+      const classIdx=classIndexOf[cl.id];
+      const rate=Math.min(97, TIER_RATE[classIdx%5] + (classIdx%7));
+      const students=byClass[cl.id]||[];
+      let present=0, late=0, absent=0;
+      const records=students.map((s,si)=>{
+        const hash=(classIdx*131 + si*17 + dayIdx*29 + 11)%100;
+        let status, arrivalTime;
+        if(hash < rate-8){ status='present'; present++; arrivalTime=`0${7+ (si%2)}:${String(10+(si*3)%45).padStart(2,'0')} AM`; }
+        else if(hash < rate){ status='late'; late++; arrivalTime=`0${8+(si%2)}:${String(35+(si*2)%25).padStart(2,'0')} AM`; }
+        else { status='absent'; absent++; arrivalTime='—'; }
+        return {studentId:s.id, firstName:s.firstName, lastName:s.lastName, classId:cl.id, status, arrivalTime, entryTime:arrivalTime, markedManually:false};
+      });
+      pending.push({dayId, cl, students:students.length, present, late, absent, records});
+    });
+    await writeAllChunked(pending, p=>setDoc(ref(code,'attendanceDays',p.dayId),
+      {date:day, classId:p.cl.id, campusId:'campus-001', totalStudents:p.students, presentCount:p.present, absentCount:p.absent, lateCount:p.late, isReconciled:false, isLocked:false}));
+    const allRecords=pending.flatMap(p=>p.records.map(r=>({dayId:p.dayId,...r})));
+    await writeAllChunked(allRecords, r=>{ const {dayId,...rec}=r; return addDoc(subCol(code,'attendanceDays',dayId,'records'), rec); });
+  }
 }
 
 async function seedSchool(code){
   const snap=await getDoc(schoolDoc(code));
-  if(snap.exists()) return;
-  const ts=serverTimestamp(), t=today();
-  await setDoc(schoolDoc(code),{name:`${code} School`,slug:code,timezone:'Asia/Kolkata',academicYear:'2025-2026',plan:'pro',isActive:true,createdAt:ts});
-  await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',address:'1 School Road',city:'Bangalore',isActive:true});
-  await setDoc(ref(code,'classes','class-10A'),{name:'10-A',grade:'10',section:'A',campusId:'campus-001',academicYear:'2025-2026',studentCount:6});
-  await setDoc(ref(code,'classes','class-10B'),{name:'10-B',grade:'10',section:'B',campusId:'campus-001',academicYear:'2025-2026',studentCount:5});
-  await ensureDemoStaff(code);
-  const ss=[
-    {id:'stu-001',firstName:'Alice',  lastName:'Johnson',roll:'10A-01',classId:'class-10A'},
-    {id:'stu-002',firstName:'Bob',    lastName:'Smith',  roll:'10A-02',classId:'class-10A'},
-    {id:'stu-003',firstName:'Charlie',lastName:'Davis',  roll:'10A-03',classId:'class-10A'},
-    {id:'stu-004',firstName:'Diana',  lastName:'Ross',   roll:'10A-04',classId:'class-10A'},
-    {id:'stu-005',firstName:'Ethan',  lastName:'Hunt',   roll:'10A-05',classId:'class-10A'},
-    {id:'stu-006',firstName:'Fiona',  lastName:'Green',  roll:'10A-06',classId:'class-10A'},
-  ];
-  for(const s of ss) await setDoc(ref(code,'students',s.id),{...s,campusId:'campus-001',isActive:true,photoUrl:'',createdAt:ts});
-  await setDoc(ref(code,'devices','device-001'),{name:'Main Gate A Reader',gateLabel:'Main Gate A',campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
-  await setDoc(ref(code,'devices','device-002'),{name:'North Gate B Reader',gateLabel:'North Gate B',campusId:'campus-001',status:'online',readQualityPercent:97,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
-  await setDoc(ref(code,'devices','device-003'),{name:'South Gate Reader',gateLabel:'South Gate',campusId:'campus-001',status:'offline',readQualityPercent:0,firmwareVersion:'v3.1.0',lastHeartbeatAt:ts});
-  const ec=col(code,'events');
-  for(const e of[
-    {name:'Alice Johnson', ok:true, gate:'Main Gate A', m:10},
-    {name:'Diana Ross',    ok:true, gate:'Main Gate A', m:18},
-    {name:'Bob Smith',     ok:true, gate:'North Gate B',m:25},
-    {name:'Unknown Tag',   ok:false,gate:'Main Gate A', m:32},
-  ]){ await addDoc(ec,{direction:e.ok?'entry':'unknown',gateLabel:e.gate,campusId:'campus-001',confidence:e.ok?'high':'low',scannedAt:Timestamp.fromDate(new Date(Date.now()-e.m*60000)),notificationStatus:e.ok?'sent':'pending',isCorrected:false,_studentName:e.name}); }
-  const dayId=`${t}_class-10A`;
-  await setDoc(ref(code,'attendanceDays',dayId),{date:t,classId:'class-10A',campusId:'campus-001',totalStudents:6,presentCount:4,absentCount:1,lateCount:1,isReconciled:false,isLocked:false});
-  for(const r of[
-    {studentId:'stu-001',firstName:'Alice',  lastName:'Johnson',status:'present',arrivalTime:'08:15 AM'},
-    {studentId:'stu-002',firstName:'Bob',    lastName:'Smith',  status:'late',   arrivalTime:'08:45 AM'},
-    {studentId:'stu-003',firstName:'Charlie',lastName:'Davis',  status:'absent', arrivalTime:'—'},
-    {studentId:'stu-004',firstName:'Diana',  lastName:'Ross',   status:'present',arrivalTime:'08:12 AM'},
-    {studentId:'stu-005',firstName:'Ethan',  lastName:'Hunt',   status:'present',arrivalTime:'08:18 AM'},
-    {studentId:'stu-006',firstName:'Fiona',  lastName:'Green',  status:'present',arrivalTime:'08:10 AM'},
-  ]) await addDoc(subCol(code,'attendanceDays',dayId,'records'),{...r,markedManually:false});
-  await addDoc(col(code,'careAlerts'),{studentId:'stu-003',studentName:'Charlie Davis',classId:'class-10A',ruleCode:'3_consecutive_absences',priority:'high',status:'open',createdAt:ts});
-  await addDoc(col(code,'careAlerts'),{studentId:'stu-002',studentName:'Bob Smith',classId:'class-10A',ruleCode:'late_pattern_monthly',priority:'medium',status:'open',createdAt:ts});
-  console.log('✅ School seeded:',code);
-  toast('School data seeded!','Dashboard is now populated with demo data.','g');
+  const isFirstRun=!snap.exists();
+  if(isFirstRun) toast('Setting up your demo school…', 'Generating ~550 students across 25 classes — this can take under a minute.', 'g');
+  const ts=serverTimestamp();
+  await setDoc(schoolDoc(code),{name:`${code} School`,slug:code,timezone:'Asia/Kolkata',academicYear:'2025-2026',plan:'pro',isActive:true,createdAt:ts},{merge:true});
+  await setDoc(ref(code,'campuses','campus-001'),{name:'Main Campus',address:'1 School Road',city:'Bangalore',isActive:true},{merge:true});
+  await resetLegacyDemoData(code);
+  const roster=await ensureIndianRoster(code);
+  if(isFirstRun){
+    await setDoc(ref(code,'devices','device-001'),{name:'Main Gate A Reader',gateLabel:'Main Gate A',campusId:'campus-001',status:'online',readQualityPercent:99,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
+    await setDoc(ref(code,'devices','device-002'),{name:'North Gate B Reader',gateLabel:'North Gate B',campusId:'campus-001',status:'online',readQualityPercent:97,firmwareVersion:'v3.2.1',lastHeartbeatAt:ts});
+    await setDoc(ref(code,'devices','device-003'),{name:'South Gate Reader',gateLabel:'South Gate',campusId:'campus-001',status:'offline',readQualityPercent:0,firmwareVersion:'v3.1.0',lastHeartbeatAt:ts});
+  }
+  await ensureAttendanceHistory(code, roster);
+  if(isFirstRun){
+    const ec=col(code,'events');
+    const sample=roster.students.slice(0,3);
+    for(const [i,s] of sample.entries()){
+      await addDoc(ec,{direction:'entry',gateLabel:'Main Gate A',campusId:'campus-001',confidence:'high',scannedAt:Timestamp.fromDate(new Date(Date.now()-(10+i*8)*60000)),notificationStatus:'sent',isCorrected:false,_studentName:`${s.firstName} ${s.lastName}`});
+    }
+    await addDoc(ec,{direction:'unknown',gateLabel:'Main Gate A',campusId:'campus-001',confidence:'low',scannedAt:Timestamp.fromDate(new Date(Date.now()-32*60000)),notificationStatus:'pending',isCorrected:false,_studentName:'Unknown Tag'});
+    // A couple of care alerts against real students from a lower-attendance class
+    const poorClass=roster.classes[4]; // grade 6, section E — tier index 4 ("poor")
+    const poorStudents=roster.students.filter(s=>s.classId===poorClass.id);
+    if(poorStudents[0]) await addDoc(col(code,'careAlerts'),{studentId:poorStudents[0].id,studentName:`${poorStudents[0].firstName} ${poorStudents[0].lastName}`,classId:poorClass.id,ruleCode:'3_consecutive_absences',priority:'high',status:'open',createdAt:ts});
+    if(poorStudents[1]) await addDoc(col(code,'careAlerts'),{studentId:poorStudents[1].id,studentName:`${poorStudents[1].firstName} ${poorStudents[1].lastName}`,classId:poorClass.id,ruleCode:'late_pattern_monthly',priority:'medium',status:'open',createdAt:ts});
+    console.log('✅ School seeded:',code);
+    toast('School data seeded!','Dashboard is now populated with demo data.','g');
+  }
 }
 
 /* ── AUTO RESTORE SESSION ─────────────────────────────────── */

@@ -1,0 +1,16 @@
+{
+  "name": "aarna-ai-rewrite-server",
+  "version": "1.0.0",
+  "description": "Minimal proxy so the AARNA dashboard can call a local OpenAI-compatible LLM (Ollama) to draft parent messages. Never sends messages itself.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
