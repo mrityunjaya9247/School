@@ -56,20 +56,29 @@ Two independent switches, both must be on for the button to actually work:
 Turning the feature off in production = flip `AI_REWRITE_ENABLED=false` and
 restart the proxy. No redeploy of the dashboard needed.
 
-## Switching models
+## Switching models & providers
 
-Edit **only** `server/config/llm.config.json` (or the matching env vars) —
-never the code:
+Edit **only** `server/.env` (or `server/config/llm.config.json`) — never the code:
 
-```json
-{ "model": "qwen3:4b" }
+### Using AskCodi (`https://api.askcodi.com/v1`)
+Set the following in `server/.env`:
+```env
+LLM_BASE_URL=https://api.askcodi.com/v1
+LLM_API_KEY=your_askcodi_api_key
+LLM_MODEL=nvidia/nemotron-3-super-120b-a12b:free  # or any model supported by your AskCodi account
+```
+
+### Using Local Ollama
+```env
+LLM_BASE_URL=http://localhost:11434/v1
+LLM_MODEL=qwen3:4b
+LLM_API_KEY=
 ```
 
 Other models known to work with Ollama's OpenAI-compatible endpoint:
-
 ```bash
-ollama pull gemma3:4b     # then set "model": "gemma3:4b"
-ollama pull llama3.2:3b   # then set "model": "llama3.2:3b"
+ollama pull gemma3:4b     # then set "LLM_MODEL=gemma3:4b"
+ollama pull llama3.2:3b   # then set "LLM_MODEL=llama3.2:3b"
 ```
 
 ## Known limitation: this endpoint's "auth" is trust-based, like the rest of the app

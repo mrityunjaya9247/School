@@ -20,7 +20,9 @@ function stripThink(text) {
 function buildUserMessage(text, language, tone, maxChars) {
   let msg = `Note: ${text}\nLanguage: ${language}\nTone: ${tone}`;
   if (maxChars) msg += `\nMax length: ${maxChars} characters`;
-  if (config.qwen3.disableThinking) msg += ' /no_think';
+  if (config.qwen3?.disableThinking && config.model?.toLowerCase().includes('qwen')) {
+    msg += ' /no_think';
+  }
   return msg;
 }
 
@@ -42,9 +44,11 @@ async function rewriteMessage(text, { language = 'English', tone = 'friendly', m
     ...config.params,
   };
 
+  const endpoint = `${config.baseUrl.replace(/\/+$/, '')}/chat/completions`;
+
   let res;
   try {
-    res = await fetch(`${config.baseUrl}/chat/completions`, {
+    res = await fetch(endpoint, {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
