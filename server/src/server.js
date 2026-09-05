@@ -6,10 +6,16 @@ const config = require('./config');
 const { requireStaff } = require('./staffAuth');
 const { createRateLimiter } = require('./rateLimiter');
 const { rewriteMessage, LLMError } = require('./llmRewriteService');
+const syncRoutes = require('./routes/sync');
+const db = require('./db');
 
 const app = express();
 app.use(cors({ origin: config.allowedOrigins }));
 app.use(express.json({ limit: '10kb' }));
+
+// Firestore -> Postgres warehouse sync (POST /api/sync, GET /api/sync/status).
+// Guarded by SYNC_TOKEN, not the staff check — the caller is a scheduler.
+app.use('/api', syncRoutes);
 
 const allowRewrite = createRateLimiter({ limit: 20, windowMs: 60_000 });
 
@@ -45,7 +51,18 @@ app.post('/api/ai/rewrite', requireStaff, async (req, res) => {
   }
 });
 
-app.get('/health', (req, res) => res.json({ ok: true, aiRewriteEnabled: config.enabled }));
+app.get('/health', async (req, res) => {
+  // Reports the database too, so a monitor catches a dead DB connection
+  // rather than only a dead process.
+  let database = 'not_configured';
+  try {
+    await db.ping();
+    database = 'ok';
+  } catch (err) {
+    database = `error: ${err.message}`;
+  }
+  res.json({ ok: true, aiRewriteEnabled: config.enabled, database });
+});
 
 app.listen(config.port, () => {
   console.log(`[server] AI rewrite proxy listening on :${config.port} (enabled=${config.enabled}, model=${config.model})`);

@@ -1,10 +1,16 @@
 @echo off
-REM ── NurturePass local server launcher ───────────────────────────
-REM Serves this folder at http://localhost:8000 and opens index.html
+REM ── AARNA local server launcher ─────────────────────────────────
+REM Serves the public\ folder at http://localhost:8000
+REM
+REM NOTE: this serves public\ only — the same files Firebase Hosting
+REM deploys. It deliberately does NOT serve the repo root, so what you
+REM test locally matches what goes live, and nothing under server\
+REM (.env, service account keys) is ever reachable from a browser.
 
-cd /d "%~dp0"
+cd /d "%~dp0public"
 
 echo Starting local server at http://localhost:8000 ...
+echo Serving: %~dp0public
 echo Press Ctrl+C in this window to stop the server.
 echo.
 

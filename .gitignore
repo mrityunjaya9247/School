@@ -20,9 +20,23 @@ desktop.ini
 .env.local
 *.local
 
+# Service account keys. A Firebase service account bypasses every Security
+# Rule on the project — committing one exposes every school's data, and it
+# stays exposed in git history even after the file is deleted.
+secrets/
+*service-account*.json
+*serviceaccount*.json
+*-firebase-adminsdk-*.json
+
 # Build output
 dist/
 build/
+
+# Firebase CLI local cache / deploy logs
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+.runtimeconfig.json
 
 # Local backups
 *.bak
