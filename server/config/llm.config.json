@@ -1,9 +1,21 @@
 {
+  "_comment": "Local model served by Ollama. Any OpenAI-compatible endpoint works — env vars in .env override everything here. See SETUP.md for the Ollama install steps.",
+  "_model_notes": "llama3.2:3b — English-only, ~2GB, fast enough for CPU-only inference (roughly 3-5s for a parent message). Alternatives at the same size: gemma3:4b (stronger writing, ~1s slower) or phi4-mini (3.8b). Avoid the larger tiers unless you have a GPU.",
   "enabled": true,
   "baseUrl": "http://localhost:11434/v1",
-  "model": "qwen3:4b",
-  "timeoutMs": 12000,
-  "params": { "temperature": 0.3, "top_p": 0.9, "max_tokens": 400 },
+  "model": "llama3.2:3b",
+
+  "_timeout_notes": "These two must be set together: max_tokens / (CPU tokens-per-sec) must fit inside timeoutMs, or a long reply is killed mid-generation and the teacher sees 'AI unavailable' instead of a slow success. 180 tokens at a pessimistic 10 tok/s needs ~18s, so 25s leaves ~40% headroom. The original 400 tokens against a 12s timeout could not fit under any CPU speed. If you move to a GPU, both can drop sharply.",
+  "timeoutMs": 25000,
+
+  "params": {
+    "temperature": 0.3,
+    "top_p": 0.9,
+    "max_tokens": 180
+  },
+
+  "_qwen_notes": "Only applied when the model name contains 'qwen' — harmless to leave in place on other models.",
   "qwen3": { "disableThinking": true },
+
   "promptFile": "prompts/rewrite.prompt.txt"
 }

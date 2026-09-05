@@ -72,6 +72,45 @@ Endpoints:
 
 ---
 
+## 3b. The local AI model (Ollama)
+
+The rewrite feature calls an OpenAI-compatible endpoint. By default that's
+Ollama on your own machine, so student names and attendance details in the
+prompt never leave it.
+
+```
+# https://ollama.com/download
+ollama pull llama3.2:3b
+ollama serve                 # listens on 11434
+```
+
+Check it directly before involving the app:
+
+```
+curl http://localhost:11434/v1/chat/completions -H "Content-Type: application/json" \
+  -d '{"model":"llama3.2:3b","messages":[{"role":"user","content":"Say hello"}]}'
+```
+
+`llama3.2:3b` is English-only, ~2GB, and answers in roughly 3-5 seconds on a
+CPU. Swap `LLM_MODEL` for `gemma3:4b` (better writing, a little slower) or
+`phi4-mini` if you want to compare — no code change, they all speak the same
+API. A GPU is not required at this size; one only becomes worthwhile if you
+add an interactive chatbot, where CPU latency feels broken.
+
+> **Where this runs matters.** Firebase Hosting serves static files only —
+> neither Express nor Ollama can run there. Until you deploy the backend
+> somewhere reachable, the AI button appears on `localhost` and is hidden on
+> the deployed site (see `AI_CONFIG` in index.html: the frontend probes
+> `/health` at startup and hides the feature if nothing answers). Everything
+> else in the app works either way, because it talks to Firestore directly.
+>
+> To enable AI on the hosted site: deploy `server/` somewhere with the model
+> alongside it (a ~$40/month 8GB box is enough), set `HOSTED_API_BASE` in
+> index.html to that URL, and add the same origin to `ALLOWED_ORIGINS` in
+> `server/.env`.
+
+---
+
 ## 4. Postgres (optional — only for SQL reporting)
 
 The app runs entirely on Firestore. Postgres is a **reporting mirror**, not

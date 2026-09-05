@@ -303,6 +303,92 @@
     .spinner{width:18px;height:18px;border:3px solid var(--slate2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
     .loader{display:flex;align-items:center;justify-content:center;gap:10px;padding:44px;color:var(--slate4);font-size:13px;font-weight:600;}
     select.cs{padding:8px 12px;border:2px solid var(--blue-mid);border-radius:var(--r-md);background:var(--white-warm);color:var(--blue-dark);font-size:13px;font-weight:700;outline:none;cursor:pointer;}
+
+    /* ══ MOBILE / TABLET ═══════════════════════════════════════════════
+       The desktop layout is a fixed 236px sidebar beside a scrolling main
+       column. On a phone that sidebar alone is ~63% of a 375px screen, so
+       below 860px it becomes an off-canvas drawer behind a hamburger and
+       the main column takes the full width.
+       Everything here is additive — desktop rules above are untouched. */
+
+    /* Hamburger: hidden on desktop, shown in the topbar on small screens. */
+    .mnav-btn{display:none;align-items:center;justify-content:center;width:38px;height:38px;flex-shrink:0;
+      background:var(--slate0);border:1px solid var(--slate2);border-radius:10px;color:var(--slate7);cursor:pointer;}
+    .mnav-btn svg{width:19px;height:19px;}
+    .mnav-btn:active{background:var(--slate1);}
+    .sb-scrim{display:none;}
+
+    @media (max-width:860px){
+      /* Full bleed — the rounded floating card wastes ~32px of width. */
+      #page-app{margin:0;border-radius:0;min-height:100vh;min-height:100dvh;box-shadow:none;}
+
+      .mnav-btn{display:flex;}
+
+      /* Sidebar becomes a drawer. 100dvh (not vh) so mobile browser chrome
+         doesn't cut off the sign-out button at the bottom. */
+      .sb{position:fixed;top:0;left:0;bottom:0;width:270px;max-width:82vw;z-index:1200;
+        height:100vh;height:100dvh;transform:translateX(-100%);
+        transition:transform .22s ease;will-change:transform;}
+      .sb.open{transform:translateX(0);box-shadow:0 0 60px rgba(0,0,0,.5);}
+
+      .sb-scrim{display:block;position:fixed;inset:0;z-index:1150;background:rgba(46,35,24,.5);
+        opacity:0;pointer-events:none;transition:opacity .22s ease;}
+      .sb-scrim.open{opacity:1;pointer-events:auto;}
+      body.drawer-open{overflow:hidden;}
+
+      /* Topbar: let it wrap rather than squash, and drop the label text on
+         buttons that carry a recognisable icon. */
+      .tb{height:auto;min-height:56px;padding:10px 14px;flex-wrap:wrap;gap:8px;}
+      .tb-l{gap:8px;min-width:0;flex:1;}
+      .tb-l .ts{display:none;}                    /* live-status pill */
+      #tb-refresh-btn{font-size:0 !important;padding:7px !important;gap:0 !important;}
+      #tb-refresh-btn svg{width:15px !important;height:15px !important;}
+      #date-pill{display:none !important;}
+      .marquee-wrap{top:0;}
+
+      /* Content padding: 26px each side is a lot of a 375px screen. */
+      .pc{padding:16px 14px !important;}
+
+      /* Any two-column form grid collapses. Covers the inline
+         grid-template-columns:1fr 1fr used throughout the modals. */
+      .kgrid{grid-template-columns:1fr !important;gap:12px;margin-bottom:16px;}
+      .tc{grid-template-columns:1fr !important;}
+      [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important;}
+      #care-grid{grid-template-columns:1fr !important;}
+
+      /* Tables scroll sideways instead of forcing the page to. */
+      .rt{min-width:520px;}
+      .rt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+      .card{padding:16px;}
+
+      /* Modals: cap height and scroll inside, so a long form is reachable
+         on a short screen. */
+      [id$="-modal"] > div{max-height:92vh;max-height:92dvh;overflow-y:auto;
+        padding:20px !important;border-radius:18px !important;margin:8px !important;}
+
+      #toasts{top:auto;bottom:12px;right:10px;left:10px;width:auto;}
+
+      /* 16px is the threshold below which iOS Safari zooms on focus. */
+      input,select,textarea{font-size:16px !important;}
+
+      /* Comfortable touch targets. */
+      .ni{padding:12px 14px;}
+      .qa-btn{padding:8px 12px;font-size:12px;}
+    }
+
+    @media (max-width:430px){
+      .pc{padding:14px 11px !important;}
+      .sb-name{font-size:18px;}
+      .tp{font-size:11px;}
+      .rt th,.rt td{padding:9px 8px;}
+      [id$="-modal"] > div{padding:16px !important;margin:6px !important;}
+    }
+
+    /* Landscape phones are short — let modals use the height they have. */
+    @media (max-height:520px) and (orientation:landscape){
+      [id$="-modal"] > div{max-height:96vh;}
+    }
+
     @media print{
       .sb, .tb, #emg-banner-wrap, #marquee-wrap, .no-print{display:none !important;}
       .ma{margin:0 !important;}
@@ -418,7 +504,8 @@
 </div>
 
 <div id="page-app" class="hidden">
-  <aside class="sb">
+  <div class="sb-scrim" id="sb-scrim" onclick="window._closeDrawer()" aria-hidden="true"></div>
+  <aside class="sb" id="sb-aside">
     <div class="sb-brand">
       <div class="sb-name">AARNA</div>
       <div class="sb-tenant" id="sb-tenant">—</div>
@@ -442,6 +529,9 @@
   <div class="ma">
     <header class="tb">
       <div class="tb-l">
+        <button class="mnav-btn" id="mnav-btn" onclick="window._toggleDrawer()" aria-label="Open menu" aria-expanded="false" aria-controls="sb-aside">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <span class="tp" id="tp-role">—</span>
         <div class="ts" id="tb-live-status"><span class="ts-dot"></span><span class="ts-txt" id="ts-txt">Connecting…</span></div>
         <button id="tb-refresh-btn" onclick="window._refreshFeed()" title="Refresh feed" style="background:var(--slate1);border:1px solid var(--slate2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--slate5);cursor:pointer;display:flex;align-items:center;gap:5px;">
@@ -603,7 +693,6 @@
       <textarea id="msg-body" rows="6" style="width:100%;padding:11px 14px;background:var(--slate0);border:2px solid var(--slate2);border-radius:var(--r-md);font-size:14px;color:var(--slate8);outline:none;resize:vertical;font-family:inherit;"></textarea>
       <div id="ai-rewrite-bar" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:9px;">
         <button type="button" id="ai-rewrite-btn" class="qa-btn" onclick="window._improveWithAI()">✨ Improve with AI</button>
-        <div id="ai-lang-toggle" style="display:flex;gap:4px;"></div>
         <div id="ai-tone-toggle" style="display:flex;gap:4px;"></div>
       </div>
       <div id="ai-rewrite-notice" class="hidden" style="margin-top:8px;font-size:12px;color:var(--slate5);background:var(--slate0);border-radius:8px;padding:8px 11px;"></div>
@@ -803,7 +892,45 @@ const db = getFirestore(initializeApp(FB));
 // The real model/prompt/timeout config lives server-side in server/config and
 // server/.env; this is just enough for the UI to know whether to show the
 // button and where to send the request.
-const AI_CONFIG = { enabled: true, apiBase: 'http://localhost:8787' };
+/* ── AI REWRITE BACKEND ───────────────────────────────────────
+   The frontend is static (Firebase Hosting); the rewrite proxy in /server
+   and the Ollama model behind it are not — they run wherever you deploy
+   them. So the API base has to differ between local development and the
+   hosted site, and the hosted site has no backend until you deploy one.
+
+   To enable AI on the deployed site: set HOSTED_API_BASE to your backend's
+   URL (e.g. 'https://aarna-api.example.com'), and add that same origin to
+   ALLOWED_ORIGINS in server/.env so CORS lets it through.
+
+   Left empty, the hosted site simply hides the AI button rather than
+   showing one that always fails. Local development is unaffected. */
+const AI_CONFIG = (() => {
+  const HOSTED_API_BASE = '';            // <-- your deployed backend URL, once it exists
+  const h = location.hostname;
+  const isLocal = !h || h === 'localhost' || h === '127.0.0.1'
+    || h.startsWith('192.168.') || h.startsWith('10.') || h.endsWith('.local');
+  const apiBase = isLocal ? 'http://localhost:8787' : HOSTED_API_BASE;
+  return { enabled: !!apiBase, apiBase, verified: false };
+})();
+
+/* Probe the backend once, so a teacher never sees an "Improve with AI"
+   button that cannot work. Failure here is silent and harmless: the AI bar
+   stays hidden and messages are composed and sent exactly as before. */
+async function _probeAiBackend(){
+  if(!AI_CONFIG.apiBase){ AI_CONFIG.enabled = false; return; }
+  try{
+    const ctrl = new AbortController();
+    const t = setTimeout(()=>ctrl.abort(), 3000);
+    const res = await fetch(`${AI_CONFIG.apiBase}/health`, { signal: ctrl.signal });
+    clearTimeout(t);
+    const data = res.ok ? await res.json() : null;
+    // The server reports whether the feature is switched on at its end too.
+    AI_CONFIG.enabled = !!(data && data.ok && data.aiRewriteEnabled !== false);
+  }catch{
+    AI_CONFIG.enabled = false;           // server down, wrong URL, or CORS
+  }
+  AI_CONFIG.verified = true;
+}
 
 /* ── State ─────────────────────────────────────────────────── */
 let sess = null;
@@ -1326,8 +1453,8 @@ async function _statsRender(){
     const bestRows=ranked.slice(0,5).map(a=>`<tr><td><span class="sn">${a.name}</span></td><td><span class="badge ${healthBadgeClass(a.pct>=80?'good':a.pct>=60?'medium':'poor')}">${a.pct}%</span></td></tr>`).join('');
     const worstRows=[...ranked].reverse().slice(0,5).map(a=>`<tr><td><span class="sn">${a.name}</span></td><td><span class="badge ${healthBadgeClass(a.pct>=80?'good':a.pct>=60?'medium':'poor')}">${a.pct}%</span></td></tr>`).join('');
     compareHTML = `<div class="tc" style="margin-top:16px;">
-      <div class="card"><div class="ct">Best classes this period</div>${bestRows?`<table class="rt"><tbody>${bestRows}</tbody></table>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
-      <div class="card"><div class="ct">Needs attention this period</div>${worstRows?`<table class="rt"><tbody>${worstRows}</tbody></table>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
+      <div class="card"><div class="ct">Best classes this period</div>${bestRows?`<div class="rt-scroll"><table class="rt"><tbody>${bestRows}</tbody></table></div>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
+      <div class="card"><div class="ct">Needs attention this period</div>${worstRows?`<div class="rt-scroll"><table class="rt"><tbody>${worstRows}</tbody></table></div>`:'<p style="font-size:12px;color:var(--slate5);">No data yet.</p>'}</div>
     </div>`;
   }
 
@@ -1784,6 +1911,8 @@ async function enterApp(){
   document.getElementById('u-avatar').textContent   = sess.name.charAt(0).toUpperCase();
   try{ document.getElementById('date-pill-txt').textContent = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); }catch{}
   checkNotif();
+  // Not awaited — a slow or absent AI backend must never delay sign-in.
+  _probeAiBackend();
   try{ const sd=await getDoc(schoolDoc(sess.code)); schoolMeta = sd.exists()?sd.data():{}; }catch{ schoolMeta={}; }
   if(sess.staffId){
     // Session may have been restored from localStorage rather than a fresh
@@ -1885,9 +2014,32 @@ function buildNav(){
        ${ico(it.i,16)}<span style="flex:1;">${it.l}</span>${it.badge?`<span class="nav-badge">${it.badge}</span>`:''}
      </div>`).join('');
 }
+/* ── MOBILE DRAWER ────────────────────────────────────────────
+   Below 860px the sidebar is off-canvas. These toggle it; on desktop the
+   button is display:none so they simply never fire. */
+function _setDrawer(open){
+  const sb=document.getElementById('sb-aside');
+  const scrim=document.getElementById('sb-scrim');
+  const btn=document.getElementById('mnav-btn');
+  if(!sb) return;
+  sb.classList.toggle('open',open);
+  if(scrim) scrim.classList.toggle('open',open);
+  if(btn){ btn.setAttribute('aria-expanded',String(open)); btn.setAttribute('aria-label',open?'Close menu':'Open menu'); }
+  // Stop the page behind the drawer scrolling under your finger.
+  document.body.classList.toggle('drawer-open',open);
+}
+window._toggleDrawer = ()=> _setDrawer(!document.getElementById('sb-aside')?.classList.contains('open'));
+window._closeDrawer  = ()=> _setDrawer(false);
+
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') window._closeDrawer(); });
+// Returning to a wide viewport (rotate to landscape, tablet) must clear the
+// drawer state, or the sidebar keeps its transform and vanishes.
+window.addEventListener('resize', ()=>{ if(window.innerWidth>860) _setDrawer(false); });
+
 window._nav = async (el,pg)=>{
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
+  window._closeDrawer();          // picking a page closes the drawer
   await showPage(pg);
 };
 // For buttons that jump to a class tab from somewhere other than the sidebar
@@ -3366,7 +3518,7 @@ window._renderTeacherTimetable = ()=>{
     }).join('');
     return `<tr><td style="font-weight:700;white-space:nowrap;font-size:11.5px;color:var(--slate5);">P${period}<br><span style="font-weight:500;font-size:9.5px;">${start}</span></td>${cells}</tr>`;
   }).join('');
-  grid.innerHTML = `<table class="rt"><thead><tr><th>Period</th>${TT_DAYS.map(d=>`<th style="text-align:center;">${d}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
+  grid.innerHTML = `<div class="rt-scroll"><table class="rt"><thead><tr><th>Period</th>${TT_DAYS.map(d=>`<th style="text-align:center;">${d}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
 };
 
 window._loadAbsentTeacherPeriods = ()=>{
@@ -3463,7 +3615,7 @@ async function pgTags(){
   <div class="tc" style="align-items:start;">
     <div class="card">
       <div class="ct">Student → EPC Assignment</div>
-      ${studs.length?`<table class="rt">
+      ${studs.length?`<div class="rt-scroll"><table class="rt">
         <thead><tr><th>Student</th><th>Class</th><th>EPC Code</th><th>Status</th><th>Save</th></tr></thead>
         <tbody id="tags-tbody">${studs.map(s=>{
           const ex=byStud[s.id]; const epcVal=ex?ex.epc:''; const iid=`epc_${s.id}`;
@@ -3474,7 +3626,7 @@ async function pgTags(){
             <td>${epcVal?'<span class="badge bg">✓ Mapped</span>':'<span class="badge bx">Unmapped</span>'}</td>
             <td><button class="btn btn-p btn-sm" onclick="window._saveTag('${s.id}','${s.firstName} ${s.lastName}','${iid}')">Save</button></td>
           </tr>`;}).join('')}</tbody>
-      </table>
+      </table></div>
       <p id="tags-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>`:'<div class="loader" style="padding:20px;font-size:12px;">No students found — seed DEMO-01 first.</div>'}
     </div>
     <div>
@@ -3578,7 +3730,7 @@ async function pgStudents(){
     </div>
   </div>
   <div class="card"><div class="ct">All Students</div>
-    <table class="rt"><thead><tr><th>Name</th><th>Guardian Phone</th><th>Roll</th><th>Class</th><th>RFID</th><th>Actions</th></tr></thead>
+    <div class="rt-scroll"><table class="rt"><thead><tr><th>Name</th><th>Guardian Phone</th><th>Roll</th><th>Class</th><th>RFID</th><th>Actions</th></tr></thead>
     <tbody id="stu-tbody">${studs.map(s=>{
       const tagged=Object.values(epcMap).some(m=>m.studentId===s.id);
       const nm=(s.firstName+' '+s.lastName).replace(/'/g,'');
@@ -3591,7 +3743,7 @@ async function pgStudents(){
           <button class="qa-btn" onclick="window._openEditStudent('${s.id}')" title="Edit details, class &amp; phone">Edit</button>
           <button class="qa-btn" onclick="window._composeFor('${s.id}','${nm}','${(s.classId||'').replace('class-','')}','${s.classId||''}')" title="Message parent">Message</button>
         </div></td></tr>`;}).join('')}
-    </tbody></table>
+    </tbody></table></div>
     <p id="stu-tbody-empty" class="hidden" style="font-size:12px;color:var(--slate5);padding:14px;text-align:center;">No matches.</p>
   </div>`;
 }
@@ -3698,7 +3850,7 @@ window._showHistory = (sid)=>{
   document.getElementById('hist-sub').innerHTML=`Roll ${h.roll||'—'} · attended <strong>${present}/${dates.length}</strong> recorded day(s)`;
   const body=document.getElementById('hist-body');
   if(!dates.length){ body.innerHTML='<div class="loader" style="padding:18px;font-size:12px;">No recorded days yet.</div>'; }
-  else body.innerHTML=`<table class="rt"><thead><tr><th></th><th>Date</th><th>Status</th><th>Entry</th><th>Exit</th></tr></thead><tbody>${
+  else body.innerHTML=`<div class="rt-scroll"><table class="rt"><thead><tr><th></th><th>Date</th><th>Status</th><th>Entry</th><th>Exit</th></tr></thead><tbody>${
     dates.map(d=>{ const rec=h.days[d]; const ok=rec.status==='present'||rec.status==='late';
       return `<tr>
         <td><span class="sdot ${ok?'g':'r'}"></span></td>
@@ -3707,7 +3859,7 @@ window._showHistory = (sid)=>{
         <td style="font-size:12px;color:var(--slate5);">${rec.entryTime||'—'}</td>
         <td style="font-size:12px;color:var(--slate5);">${rec.exitAt||'—'}</td>
       </tr>`; }).join('')
-  }</tbody></table>`;
+  }</tbody></table></div>`;
   document.getElementById('hist-modal').classList.remove('hidden');
 };
 
@@ -3738,10 +3890,10 @@ function isPortalVisible(m){ return !m.channels || m.channels.includes('portal')
    failure (server down, LLM unreachable, timeout) this degrades to a quiet
    inline notice and leaves the teacher's own text exactly as they wrote it —
    the send button below is never touched by this. */
+// language stays in the payload the API expects, but is fixed to English —
+// the toggle is gone, so there is nothing for a teacher to get wrong.
 let _aiPrefs = { language:'English', tone:'friendly' };
 function renderAiToggles(){
-  document.getElementById('ai-lang-toggle').innerHTML = [['English','EN'],['Hindi','हिंदी']].map(([v,l])=>
-    `<button type="button" class="btn ${_aiPrefs.language===v?'btn-p':'btn-g'} btn-sm" onclick="window._setAiPref('language','${v}')">${l}</button>`).join('');
   document.getElementById('ai-tone-toggle').innerHTML = [['friendly','Friendly'],['formal','Formal']].map(([v,l])=>
     `<button type="button" class="btn ${_aiPrefs.tone===v?'btn-p':'btn-g'} btn-sm" onclick="window._setAiPref('tone','${v}')">${l}</button>`).join('');
 }
